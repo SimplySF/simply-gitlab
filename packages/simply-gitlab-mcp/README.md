@@ -5,9 +5,18 @@ GitLab capabilities the [`simply gitlab`](../simply-gitlab) CLI has — one tool
 the same library in-process.
 
 ```sh
-npm install -g @simplysf/simply-gitlab-mcp
-simply-gitlab-mcp --help
+npm install -g @simplysf/simply-cli
+simply gitlab mcp --list
 ```
+
+`--list` prints every tool this server would register, then exits. Run without it and the server
+waits on stdin for a client, which at a terminal looks like a hang.
+
+The plugin installs itself the first time you run the command, so `@simplysf/simply-cli` is the
+only thing to install.
+
+**The standalone binary still works.** `npm install -g @simplysf/simply-gitlab-mcp` and `simply-gitlab-mcp`
+are unchanged, and an existing client configuration pointing at them keeps running.
 
 `--help` lists every tool the server can register, split into read and write.
 
