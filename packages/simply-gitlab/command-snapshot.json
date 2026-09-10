@@ -1,0 +1,293 @@
+[
+  {
+    "alias": [],
+    "command": "gitlab:branch:create",
+    "flagAliases": [],
+    "flagChars": ["e", "p"],
+    "flags": ["branch", "dry-run", "env-file", "gitlab-token", "gitlab-url", "json", "project", "ref"],
+    "plugin": "@simplysf/simply-gitlab"
+  },
+  {
+    "alias": [],
+    "command": "gitlab:branch:list",
+    "flagAliases": [],
+    "flagChars": ["e", "p"],
+    "flags": ["env-file", "gitlab-token", "gitlab-url", "json", "limit", "project", "search"],
+    "plugin": "@simplysf/simply-gitlab"
+  },
+  {
+    "alias": [],
+    "command": "gitlab:ci:environment:list",
+    "flagAliases": [],
+    "flagChars": ["e", "p"],
+    "flags": ["env-file", "gitlab-token", "gitlab-url", "json", "limit", "name", "project", "search", "state"],
+    "plugin": "@simplysf/simply-gitlab"
+  },
+  {
+    "alias": [],
+    "command": "gitlab:ci:job:list",
+    "flagAliases": [],
+    "flagChars": ["e", "p"],
+    "flags": ["env-file", "gitlab-token", "gitlab-url", "json", "limit", "project", "scope"],
+    "plugin": "@simplysf/simply-gitlab"
+  },
+  {
+    "alias": [],
+    "command": "gitlab:ci:job:log",
+    "flagAliases": [],
+    "flagChars": ["e", "p"],
+    "flags": ["env-file", "gitlab-token", "gitlab-url", "job", "json", "project", "tail"],
+    "plugin": "@simplysf/simply-gitlab"
+  },
+  {
+    "alias": [],
+    "command": "gitlab:ci:variable:list",
+    "flagAliases": [],
+    "flagChars": ["e", "p"],
+    "flags": ["env-file", "gitlab-token", "gitlab-url", "json", "limit", "project", "reveal"],
+    "plugin": "@simplysf/simply-gitlab"
+  },
+  {
+    "alias": [],
+    "command": "gitlab:commit:create",
+    "flagAliases": [],
+    "flagChars": ["e", "p"],
+    "flags": [
+      "actions",
+      "author-email",
+      "author-name",
+      "body",
+      "body-file",
+      "branch",
+      "dry-run",
+      "env-file",
+      "force",
+      "gitlab-token",
+      "gitlab-url",
+      "json",
+      "message",
+      "project",
+      "start-branch",
+      "start-sha"
+    ],
+    "plugin": "@simplysf/simply-gitlab"
+  },
+  {
+    "alias": [],
+    "command": "gitlab:commit:diff",
+    "flagAliases": [],
+    "flagChars": ["e", "p"],
+    "flags": ["env-file", "gitlab-token", "gitlab-url", "json", "project", "sha", "stat"],
+    "plugin": "@simplysf/simply-gitlab"
+  },
+  {
+    "alias": [],
+    "command": "gitlab:commit:list",
+    "flagAliases": [],
+    "flagChars": ["e", "p"],
+    "flags": [
+      "author",
+      "env-file",
+      "gitlab-token",
+      "gitlab-url",
+      "json",
+      "limit",
+      "path",
+      "project",
+      "ref",
+      "since",
+      "stats",
+      "until"
+    ],
+    "plugin": "@simplysf/simply-gitlab"
+  },
+  {
+    "alias": [],
+    "command": "gitlab:commit:view",
+    "flagAliases": [],
+    "flagChars": ["e", "p"],
+    "flags": ["env-file", "gitlab-token", "gitlab-url", "json", "project", "sha"],
+    "plugin": "@simplysf/simply-gitlab"
+  },
+  {
+    "alias": [],
+    "command": "gitlab:file:create",
+    "flagAliases": [],
+    "flagChars": ["e", "p"],
+    "flags": [
+      "author-email",
+      "author-name",
+      "branch",
+      "content",
+      "content-file",
+      "dry-run",
+      "env-file",
+      "gitlab-token",
+      "gitlab-url",
+      "json",
+      "message",
+      "path",
+      "project",
+      "start-branch"
+    ],
+    "plugin": "@simplysf/simply-gitlab"
+  },
+  {
+    "alias": [],
+    "command": "gitlab:file:update",
+    "flagAliases": [],
+    "flagChars": ["e", "p"],
+    "flags": [
+      "author-email",
+      "author-name",
+      "branch",
+      "content",
+      "content-file",
+      "dry-run",
+      "env-file",
+      "gitlab-token",
+      "gitlab-url",
+      "json",
+      "last-commit-id",
+      "message",
+      "path",
+      "project",
+      "start-branch"
+    ],
+    "plugin": "@simplysf/simply-gitlab"
+  },
+  {
+    "alias": [],
+    "command": "gitlab:file:view",
+    "flagAliases": [],
+    "flagChars": ["e", "p"],
+    "flags": ["env-file", "gitlab-token", "gitlab-url", "json", "path", "project", "raw", "ref"],
+    "plugin": "@simplysf/simply-gitlab"
+  },
+  {
+    "alias": [],
+    "command": "gitlab:mr:create",
+    "flagAliases": [],
+    "flagChars": ["e", "p"],
+    "flags": [
+      "assignee-id",
+      "body",
+      "body-file",
+      "description",
+      "draft",
+      "dry-run",
+      "env-file",
+      "gitlab-token",
+      "gitlab-url",
+      "json",
+      "labels",
+      "milestone-id",
+      "project",
+      "remove-source-branch",
+      "reviewer-id",
+      "source-branch",
+      "squash",
+      "target-branch",
+      "title"
+    ],
+    "plugin": "@simplysf/simply-gitlab"
+  },
+  {
+    "alias": [],
+    "command": "gitlab:mr:list",
+    "flagAliases": [],
+    "flagChars": ["e", "p"],
+    "flags": [
+      "author-username",
+      "env-file",
+      "gitlab-token",
+      "gitlab-url",
+      "json",
+      "labels",
+      "limit",
+      "project",
+      "reviewer-username",
+      "search",
+      "source-branch",
+      "state",
+      "target-branch"
+    ],
+    "plugin": "@simplysf/simply-gitlab"
+  },
+  {
+    "alias": [],
+    "command": "gitlab:mr:update",
+    "flagAliases": [],
+    "flagChars": ["e", "p"],
+    "flags": [
+      "assignee-id",
+      "body",
+      "body-file",
+      "description",
+      "dry-run",
+      "env-file",
+      "gitlab-token",
+      "gitlab-url",
+      "json",
+      "labels",
+      "milestone-id",
+      "mr",
+      "project",
+      "remove-source-branch",
+      "reviewer-id",
+      "squash",
+      "state",
+      "target-branch",
+      "title"
+    ],
+    "plugin": "@simplysf/simply-gitlab"
+  },
+  {
+    "alias": [],
+    "command": "gitlab:mr:view",
+    "flagAliases": [],
+    "flagChars": ["e", "p"],
+    "flags": ["env-file", "gitlab-token", "gitlab-url", "json", "mr", "project"],
+    "plugin": "@simplysf/simply-gitlab"
+  },
+  {
+    "alias": [],
+    "command": "gitlab:project:list",
+    "flagAliases": [],
+    "flagChars": ["e"],
+    "flags": ["env-file", "gitlab-token", "gitlab-url", "json", "limit", "membership", "owned", "search", "simple"],
+    "plugin": "@simplysf/simply-gitlab"
+  },
+  {
+    "alias": [],
+    "command": "gitlab:project:view",
+    "flagAliases": [],
+    "flagChars": ["e", "p"],
+    "flags": ["env-file", "gitlab-token", "gitlab-url", "json", "project"],
+    "plugin": "@simplysf/simply-gitlab"
+  },
+  {
+    "alias": [],
+    "command": "gitlab:release:list",
+    "flagAliases": [],
+    "flagChars": ["e", "p"],
+    "flags": ["env-file", "gitlab-token", "gitlab-url", "json", "limit", "project"],
+    "plugin": "@simplysf/simply-gitlab"
+  },
+  {
+    "alias": [],
+    "command": "gitlab:search",
+    "flagAliases": [],
+    "flagChars": ["e"],
+    "flags": ["env-file", "gitlab-token", "gitlab-url", "group", "json", "limit", "project", "query", "scope"],
+    "plugin": "@simplysf/simply-gitlab"
+  },
+  {
+    "alias": [],
+    "command": "gitlab:tag:list",
+    "flagAliases": [],
+    "flagChars": ["e", "p"],
+    "flags": ["env-file", "gitlab-token", "gitlab-url", "json", "limit", "order-by", "project", "search", "sort"],
+    "plugin": "@simplysf/simply-gitlab"
+  }
+]
