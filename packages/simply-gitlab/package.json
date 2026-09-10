@@ -1,7 +1,7 @@
 {
   "name": "@simplysf/simply-gitlab",
   "description": "Command-line interface for working with GitLab",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "@ClayChipps",
   "homepage": "https://github.com/SimplySF/simply-gitlab",
   "bugs": "https://github.com/SimplySF/simply-gitlab/issues",
@@ -89,7 +89,7 @@
   },
   "dependencies": {
     "@oclif/core": "^4.11.2",
-    "@simplysf/simply-gitlab-core": "workspace:^0.1.0"
+    "@simplysf/simply-gitlab-core": "workspace:^0.2.0"
   },
   "devDependencies": {
     "@oclif/plugin-command-snapshot": "^5.4.0",
