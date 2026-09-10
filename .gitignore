@@ -158,3 +158,9 @@ lib
 # Nx cache
 .nx/
 
+# Astro
+.astro/
+
+# Command-reference pages: regenerated from packages/simply-gitlab/README.md by
+# site/scripts/sync-command-reference.mjs on every `astro build`/`dev`, never hand-edited.
+site/src/content/docs/reference/
