@@ -1,6 +1,6 @@
 # 0007 — Project and group configuration baselines
 
-**Status:** Draft
+**Status:** Implemented (PR #4)
 **Package:** all three
 **Date:** 2026-09-10
 

@@ -40,9 +40,32 @@ describe('the tool catalogue', () => {
     for (const tool of TOOLS) expect(tool.name).toMatch(/^gitlab(_[a-z]+)+$/);
   });
 
-  it('covers every CLI command', () => {
+  /**
+   * Commands deliberately not exposed as tools, each with the design document that argues for it.
+   *
+   * An allowlist rather than a relaxed assertion: a command added tomorrow without a tool still
+   * fails, and adding an entry here is a visible decision rather than a quiet omission.
+   */
+  const DELIBERATELY_UNEXPOSED: Readonly<Record<string, string>> = {
+    'gitlab:config:apply': 'docs/design/0007: applying a baseline across many projects is a person s job',
+  };
+
+  it('covers every CLI command, except the ones deliberately left out', () => {
     const covered = new Set(TOOLS.map((tool) => tool.command.join(':')));
-    expect([...cliCommands].filter((command) => !covered.has(command))).toStrictEqual([]);
+    const missing = [...cliCommands].filter(
+      (command) => !covered.has(command) && DELIBERATELY_UNEXPOSED[command] === undefined,
+    );
+    expect(missing).toStrictEqual([]);
+  });
+
+  it('does not list a command as deliberately unexposed once it has a tool', () => {
+    // Otherwise the allowlist quietly outlives the decision it records.
+    const covered = new Set(TOOLS.map((tool) => tool.command.join(':')));
+    expect(Object.keys(DELIBERATELY_UNEXPOSED).filter((command) => covered.has(command))).toStrictEqual([]);
+  });
+
+  it('only excuses commands the CLI actually has', () => {
+    expect(Object.keys(DELIBERATELY_UNEXPOSED).filter((command) => !cliCommands.has(command))).toStrictEqual([]);
   });
 
   it('names only commands the CLI actually has', () => {
@@ -82,5 +105,28 @@ describe('the tool catalogue', () => {
       expect(tool.title.length).toBeGreaterThan(0);
       expect(tool.description.length).toBeGreaterThan(40);
     }
+  });
+});
+
+describe('configuration baselines', () => {
+  it('offers no tool that applies a baseline', () => {
+    // Changing settings across fifty projects is a deployment, not a tool call: it belongs to a
+    // person with the plan in front of them. Pinned so the absence is a decision, not an oversight.
+    // See docs/design/0007-configuration-baselines.md.
+    const applyTools = TOOLS.filter((tool) => tool.command.join(':') === 'gitlab:config:apply');
+    expect(applyTools).toStrictEqual([]);
+  });
+
+  it('exposes plan and export, and both are reads', () => {
+    for (const name of ['gitlab_config_plan', 'gitlab_config_export']) {
+      const tool = TOOLS.find((entry) => entry.name === name);
+      expect(tool, name).toBeDefined();
+      expect(tool?.kind, name).toBe('read');
+    }
+  });
+
+  it('tells an agent where applying a baseline actually happens', () => {
+    const plan = TOOLS.find((tool) => tool.name === 'gitlab_config_plan');
+    expect(plan?.description).toMatch(/simply gitlab config apply/);
   });
 });

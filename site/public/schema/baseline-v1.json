@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://simplysf.github.io/simply-gitlab/schema/baseline-v1.json",
+  "title": "Simply GitLab configuration baseline",
+  "description": "What a set of GitLab projects should have in common. Read by `simply gitlab config plan` and `simply gitlab config apply`. Advisory: the CLI's own validator is what runs, and its errors name the exact path that is wrong.",
+  "type": "object",
+  "required": ["version"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "version": {
+      "const": 1,
+      "description": "Config format version. Only 1 exists."
+    },
+    "targets": { "$ref": "#/$defs/targets" },
+    "group": { "$ref": "#/$defs/groupDesired" },
+    "project": { "$ref": "#/$defs/projectDesired" },
+    "overrides": {
+      "type": "object",
+      "description": "Per-target exceptions, keyed by full project or group path.",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "project": { "$ref": "#/$defs/projectDesired" },
+          "group": { "$ref": "#/$defs/groupDesired" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "targets": {
+      "type": "object",
+      "description": "What the run acts on. Groups expand through their subgroups.",
+      "additionalProperties": false,
+      "anyOf": [{ "required": ["groups"] }, { "required": ["projects"] }],
+      "properties": {
+        "groups": {
+          "type": "array",
+          "description": "Group paths or ids. Each expands to every project in the group and its subgroups.",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "projects": {
+          "type": "array",
+          "description": "Individual project paths or ids, added to whatever the groups expanded to.",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "exclude": {
+          "type": "array",
+          "description": "Removed from the union. A trailing * drops a whole subtree.",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "groupDesired": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "settings": {
+          "type": "object",
+          "description": "Attributes for PUT /groups/:id. Names are GitLab's own."
+        }
+      }
+    },
+    "projectDesired": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "settings": {
+          "type": "object",
+          "description": "Attributes for PUT /projects/:id — merge method, CI config path, build timeout, and the rest. Names are GitLab's own; only what you declare is compared."
+        },
+        "protectedBranches": {
+          "$ref": "#/$defs/section",
+          "description": "Branch protections, keyed by name. Corrected in place with PATCH."
+        },
+        "protectedTags": {
+          "$ref": "#/$defs/section",
+          "description": "Tag protections, keyed by name. GitLab has no update endpoint, so a change is a delete and a create."
+        },
+        "approvals": {
+          "type": "object",
+          "description": "Project approval settings (Premium/Ultimate)."
+        },
+        "approvalRules": {
+          "$ref": "#/$defs/section",
+          "description": "Approval rules, keyed by name (Premium/Ultimate). Accepts `usernames`, group paths under `groups`, and branch names under `protectedBranches`; the ids are resolved for you."
+        },
+        "pushRules": {
+          "type": "object",
+          "description": "Push rules (Premium/Ultimate)."
+        },
+        "variables": {
+          "$ref": "#/$defs/section",
+          "description": "CI/CD variable metadata, keyed by key + environment_scope. Reported only, never written: creating or updating a variable requires its value, and this file holds none."
+        }
+      }
+    },
+    "section": {
+      "description": "A list section: a bare array, or an object that can also prune or replace.",
+      "oneOf": [
+        { "type": "array", "items": { "type": "object" } },
+        {
+          "type": "object",
+          "required": ["entries"],
+          "additionalProperties": false,
+          "properties": {
+            "prune": {
+              "type": "boolean",
+              "description": "Delete entries that exist on the instance but are not declared here. Off by default, so a first run cannot remove a protection that predates the config.",
+              "default": false
+            },
+            "$replace": {
+              "type": "boolean",
+              "description": "In an override, replace the baseline's entries entirely instead of merging into them by key.",
+              "default": false
+            },
+            "entries": { "type": "array", "items": { "type": "object" } }
+          }
+        }
+      ]
+    }
+  }
+}

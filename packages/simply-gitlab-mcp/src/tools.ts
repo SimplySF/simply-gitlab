@@ -16,6 +16,13 @@
 
 import {
   assertIid,
+  ConfigError,
+  EXPORTABLE_SECTIONS,
+  exportConfig,
+  loadBaselineConfig,
+  planRun,
+  planToJson,
+  validateBaselineConfig,
   buildCommitBody,
   buildFileWrite,
   buildMergeRequestCreateBody,
@@ -644,6 +651,91 @@ export const TOOLS: readonly ToolSpec[] = [
           { name: input.name, search: input.search, states: input.state },
           input.limit ?? 20,
         ),
+  }),
+
+  // --- Configuration baselines ---
+  tool({
+    name: 'gitlab_config_export',
+    title: 'GitLab: export a baseline config',
+    description:
+      'Read one project and return a baseline configuration describing it — merge and CI settings, ' +
+      'protected branches and tags, approval settings and rules, push rules, and variable metadata. ' +
+      'The output is the file gitlab_config_plan takes, so this is how a baseline gets written: ' +
+      'export the project that already looks right, then delete what does not matter.\n\n' +
+      'Variables are exported as metadata only — keys, scopes, and flags, never values.',
+    command: ['gitlab', 'config', 'export'],
+    kind: 'read',
+    inputSchema: {
+      project,
+      sections: z
+        .array(z.enum(EXPORTABLE_SECTIONS))
+        .optional()
+        .describe('Sections to export. Defaults to all of them.'),
+    },
+    run: (ctx, input) =>
+      exportConfig(ctx.gitlab(), input.project, {
+        sections: input.sections === undefined || input.sections.length === 0 ? undefined : input.sections,
+      }),
+  }),
+  tool({
+    name: 'gitlab_config_plan',
+    title: 'GitLab: plan a baseline against projects',
+    description:
+      'Compare a baseline configuration against every project it targets and report what differs. ' +
+      'Reads only — nothing is changed. This is the tool for questions like "which of our projects ' +
+      'are missing the two-approval rule?" or "is main protected everywhere?".\n\n' +
+      'Pass the config as an object in "config", or a path to a JSON file in "configPath". Only ' +
+      'the attributes the config declares are compared; anything it does not mention is ignored.\n\n' +
+      'Each target reports sections with their changes: create, update, delete, or report. A ' +
+      'delete carries a note when the section does not prune, meaning the drift exists but would ' +
+      'not be corrected. A section can also come back unsupported, which on a Free instance is what ' +
+      'approval rules and push rules do.\n\n' +
+      'There is deliberately no tool that applies a baseline. Changing settings across fifty ' +
+      'projects is a deployment, not a tool call, and belongs to a person with the plan in front ' +
+      'of them: "simply gitlab config apply".',
+    command: ['gitlab', 'config', 'plan'],
+    kind: 'read',
+    inputSchema: {
+      config: z
+        .record(z.string(), z.unknown())
+        .optional()
+        .describe('The baseline configuration itself. Use this or configPath, not both.'),
+      configPath: z.string().optional().describe('Path to a JSON baseline configuration file.'),
+      targets: z
+        .array(z.string())
+        .optional()
+        .describe('Limit the run to these project paths. They must be ones the config targets.'),
+      concurrency: z
+        .number()
+        .int()
+        .min(1)
+        .max(16)
+        .optional()
+        .describe('How many targets to read at once. Defaults to 4.'),
+    },
+    run: async (ctx, input) => {
+      if ((input.config === undefined) === (input.configPath === undefined)) {
+        throw new ConfigError('Pass either "config" or "configPath", and not both.');
+      }
+      const config =
+        input.configPath === undefined
+          ? validateBaselineConfig(input.config, 'config')
+          : loadBaselineConfig(input.configPath);
+
+      const { targets, plan } = await planRun(ctx.gitlab(), config, {
+        concurrency: input.concurrency,
+        only: input.targets,
+      });
+
+      return {
+        targets: {
+          projects: targets.projects.map((t) => t.path),
+          groups: targets.groups.map((t) => t.path),
+          excluded: targets.excluded,
+        },
+        ...(planToJson(plan) as object),
+      };
+    },
   }),
 
   // --- Search ---

@@ -352,6 +352,137 @@ export class GitLabClient {
     return this.collect(`/projects/${segment(project)}/releases`, {}, limit);
   }
 
+  // --- Configuration: project and group settings ---
+
+  /**
+   * Partially updates a project. Only the attributes sent are changed — GitLab does not document
+   * that outright, and `test/gitlab-client.test.ts` pins it, because a full-replace PUT would make
+   * every baseline apply destructive.
+   */
+  public async updateProject(project: ProjectRef, body: Record<string, unknown>): Promise<unknown> {
+    return this.request(`/projects/${segment(project)}`, { method: 'PUT', body, mutating: true });
+  }
+
+  public async getGroup(group: ProjectRef): Promise<unknown> {
+    return this.request(`/groups/${segment(group)}`, { method: 'GET' });
+  }
+
+  public async updateGroup(group: ProjectRef, body: Record<string, unknown>): Promise<unknown> {
+    return this.request(`/groups/${segment(group)}`, { method: 'PUT', body, mutating: true });
+  }
+
+  /** Every project in a group, subgroups included — how a baseline names fifty projects at once. */
+  public async listGroupProjects(group: ProjectRef, limit = 500): Promise<ListResult> {
+    return this.collect(
+      `/groups/${segment(group)}/projects`,
+      { include_subgroups: true, archived: false, with_shared: false, simple: true },
+      limit,
+    );
+  }
+
+  // --- Configuration: protected branches and tags ---
+
+  public async listProtectedBranches(project: ProjectRef, limit = 100): Promise<ListResult> {
+    return this.collect(`/projects/${segment(project)}/protected_branches`, {}, limit);
+  }
+
+  public async protectBranch(project: ProjectRef, body: Record<string, unknown>): Promise<unknown> {
+    return this.request(`/projects/${segment(project)}/protected_branches`, {
+      method: 'POST',
+      body,
+      mutating: true,
+    });
+  }
+
+  /**
+   * Changes an existing branch protection in place. This is what keeps a baseline apply safe: the
+   * alternative is DELETE followed by POST, which leaves the branch unprotected in between.
+   */
+  public async patchProtectedBranch(
+    project: ProjectRef,
+    name: string,
+    body: Record<string, unknown>,
+  ): Promise<unknown> {
+    return this.request(`/projects/${segment(project)}/protected_branches/${segment(name)}`, {
+      method: 'PATCH',
+      body,
+      mutating: true,
+    });
+  }
+
+  public async unprotectBranch(project: ProjectRef, name: string): Promise<unknown> {
+    return this.request(`/projects/${segment(project)}/protected_branches/${segment(name)}`, {
+      method: 'DELETE',
+      mutating: true,
+    });
+  }
+
+  public async listProtectedTags(project: ProjectRef, limit = 100): Promise<ListResult> {
+    return this.collect(`/projects/${segment(project)}/protected_tags`, {}, limit);
+  }
+
+  public async protectTag(project: ProjectRef, body: Record<string, unknown>): Promise<unknown> {
+    return this.request(`/projects/${segment(project)}/protected_tags`, { method: 'POST', body, mutating: true });
+  }
+
+  public async unprotectTag(project: ProjectRef, name: string): Promise<unknown> {
+    return this.request(`/projects/${segment(project)}/protected_tags/${segment(name)}`, {
+      method: 'DELETE',
+      mutating: true,
+    });
+  }
+
+  // --- Configuration: approvals and push rules (Premium/Ultimate) ---
+
+  public async getApprovalSettings(project: ProjectRef): Promise<unknown> {
+    return this.request(`/projects/${segment(project)}/approvals`, { method: 'GET' });
+  }
+
+  /** Approval settings are updated with POST rather than PUT. That is GitLab's shape, not a slip. */
+  public async updateApprovalSettings(project: ProjectRef, body: Record<string, unknown>): Promise<unknown> {
+    return this.request(`/projects/${segment(project)}/approvals`, { method: 'POST', body, mutating: true });
+  }
+
+  public async listApprovalRules(project: ProjectRef, limit = 100): Promise<ListResult> {
+    return this.collect(`/projects/${segment(project)}/approval_rules`, {}, limit);
+  }
+
+  public async createApprovalRule(project: ProjectRef, body: Record<string, unknown>): Promise<unknown> {
+    return this.request(`/projects/${segment(project)}/approval_rules`, { method: 'POST', body, mutating: true });
+  }
+
+  public async updateApprovalRule(
+    project: ProjectRef,
+    ruleId: number,
+    body: Record<string, unknown>,
+  ): Promise<unknown> {
+    return this.request(`/projects/${segment(project)}/approval_rules/${ruleId}`, {
+      method: 'PUT',
+      body,
+      mutating: true,
+    });
+  }
+
+  public async deleteApprovalRule(project: ProjectRef, ruleId: number): Promise<unknown> {
+    return this.request(`/projects/${segment(project)}/approval_rules/${ruleId}`, {
+      method: 'DELETE',
+      mutating: true,
+    });
+  }
+
+  public async getPushRules(project: ProjectRef): Promise<unknown> {
+    return this.request(`/projects/${segment(project)}/push_rule`, { method: 'GET' });
+  }
+
+  /** POST creates the project push rule set; PUT edits it once one exists. */
+  public async createPushRules(project: ProjectRef, body: Record<string, unknown>): Promise<unknown> {
+    return this.request(`/projects/${segment(project)}/push_rule`, { method: 'POST', body, mutating: true });
+  }
+
+  public async updatePushRules(project: ProjectRef, body: Record<string, unknown>): Promise<unknown> {
+    return this.request(`/projects/${segment(project)}/push_rule`, { method: 'PUT', body, mutating: true });
+  }
+
   // --- Search ---
 
   /**

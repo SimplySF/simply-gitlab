@@ -118,6 +118,9 @@ exitCode, status?, body?}}` — and nothing to stdout. Exit codes are identical 
 - [`simply gitlab commit diff`](#simply-gitlab-commit-diff)
 - [`simply gitlab commit list`](#simply-gitlab-commit-list)
 - [`simply gitlab commit view`](#simply-gitlab-commit-view)
+- [`simply gitlab config apply`](#simply-gitlab-config-apply)
+- [`simply gitlab config export`](#simply-gitlab-config-export)
+- [`simply gitlab config plan`](#simply-gitlab-config-plan)
 - [`simply gitlab file create`](#simply-gitlab-file-create)
 - [`simply gitlab file update`](#simply-gitlab-file-update)
 - [`simply gitlab file view`](#simply-gitlab-file-view)
@@ -172,7 +175,7 @@ FLAG DESCRIPTIONS
     explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/branch/create.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.1.0/packages/simply-gitlab/lib/commands/gitlab/branch/create.js)_
+_See code: [lib/commands/gitlab/branch/create.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.2.0/packages/simply-gitlab/lib/commands/gitlab/branch/create.js)_
 
 ## `simply gitlab branch list`
 
@@ -215,7 +218,7 @@ FLAG DESCRIPTIONS
     explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/branch/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.1.0/packages/simply-gitlab/lib/commands/gitlab/branch/list.js)_
+_See code: [lib/commands/gitlab/branch/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.2.0/packages/simply-gitlab/lib/commands/gitlab/branch/list.js)_
 
 ## `simply gitlab ci environment list`
 
@@ -261,7 +264,7 @@ FLAG DESCRIPTIONS
     explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/ci/environment/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.1.0/packages/simply-gitlab/lib/commands/gitlab/ci/environment/list.js)_
+_See code: [lib/commands/gitlab/ci/environment/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.2.0/packages/simply-gitlab/lib/commands/gitlab/ci/environment/list.js)_
 
 ## `simply gitlab ci job list`
 
@@ -305,7 +308,7 @@ FLAG DESCRIPTIONS
     explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/ci/job/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.1.0/packages/simply-gitlab/lib/commands/gitlab/ci/job/list.js)_
+_See code: [lib/commands/gitlab/ci/job/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.2.0/packages/simply-gitlab/lib/commands/gitlab/ci/job/list.js)_
 
 ## `simply gitlab ci job log`
 
@@ -350,7 +353,7 @@ FLAG DESCRIPTIONS
     explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/ci/job/log.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.1.0/packages/simply-gitlab/lib/commands/gitlab/ci/job/log.js)_
+_See code: [lib/commands/gitlab/ci/job/log.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.2.0/packages/simply-gitlab/lib/commands/gitlab/ci/job/log.js)_
 
 ## `simply gitlab ci variable list`
 
@@ -401,7 +404,7 @@ FLAG DESCRIPTIONS
     where this output is going.
 ```
 
-_See code: [lib/commands/gitlab/ci/variable/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.1.0/packages/simply-gitlab/lib/commands/gitlab/ci/variable/list.js)_
+_See code: [lib/commands/gitlab/ci/variable/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.2.0/packages/simply-gitlab/lib/commands/gitlab/ci/variable/list.js)_
 
 ## `simply gitlab commit create`
 
@@ -461,7 +464,7 @@ FLAG DESCRIPTIONS
     explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/commit/create.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.1.0/packages/simply-gitlab/lib/commands/gitlab/commit/create.js)_
+_See code: [lib/commands/gitlab/commit/create.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.2.0/packages/simply-gitlab/lib/commands/gitlab/commit/create.js)_
 
 ## `simply gitlab commit diff`
 
@@ -503,7 +506,7 @@ FLAG DESCRIPTIONS
     explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/commit/diff.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.1.0/packages/simply-gitlab/lib/commands/gitlab/commit/diff.js)_
+_See code: [lib/commands/gitlab/commit/diff.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.2.0/packages/simply-gitlab/lib/commands/gitlab/commit/diff.js)_
 
 ## `simply gitlab commit list`
 
@@ -554,7 +557,7 @@ FLAG DESCRIPTIONS
     explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/commit/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.1.0/packages/simply-gitlab/lib/commands/gitlab/commit/list.js)_
+_See code: [lib/commands/gitlab/commit/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.2.0/packages/simply-gitlab/lib/commands/gitlab/commit/list.js)_
 
 ## `simply gitlab commit view`
 
@@ -595,7 +598,193 @@ FLAG DESCRIPTIONS
     explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/commit/view.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.1.0/packages/simply-gitlab/lib/commands/gitlab/commit/view.js)_
+_See code: [lib/commands/gitlab/commit/view.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.2.0/packages/simply-gitlab/lib/commands/gitlab/commit/view.js)_
+
+## `simply gitlab config apply`
+
+Bring projects onto a baseline config.
+
+```
+USAGE
+  $ simply gitlab config apply -c <value> [--json] [-e <value>] [--gitlab-url <value>] [--gitlab-token <value>] [--target
+    <value>...] [--concurrency <value>] [--fail-fast] [--dry-run]
+
+FLAGS
+  -c, --config=<value>       (required) Path to the baseline configuration file.
+      --concurrency=<value>  [default: 4] How many targets to work on at once.
+      --dry-run              Print the request that would be sent and exit without sending it.
+      --fail-fast            Stop at the first target that fails instead of continuing.
+      --target=<value>...    Limit the run to this project path. Repeatable.
+
+CONNECTION FLAGS
+  -e, --env-file=<value>      Path to a .env file holding connection settings.
+      --gitlab-token=<value>  [env: GITLAB_TOKEN] Personal, project, or group access token.
+      --gitlab-url=<value>    [env: GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
+
+GLOBAL FLAGS
+  --json  Format output as json.
+
+DESCRIPTION
+  Bring projects onto a baseline config.
+
+  Computes the same plan as config plan, then executes it. Only what the plan showed is sent, so a preview is a
+  guarantee rather than an approximation, and a second run against a converged project sends no requests at all.
+
+  Sections are applied in a fixed order — settings, protected branches, protected tags, approval settings, approval
+  rules, push rules — because an approval rule scoped to a branch needs that branch protected before it can reference
+  it.
+
+  By default the config only adds and corrects what it declares. A section that sets "prune": true also deletes entries
+  the config does not mention.
+
+  One target failing does not abandon the rest; the summary says which ones failed and where they stopped. There is no
+  transaction across GitLab endpoints, so a target that failed part-way keeps the sections already applied — run config
+  plan afterwards to see what is left.
+
+EXAMPLES
+  $ simply gitlab config apply --config ./baseline.json --dry-run
+
+  $ simply gitlab config apply --config ./baseline.json
+
+  $ simply gitlab config apply --config ./baseline.json --target group/project
+
+FLAG DESCRIPTIONS
+  -e, --env-file=<value>  Path to a .env file holding connection settings.
+
+    Loaded before anything else. Variables already present in the environment win, so the file never overrides an
+    explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
+
+  --concurrency=<value>  How many targets to work on at once.
+
+    Small by default. The client already retries a rate-limited request with a capped Retry-After, so raising this
+    trades a shared instance responsiveness for very little wall-clock time.
+
+  --target=<value>...  Limit the run to this project path. Repeatable.
+
+    Narrows a run without editing the config, for the loop of fixing one project and checking it again. Naming a project
+    the config does not target is an error rather than a silent no-op.
+```
+
+_See code: [lib/commands/gitlab/config/apply.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.2.0/packages/simply-gitlab/lib/commands/gitlab/config/apply.js)_
+
+## `simply gitlab config export`
+
+Write a baseline config describing an existing project.
+
+```
+USAGE
+  $ simply gitlab config export -p <value> [--json] [-e <value>] [--gitlab-url <value>] [--gitlab-token <value>]
+    [--section settings|protectedBranches|protectedTags|approvals|approvalRules|pushRules|variables...]
+
+FLAGS
+  -p, --project=<value>      (required) [env: GITLAB_PROJECT] Project id, or its full path such as
+                             group/subgroup/project.
+      --section=<option>...  Comma-separated sections to export. Defaults to all of them.
+                             <options:
+                             settings|protectedBranches|protectedTags|approvals|approvalRules|pushRules|variables>
+
+CONNECTION FLAGS
+  -e, --env-file=<value>      Path to a .env file holding connection settings.
+      --gitlab-token=<value>  [env: GITLAB_TOKEN] Personal, project, or group access token.
+      --gitlab-url=<value>    [env: GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
+
+GLOBAL FLAGS
+  --json  Format output as json.
+
+DESCRIPTION
+  Write a baseline config describing an existing project.
+
+  Reads one project and prints a configuration file that describes it, ready to be edited and pointed at the rest of
+  your projects. Writing a baseline by hand against forty attributes is miserable and the first draft is wrong;
+  exporting the project that already looks right and deleting what you do not care about is the way to start.
+
+  The output is deliberately verbose — every supported key, not a curated subset — because deleting a line is easier
+  than discovering that a key exists. Variables are exported as metadata only: keys, scopes, and flags, never values.
+
+  The exported targets name only the project it came from. Widen that on purpose rather than inheriting a blast radius
+  from an export.
+
+EXAMPLES
+  $ simply gitlab config export --project group/project > baseline.json
+
+  $ simply gitlab config export --project group/project --section settings,protectedBranches
+
+FLAG DESCRIPTIONS
+  -e, --env-file=<value>  Path to a .env file holding connection settings.
+
+    Loaded before anything else. Variables already present in the environment win, so the file never overrides an
+    explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
+```
+
+_See code: [lib/commands/gitlab/config/export.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.2.0/packages/simply-gitlab/lib/commands/gitlab/config/export.js)_
+
+## `simply gitlab config plan`
+
+Report how projects differ from a baseline config.
+
+```
+USAGE
+  $ simply gitlab config plan -c <value> [--json] [-e <value>] [--gitlab-url <value>] [--gitlab-token <value>] [--target
+    <value>...] [--concurrency <value>] [--fail-fast] [--fail-on-drift]
+
+FLAGS
+  -c, --config=<value>       (required) Path to the baseline configuration file.
+      --concurrency=<value>  [default: 4] How many targets to work on at once.
+      --fail-fast            Stop at the first target that fails instead of continuing.
+      --fail-on-drift        Exit 1 when any target differs from the baseline.
+      --target=<value>...    Limit the run to this project path. Repeatable.
+
+CONNECTION FLAGS
+  -e, --env-file=<value>      Path to a .env file holding connection settings.
+      --gitlab-token=<value>  [env: GITLAB_TOKEN] Personal, project, or group access token.
+      --gitlab-url=<value>    [env: GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
+
+GLOBAL FLAGS
+  --json  Format output as json.
+
+DESCRIPTION
+  Report how projects differ from a baseline config.
+
+  Reads the baseline, expands its targets, and prints what differs on each one. Nothing is sent that changes anything,
+  so this is safe to run against every project you have.
+
+  Only the attributes the config declares are compared. A project with forty settings the config never mentions shows
+  nothing for them — that is what makes a baseline safe to point at projects that already exist.
+
+  Entries that exist on the instance but are not in the config are shown as removals, marked as not pruned unless that
+  section opts into pruning. Seeing what you are choosing not to fix is most of the value of running this across fifty
+  projects.
+
+  Use --fail-on-drift in a scheduled job: it exits 1 when anything differs, so CI can tell you that something drifted
+  without anyone having to read the output.
+
+EXAMPLES
+  $ simply gitlab config plan --config ./baseline.json
+
+  $ simply gitlab config plan --config ./baseline.json --target group/project
+
+  $ simply gitlab config plan --config ./baseline.json --fail-on-drift
+
+  $ simply gitlab config plan --config ./baseline.json --json | jq .summary
+
+FLAG DESCRIPTIONS
+  -e, --env-file=<value>  Path to a .env file holding connection settings.
+
+    Loaded before anything else. Variables already present in the environment win, so the file never overrides an
+    explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
+
+  --concurrency=<value>  How many targets to work on at once.
+
+    Small by default. The client already retries a rate-limited request with a capped Retry-After, so raising this
+    trades a shared instance responsiveness for very little wall-clock time.
+
+  --target=<value>...  Limit the run to this project path. Repeatable.
+
+    Narrows a run without editing the config, for the loop of fixing one project and checking it again. Naming a project
+    the config does not target is an error rather than a silent no-op.
+```
+
+_See code: [lib/commands/gitlab/config/plan.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.2.0/packages/simply-gitlab/lib/commands/gitlab/config/plan.js)_
 
 ## `simply gitlab file create`
 
@@ -647,7 +836,7 @@ FLAG DESCRIPTIONS
     explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/file/create.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.1.0/packages/simply-gitlab/lib/commands/gitlab/file/create.js)_
+_See code: [lib/commands/gitlab/file/create.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.2.0/packages/simply-gitlab/lib/commands/gitlab/file/create.js)_
 
 ## `simply gitlab file update`
 
@@ -700,7 +889,7 @@ FLAG DESCRIPTIONS
     explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/file/update.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.1.0/packages/simply-gitlab/lib/commands/gitlab/file/update.js)_
+_See code: [lib/commands/gitlab/file/update.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.2.0/packages/simply-gitlab/lib/commands/gitlab/file/update.js)_
 
 ## `simply gitlab file view`
 
@@ -746,7 +935,7 @@ FLAG DESCRIPTIONS
     explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/file/view.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.1.0/packages/simply-gitlab/lib/commands/gitlab/file/view.js)_
+_See code: [lib/commands/gitlab/file/view.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.2.0/packages/simply-gitlab/lib/commands/gitlab/file/view.js)_
 
 ## `simply gitlab mr create`
 
@@ -807,7 +996,7 @@ FLAG DESCRIPTIONS
     explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/mr/create.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.1.0/packages/simply-gitlab/lib/commands/gitlab/mr/create.js)_
+_See code: [lib/commands/gitlab/mr/create.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.2.0/packages/simply-gitlab/lib/commands/gitlab/mr/create.js)_
 
 ## `simply gitlab mr list`
 
@@ -861,7 +1050,7 @@ FLAG DESCRIPTIONS
     explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/mr/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.1.0/packages/simply-gitlab/lib/commands/gitlab/mr/list.js)_
+_See code: [lib/commands/gitlab/mr/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.2.0/packages/simply-gitlab/lib/commands/gitlab/mr/list.js)_
 
 ## `simply gitlab mr update`
 
@@ -925,7 +1114,7 @@ FLAG DESCRIPTIONS
     explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/mr/update.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.1.0/packages/simply-gitlab/lib/commands/gitlab/mr/update.js)_
+_See code: [lib/commands/gitlab/mr/update.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.2.0/packages/simply-gitlab/lib/commands/gitlab/mr/update.js)_
 
 ## `simply gitlab mr view`
 
@@ -966,7 +1155,7 @@ FLAG DESCRIPTIONS
     explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/mr/view.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.1.0/packages/simply-gitlab/lib/commands/gitlab/mr/view.js)_
+_See code: [lib/commands/gitlab/mr/view.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.2.0/packages/simply-gitlab/lib/commands/gitlab/mr/view.js)_
 
 ## `simply gitlab project list`
 
@@ -1013,7 +1202,7 @@ FLAG DESCRIPTIONS
     explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/project/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.1.0/packages/simply-gitlab/lib/commands/gitlab/project/list.js)_
+_See code: [lib/commands/gitlab/project/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.2.0/packages/simply-gitlab/lib/commands/gitlab/project/list.js)_
 
 ## `simply gitlab project view`
 
@@ -1052,7 +1241,7 @@ FLAG DESCRIPTIONS
     explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/project/view.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.1.0/packages/simply-gitlab/lib/commands/gitlab/project/view.js)_
+_See code: [lib/commands/gitlab/project/view.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.2.0/packages/simply-gitlab/lib/commands/gitlab/project/view.js)_
 
 ## `simply gitlab release list`
 
@@ -1093,7 +1282,7 @@ FLAG DESCRIPTIONS
     explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/release/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.1.0/packages/simply-gitlab/lib/commands/gitlab/release/list.js)_
+_See code: [lib/commands/gitlab/release/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.2.0/packages/simply-gitlab/lib/commands/gitlab/release/list.js)_
 
 ## `simply gitlab search`
 
@@ -1148,7 +1337,7 @@ FLAG DESCRIPTIONS
     explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/search.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.1.0/packages/simply-gitlab/lib/commands/gitlab/search.js)_
+_See code: [lib/commands/gitlab/search.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.2.0/packages/simply-gitlab/lib/commands/gitlab/search.js)_
 
 ## `simply gitlab tag list`
 
@@ -1195,7 +1384,7 @@ FLAG DESCRIPTIONS
     explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/tag/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.1.0/packages/simply-gitlab/lib/commands/gitlab/tag/list.js)_
+_See code: [lib/commands/gitlab/tag/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.2.0/packages/simply-gitlab/lib/commands/gitlab/tag/list.js)_
 <!-- commandsstop -->
 
 ## License

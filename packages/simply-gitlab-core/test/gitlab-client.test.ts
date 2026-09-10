@@ -172,3 +172,52 @@ describe('GitLabClient.search', () => {
     );
   });
 });
+
+describe('GitLabClient configuration endpoints', () => {
+  it('sends only the attributes given to updateProject', async () => {
+    // The design rests on PUT /projects/:id being a partial update. GitLab does not document that
+    // outright, so it is pinned here: if it were ever a full replace, every apply would be
+    // destructive and this test is what would say so.
+    let received: unknown;
+    server.route('/api/v4/projects/1', (req, res, body) => {
+      received = body === '' ? undefined : (JSON.parse(body) as unknown);
+      respondJson(res, 200, { id: 1 });
+    });
+
+    await client().updateProject(1, { merge_method: 'ff' });
+
+    expect(received).toStrictEqual({ merge_method: 'ff' });
+    expect(server.requests[0]?.method).toBe('PUT');
+  });
+
+  it('patches a protected branch in place, encoding the branch name', async () => {
+    server.route('/api/v4/projects/1/protected_branches/release%2Fnext', (req, res) => {
+      respondJson(res, 200, { method: req.method });
+    });
+
+    await expect(client().patchProtectedBranch(1, 'release/next', { allow_force_push: false })).resolves.toEqual({
+      method: 'PATCH',
+    });
+  });
+
+  it('updates approval settings with POST, which is the shape GitLab takes', async () => {
+    server.route('/api/v4/projects/1/approvals', (req, res) => {
+      respondJson(res, 200, { method: req.method });
+    });
+
+    await expect(client().updateApprovalSettings(1, { reset_approvals_on_push: true })).resolves.toEqual({
+      method: 'POST',
+    });
+  });
+
+  it('lists a group including its subgroups', async () => {
+    server.route('/api/v4/groups/platform/projects', (req, res) => {
+      respondJson(res, 200, [{ id: 1, path_with_namespace: 'platform/api', url: req.url }]);
+    });
+
+    const result = await client().listGroupProjects('platform');
+
+    expect(result.items).toHaveLength(1);
+    expect(server.requests[0]?.url).toContain('include_subgroups=true');
+  });
+});
