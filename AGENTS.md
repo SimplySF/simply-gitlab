@@ -25,6 +25,12 @@ Use the smallest relevant topic document rather than loading the whole directory
 The package [README](packages/simply-gitlab/README.md) is the generated user-facing command
 reference. Update command metadata first, then regenerate it as described in `CONTRIBUTING.md`.
 
+The [docs site](site) in `site/` publishes that same reference plus four hand-written guides. Its
+`reference/` pages are generated from the package README and are gitignored — never hand-edit them.
+A guide that no longer matches `--help` is worse than no guide, so when you change credentials,
+write safety, the `--json`/exit-code contract, or the MCP server, update the matching page under
+`site/src/content/docs/guides/`. See "Documentation Site" in `CONTRIBUTING.md`.
+
 ## Working conventions
 
 - **Implement functionality in `@simplysf/simply-gitlab-core` first, then expose it through both

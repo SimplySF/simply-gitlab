@@ -92,6 +92,12 @@ URL-encode it.
 
 ## Documentation
 
+**[simplysf.github.io/simply-gitlab](https://simplysf.github.io/simply-gitlab/)** — the docs site,
+with a getting-started walkthrough, guides for credentials, write safety, scripting, and the MCP
+server, and the full command reference.
+
+In this repo:
+
 - [Command reference](packages/simply-gitlab/README.md) — every command, flag, and example
 - [MCP server](packages/simply-gitlab-mcp/README.md) — the tool catalogue and client setup
 - [Design documents](docs/design/README.md) — why things are the way they are
