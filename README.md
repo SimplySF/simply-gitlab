@@ -31,7 +31,7 @@ All three packages need Node.js 22 or later.
 **The CLI**, for a person at a terminal or a script:
 
 ```sh
-npm install -g @simplysf/simply-gitlab
+npm install -g @simplysf/simply-cli
 simply gitlab --help
 ```
 

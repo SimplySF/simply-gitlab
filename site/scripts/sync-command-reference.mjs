@@ -196,7 +196,7 @@ writeFile(
       '`sync` script), so it always matches the published `--help` output.',
       '',
       '```sh',
-      `npm install -g ${pkg.name}`,
+      'npm install -g @simplysf/simply-cli',
       'simply gitlab --help',
       '```',
       '',

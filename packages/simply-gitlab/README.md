@@ -15,9 +15,25 @@ The same capabilities are available to AI agents through
 
 ## Install
 
-```bash
-npm install -g @simplysf/simply-gitlab
+`@simplysf/simply-gitlab` is a plugin of the `simply` CLI, not a command of its own. Install the host; this
+plugin installs itself the first time you run one of its commands.
+
+```sh
+npm install -g @simplysf/simply-cli
+
+simply gitlab --help
 ```
+
+To install it ahead of time — in CI, a container image, or offline:
+
+```sh
+simply plugins install @simplysf/simply-gitlab
+```
+
+> **Upgrading from a standalone install?** This package used to own the `simply` command itself,
+> which meant it could not be installed alongside SimplySF's other CLIs. It is now a plugin.
+> Run `npm uninstall -g @simplysf/simply-gitlab` and install `@simplysf/simply-cli` instead.
+> **Your commands do not change** — `simply gitlab …` is exactly what it was.
 
 ## Issues
 
