@@ -11,7 +11,7 @@ description: Requirements, installation, and a first command for the Simply GitL
 ## Install
 
 ```sh
-npm install -g @simplysf/simply-gitlab
+npm install -g @simplysf/simply-cli
 ```
 
 ## Verify it worked
