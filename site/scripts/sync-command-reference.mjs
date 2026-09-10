@@ -78,6 +78,13 @@ const GROUPS = [
     description: 'List CI jobs and read their logs, list CI/CD variables, and see deployment environments.',
   },
   {
+    match: 'simply gitlab config ',
+    file: 'config-baselines.md',
+    order: 8,
+    title: 'Configuration baselines',
+    description: 'Export a baseline from a project, report how projects differ from it, and converge them.',
+  },
+  {
     match: 'simply gitlab search',
     file: 'search.md',
     order: 7,

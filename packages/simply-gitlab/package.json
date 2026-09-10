@@ -84,6 +84,9 @@
       },
       "gitlab:ci:environment": {
         "description": "List deployment environments."
+      },
+      "gitlab:config": {
+        "description": "Hold many projects to one baseline configuration."
       }
     }
   },

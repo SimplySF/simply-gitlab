@@ -111,6 +111,50 @@
   },
   {
     "alias": [],
+    "command": "gitlab:config:apply",
+    "flagAliases": [],
+    "flagChars": ["c", "e"],
+    "flags": [
+      "concurrency",
+      "config",
+      "dry-run",
+      "env-file",
+      "fail-fast",
+      "gitlab-token",
+      "gitlab-url",
+      "json",
+      "target"
+    ],
+    "plugin": "@simplysf/simply-gitlab"
+  },
+  {
+    "alias": [],
+    "command": "gitlab:config:export",
+    "flagAliases": [],
+    "flagChars": ["e", "p"],
+    "flags": ["env-file", "gitlab-token", "gitlab-url", "json", "project", "section"],
+    "plugin": "@simplysf/simply-gitlab"
+  },
+  {
+    "alias": [],
+    "command": "gitlab:config:plan",
+    "flagAliases": [],
+    "flagChars": ["c", "e"],
+    "flags": [
+      "concurrency",
+      "config",
+      "env-file",
+      "fail-fast",
+      "fail-on-drift",
+      "gitlab-token",
+      "gitlab-url",
+      "json",
+      "target"
+    ],
+    "plugin": "@simplysf/simply-gitlab"
+  },
+  {
+    "alias": [],
     "command": "gitlab:file:create",
     "flagAliases": [],
     "flagChars": ["e", "p"],

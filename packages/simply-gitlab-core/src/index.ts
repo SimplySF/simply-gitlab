@@ -105,3 +105,60 @@ export {
   type FileWriteInput,
 } from './repository-files.js';
 export { ADVANCED_SCOPES, BASIC_SCOPES, needsAdvancedSearch, searchColumns } from './search.js';
+
+// --- Configuration baselines (docs/design/0007-configuration-baselines.md) ---
+export {
+  effectiveGroup,
+  effectiveProject,
+  entryKey,
+  entryLabel,
+  LIST_SECTIONS,
+  mergeGroupDesired,
+  mergeProjectDesired,
+  normalizeSection,
+  OBJECT_SECTIONS,
+  loadBaselineConfig,
+  validateBaselineConfig,
+  type BaselineConfig,
+  type BaselineTargets,
+  type Entry,
+  type GroupDesired,
+  type ListSection,
+  type NormalizedSection,
+  type ProjectDesired,
+  type Section,
+  type SectionObject,
+  type TargetOverride,
+} from './baseline-config.js';
+export { matchesExclude, resolveTargets, type ResolvedTarget, type ResolvedTargets } from './baseline-targets.js';
+export {
+  hasChanges,
+  hasDrift,
+  planGroup,
+  planProject,
+  type Action,
+  type BaselinePlan,
+  type Change,
+  type ChangeOp,
+  type SectionPlan,
+  type TargetPlan,
+} from './baseline-plan.js';
+export {
+  DEFAULT_CONCURRENCY,
+  failures,
+  mapPool,
+  planRun,
+  summarise,
+  type PlannedRun,
+  type RunOptions,
+  type RunSummary,
+} from './baseline-run.js';
+export { applyFailures, applyPlan, applyTarget, type ApplyResult, type TargetResult } from './baseline-apply.js';
+export { planToJson, renderApply, renderPlan } from './baseline-render.js';
+export {
+  EXPORTABLE_SECTIONS,
+  exportConfig,
+  exportProject,
+  type ExportableSection,
+  type ExportOptions,
+} from './baseline-export.js';
