@@ -1,7 +1,7 @@
 {
   "name": "@simplysf/simply-gitlab-mcp",
   "description": "Model Context Protocol server exposing GitLab to AI agents, built on @simplysf/simply-gitlab-core",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": "@ClayChipps",
   "homepage": "https://github.com/SimplySF/simply-gitlab",
   "bugs": "https://github.com/SimplySF/simply-gitlab/issues",
@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.30.0",
-    "@simplysf/simply-gitlab-core": "workspace:^0.2.0",
+    "@simplysf/simply-gitlab-core": "workspace:^0.3.0",
     "zod": "^4.5.4"
   },
   "devDependencies": {

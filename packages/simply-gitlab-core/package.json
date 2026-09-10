@@ -1,7 +1,7 @@
 {
   "name": "@simplysf/simply-gitlab-core",
   "description": "Configuration, authentication, HTTP client, and shared logic for working with GitLab",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": "@ClayChipps",
   "homepage": "https://github.com/SimplySF/simply-gitlab",
   "bugs": "https://github.com/SimplySF/simply-gitlab/issues",
