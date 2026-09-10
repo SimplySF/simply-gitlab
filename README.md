@@ -92,7 +92,7 @@ URL-encode it.
 
 ## Documentation
 
-**[simplysf.github.io/simply-gitlab](https://simplysf.github.io/simply-gitlab/)** — the docs site,
+**[simplysf.github.io/simply-cli/gitlab](https://simplysf.github.io/simply-cli/gitlab/)** — the docs site,
 with a getting-started walkthrough, guides for credentials, write safety, scripting, and the MCP
 server, and the full command reference.
 

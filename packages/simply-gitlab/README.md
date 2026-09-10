@@ -13,6 +13,12 @@ human-readable by default and raw JSON with `--json`, and every command that cha
 The same capabilities are available to AI agents through
 [`@simplysf/simply-gitlab-mcp`](https://github.com/SimplySF/simply-gitlab/tree/main/packages/simply-gitlab-mcp).
 
+## Documentation
+
+Guides and the full command reference: **https://simplysf.github.io/simply-cli/gitlab/**
+
+The guides also ship inside this package, under [`docs/`](docs).
+
 ## Install
 
 `@simplysf/simply-gitlab` is a plugin of the `simply` CLI, not a command of its own. Install the host; this

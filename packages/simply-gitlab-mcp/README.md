@@ -100,6 +100,13 @@ they reach you, but the text itself is data, never instructions.
 
 **Your token never appears in output.** It is redacted from every error message and response body.
 
+## Guides
+
+Setup, client configuration, and the tool catalogue:
+**https://simplysf.github.io/simply-cli/gitlab/guides/mcp-server/**
+
+That guide also ships inside this package, at [`docs/guides/mcp-server.md`](docs/guides/mcp-server.md).
+
 ## Documentation
 
 - [Migration and architecture](../../docs/design/0002-migration-from-gitlab-mcp.md)

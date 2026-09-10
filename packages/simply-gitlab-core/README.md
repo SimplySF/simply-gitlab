@@ -66,6 +66,11 @@ Every export from `src/index.ts` is semver-covered: adding one is a minor or pat
 or renaming one is breaking. `test/index.test.ts` pins the list, so a removal fails a test rather
 than shipping quietly in a patch.
 
+## Guides
+
+User-facing documentation for the CLI and MCP server built on this package:
+**https://simplysf.github.io/simply-cli/gitlab/**
+
 ## Documentation
 
 - [GitLab client core design](../../docs/design/0001-gitlab-client-core.md)
