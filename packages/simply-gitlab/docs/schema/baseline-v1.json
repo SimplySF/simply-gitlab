@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://simplysf.github.io/simply-gitlab/schema/baseline-v1.json",
+  "$id": "https://simplysf.github.io/simply-cli/schema/baseline-v1.json",
   "title": "Simply GitLab configuration baseline",
   "description": "What a set of GitLab projects should have in common. Read by `simply gitlab config plan` and `simply gitlab config apply`. Advisory: the CLI's own validator is what runs, and its errors name the exact path that is wrong.",
   "type": "object",
