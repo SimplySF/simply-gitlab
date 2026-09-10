@@ -64,8 +64,8 @@ Edit `claude_desktop_config.json` (macOS: `~/Library/Application Support/Claude/
 {
   "mcpServers": {
     "simply-gitlab": {
-      "command": "simply-gitlab-mcp",
-      "args": ["--env-file", "/home/me/gitlab.env"]
+      "command": "simply",
+      "args": ["gitlab", "mcp", "--env-file", "/home/me/gitlab.env"]
     }
   }
 }
@@ -78,7 +78,7 @@ The same entry with the settings inline and no global install:
   "mcpServers": {
     "simply-gitlab": {
       "command": "npx",
-      "args": ["-y", "@simplysf/simply-gitlab-mcp"],
+      "args": ["gitlab", "mcp"],
       "env": {
         "GITLAB_URL": "https://gitlab.example.com",
         "GITLAB_TOKEN": "glpat-..."
@@ -113,8 +113,8 @@ project, with the same `mcpServers` shape as Claude Desktop:
 {
   "mcpServers": {
     "simply-gitlab": {
-      "command": "simply-gitlab-mcp",
-      "args": ["--env-file", "/home/me/gitlab.env"]
+      "command": "simply",
+      "args": ["gitlab", "mcp", "--env-file", "/home/me/gitlab.env"]
     }
   }
 }
@@ -141,7 +141,7 @@ the settings file without an env file:
   "mcpServers": {
     "simply-gitlab": {
       "command": "npx",
-      "args": ["-y", "@simplysf/simply-gitlab-mcp"],
+      "args": ["gitlab", "mcp"],
       "env": {
         "GITLAB_URL": "https://gitlab.example.com",
         "GITLAB_TOKEN": "$GITLAB_TOKEN"
@@ -161,8 +161,8 @@ register the merge-request tools while holding back the ones that push commits.
 {
   "mcpServers": {
     "simply-gitlab-write": {
-      "command": "simply-gitlab-mcp",
-      "args": ["--allow-writes", "--env-file", "/home/me/gitlab-write.env"],
+      "command": "simply",
+      "args": ["gitlab", "mcp", "--allow-writes", "--env-file", "/home/me/gitlab-write.env"],
       "excludeTools": ["gitlab_commit_create", "gitlab_file_create", "gitlab_file_update"],
       "trust": false
     }
@@ -188,8 +188,8 @@ VS Code reads `.vscode/mcp.json`, with a `servers` key and an explicit transport
   "servers": {
     "simply-gitlab": {
       "type": "stdio",
-      "command": "simply-gitlab-mcp",
-      "args": ["--env-file", "/home/me/gitlab.env"]
+      "command": "simply",
+      "args": ["gitlab", "mcp", "--env-file", "/home/me/gitlab.env"]
     }
   }
 }
@@ -277,12 +277,12 @@ write. In an `mcpServers` configuration the pair looks like this:
 {
   "mcpServers": {
     "simply-gitlab": {
-      "command": "simply-gitlab-mcp",
-      "args": ["--env-file", "/home/me/gitlab.env"]
+      "command": "simply",
+      "args": ["gitlab", "mcp", "--env-file", "/home/me/gitlab.env"]
     },
     "simply-gitlab-write": {
-      "command": "simply-gitlab-mcp",
-      "args": ["--allow-writes", "--env-file", "/home/me/gitlab-write.env"]
+      "command": "simply",
+      "args": ["gitlab", "mcp", "--allow-writes", "--env-file", "/home/me/gitlab-write.env"]
     }
   }
 }
