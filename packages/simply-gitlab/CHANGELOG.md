@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/SimplySF/simply-gitlab/compare/%40simplysf%2Fsimply-gitlab%400.4.0...%40simplysf%2Fsimply-gitlab%400.5.0) (2026-09-10)
+
+### Features
+
+- **docs:** ship the guides in the packages, redirect the site ([#7](https://github.com/SimplySF/simply-gitlab/issues/7)) ([3968f7f](https://github.com/SimplySF/simply-gitlab/commit/3968f7f1e15ca04e3eddfb7cdfb5ea7609bc2d9a))
+
 # [0.4.0](https://github.com/SimplySF/simply-gitlab/compare/%40simplysf%2Fsimply-gitlab%400.3.0...%40simplysf%2Fsimply-gitlab%400.4.0) (2026-09-10)
 
 - feat!: become a plugin of the simply CLI (#5) ([7c40567](https://github.com/SimplySF/simply-gitlab/commit/7c40567ad94a1a4179c6684c99fb6661af1ab2a6)), closes [#5](https://github.com/SimplySF/simply-gitlab/issues/5)

@@ -44,7 +44,7 @@ and `export` and **not** `apply`, for the reason in [The MCP surface](#the-mcp-s
 
 ```json
 {
-  "$schema": "https://simplysf.github.io/simply-gitlab/schema/baseline-v1.json",
+  "$schema": "https://simplysf.github.io/simply-cli/schema/baseline-v1.json",
   "version": 1,
 
   "targets": {
