@@ -30,6 +30,7 @@ import {
   decodeFileContent,
   type FilePayload,
   maskVariables,
+  prepareProjectCreate,
   tailLog,
 } from '@simplysf/simply-gitlab-core';
 import { z } from 'zod';
@@ -150,6 +151,74 @@ export const TOOLS: readonly ToolSpec[] = [
     kind: 'read',
     inputSchema: { project },
     run: (ctx, input) => ctx.gitlab().getProject(input.project),
+  }),
+  tool({
+    name: 'gitlab_project_create',
+    title: 'GitLab: create a project',
+    description:
+      'Create a project, blank or from a template, in a group or user namespace. Give "name" or ' +
+      '"path"; GitLab derives the other. "template" names a built-in template such as "express" ' +
+      'or "rails". For a custom template, add "customTemplate" (instance-level), "templateGroup" ' +
+      '(a group\'s templates), or pass "templateProject" instead to name the template project by ' +
+      'id or path, which GitLab prefers because a name can be ambiguous; custom templates need a ' +
+      'Premium or Ultimate instance.\n\n' +
+      'A template is applied asynchronously: the result arrives with import_status "scheduled" ' +
+      'and the files follow a few seconds later, so call gitlab_project_view until import_status ' +
+      'is "finished" before writing files to the new project. Use dryRun to preview; a namespace ' +
+      'or template given as a path is still looked up so the ids shown are the ones that would ' +
+      'be sent.',
+    command: ['gitlab', 'project', 'create'],
+    kind: 'write',
+    inputSchema: {
+      name: z.string().optional().describe('Project name. One of name or path is required.'),
+      path: z.string().optional().describe('Repository path, the URL slug. One of name or path is required.'),
+      namespace: z
+        .string()
+        .optional()
+        .describe("Group or user namespace to create in, by id or full path. Defaults to the token owner's."),
+      description: z.string().optional().describe('Project description.'),
+      visibility: z.enum(['private', 'internal', 'public']).optional().describe('Who can see the project.'),
+      defaultBranch: z.string().optional().describe('Name of the default branch.'),
+      initializeWithReadme: z.boolean().optional().describe('Create a first commit holding a README.'),
+      topics: z.array(z.string()).optional().describe('Topics to label the project with.'),
+      template: z
+        .string()
+        .optional()
+        .describe('Built-in template name; with customTemplate or templateGroup, a custom template name.'),
+      customTemplate: z
+        .boolean()
+        .optional()
+        .describe('Look "template" up among the instance\'s custom project templates, not the built-in ones.'),
+      templateGroup: z
+        .string()
+        .optional()
+        .describe('Group whose custom project templates "template" names, by id or full path.'),
+      templateProject: z
+        .string()
+        .optional()
+        .describe('Custom template project to create from, by id or full path. Not with "template".'),
+      body,
+      ...WRITE_SHAPE,
+    },
+    run: async (ctx, input) => {
+      const client = ctx.gitlab();
+      const request = await prepareProjectCreate(client, {
+        name: input.name,
+        path: input.path,
+        namespace: input.namespace,
+        description: input.description,
+        visibility: input.visibility,
+        defaultBranch: input.defaultBranch,
+        initializeWithReadme: input.initializeWithReadme,
+        topics: input.topics,
+        template: input.template,
+        customTemplate: input.customTemplate,
+        templateGroup: input.templateGroup,
+        templateProject: input.templateProject,
+        body: input.body,
+      });
+      return input.dryRun === true ? request : client.createProject(request);
+    },
   }),
 
   // --- Repository files ---

@@ -98,6 +98,16 @@ export {
   type MergeRequestUpdateInput,
 } from './merge-requests.js';
 export {
+  buildProjectCreateBody,
+  prepareProjectCreate,
+  resolveGroupId,
+  resolveNamespaceId,
+  resolveProjectId,
+  type ProjectCreateInput,
+  type ProjectCreateRefs,
+  type ProjectVisibility,
+} from './projects.js';
+export {
   buildFileWrite,
   decodeFileContent,
   type DecodedFile,

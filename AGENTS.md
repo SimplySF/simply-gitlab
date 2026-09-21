@@ -24,6 +24,9 @@ Use the smallest relevant topic document rather than loading the whole directory
 - [Configuration baselines](docs/design/0007-configuration-baselines.md) (Draft): the planned
   `gitlab config export/plan/apply` surface for holding many projects to one JSON baseline —
   the config shape, merge semantics, opt-in pruning, and why `apply` gets no MCP tool.
+- [Creating a project](docs/design/0008-project-create.md): `gitlab project create`, the four
+  template attributes and when `use_custom_template` is set, path-to-id resolution, and why a dry
+  run still looks ids up.
 
 The package [README](packages/simply-gitlab/README.md) is the generated user-facing command
 reference. Update command metadata first, then regenerate it as described in `CONTRIBUTING.md`.

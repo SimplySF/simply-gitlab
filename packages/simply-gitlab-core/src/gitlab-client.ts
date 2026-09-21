@@ -198,6 +198,22 @@ export class GitLabClient {
     return this.request(`/projects/${segment(project)}`, { method: 'GET' });
   }
 
+  /**
+   * Creates a project. The body is built by `buildProjectCreateBody`; when it names a template,
+   * GitLab answers as soon as the project record exists and applies the template asynchronously,
+   * reporting progress in the payload's `import_status`.
+   */
+  public async createProject(body: Record<string, unknown>): Promise<unknown> {
+    return this.request('/projects', { method: 'POST', body, mutating: true });
+  }
+
+  // --- Namespaces ---
+
+  /** A group or a user namespace, by id or URL-encoded full path — the same route serves both. */
+  public async getNamespace(namespace: ProjectRef): Promise<unknown> {
+    return this.request(`/namespaces/${segment(namespace)}`, { method: 'GET' });
+  }
+
   // --- Repository files ---
 
   public async getFile(project: ProjectRef, filePath: string, options: FileOptions): Promise<unknown> {

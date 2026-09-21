@@ -53,7 +53,9 @@ extending `CliError`.
 
 **Operations** — `assertIid`, `buildMergeRequestCreateBody`, `buildMergeRequestUpdateBody`,
 `buildCommitBody`, `parseCommitActions`, `buildFileWrite`, `decodeFileContent`, `maskVariables`,
-`tailLog`, `searchColumns`.
+`tailLog`, `searchColumns`, and for creating a project — blank or from a template —
+`buildProjectCreateBody`, `prepareProjectCreate`, `resolveNamespaceId`, `resolveGroupId`,
+`resolveProjectId`.
 
 **Rendering** — `formatTable`, `formatKeyValue`, and the column sets each list command uses.
 
