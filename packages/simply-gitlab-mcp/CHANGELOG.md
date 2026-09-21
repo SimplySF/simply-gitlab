@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.6.0](https://github.com/SimplySF/simply-gitlab/compare/%40simplysf%2Fsimply-gitlab-mcp%400.5.0...%40simplysf%2Fsimply-gitlab-mcp%400.6.0) (2026-09-21)
+
+### Features
+
+- create a project, blank or from a template ([#15](https://github.com/SimplySF/simply-gitlab/issues/15)) ([0c49657](https://github.com/SimplySF/simply-gitlab/commit/0c496570f053a62da468ad66baca70eb0d995f56))
+
 # [0.5.0](https://github.com/SimplySF/simply-gitlab/compare/%40simplysf%2Fsimply-gitlab-mcp%400.4.0...%40simplysf%2Fsimply-gitlab-mcp%400.5.0) (2026-09-10)
 
 ### Features
