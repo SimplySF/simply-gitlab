@@ -3,9 +3,9 @@ title: Write safety
 description: The layers between a Simply GitLab command and a change to your repository, which of them is a real boundary, and why CI variable values are hidden by default.
 ---
 
-Six commands change data — `branch create`, `file create`, `file update`, `commit create`,
-`mr create`, and `mr update`. Nothing in this CLI deletes anything. Those six sit behind several
-layers, and only the last is a real boundary.
+Seven commands change data — `project create`, `branch create`, `file create`, `file update`,
+`commit create`, `mr create`, and `mr update`. Nothing in this CLI deletes anything. Those seven sit
+behind several layers, and only the last is a real boundary.
 
 ## No `--confirm`, deliberately
 
@@ -19,8 +19,9 @@ something is the one that brings it back.
 
 ## `--dry-run`
 
-Accepted by all six. It prints the exact request body that would be sent and sends nothing, which
-is the cheapest way to see what is about to happen:
+Accepted by all seven. It prints the exact request body that would be sent and sends nothing, which
+is the cheapest way to see what is about to happen. The one nuance is `project create`: a namespace
+or template given as a path is still looked up, so the printed ids are the ones that would be sent.
 
 ```sh
 simply gitlab mr create --project group/project \

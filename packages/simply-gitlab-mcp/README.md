@@ -49,11 +49,11 @@ server always verifies certificates.
 
 ## Writes
 
-**Only read tools are registered by default.** Add `--allow-writes` to `args` to register the six
+**Only read tools are registered by default.** Add `--allow-writes` to `args` to register the seven
 that change data:
 
-`gitlab_branch_create`, `gitlab_commit_create`, `gitlab_file_create`, `gitlab_file_update`,
-`gitlab_mr_create`, `gitlab_mr_update`.
+`gitlab_project_create`, `gitlab_branch_create`, `gitlab_commit_create`, `gitlab_file_create`,
+`gitlab_file_update`, `gitlab_mr_create`, `gitlab_mr_update`.
 
 Every one of them accepts `dryRun: true`, which returns the exact request that would be sent and
 sends nothing.
@@ -65,17 +65,17 @@ GitLab refuse the write server-side.
 
 ## Tools
 
-| Tool                                                    | What it does                                               |
-| ------------------------------------------------------- | ---------------------------------------------------------- |
-| `gitlab_project_list` / `gitlab_project_view`           | Find and inspect projects                                  |
-| `gitlab_file_view` / `_create` / `_update`              | Read and write repository files                            |
-| `gitlab_branch_list` / `_create`                        | List and create branches                                   |
-| `gitlab_commit_list` / `_view` / `_diff` / `_create`    | History, a single commit, its diff, and multi-file commits |
-| `gitlab_mr_list` / `_view` / `_create` / `_update`      | Merge requests                                             |
-| `gitlab_tag_list`, `gitlab_release_list`                | Tags and releases                                          |
-| `gitlab_ci_job_list` / `gitlab_ci_job_log`              | CI jobs and their traces                                   |
-| `gitlab_ci_variable_list`, `gitlab_ci_environment_list` | CI variables and deployment environments                   |
-| `gitlab_search`                                         | Search the instance, a group, or one project               |
+| Tool                                                    | What it does                                                 |
+| ------------------------------------------------------- | ------------------------------------------------------------ |
+| `gitlab_project_list` / `_view` / `_create`             | Find, inspect, and create projects, blank or from a template |
+| `gitlab_file_view` / `_create` / `_update`              | Read and write repository files                              |
+| `gitlab_branch_list` / `_create`                        | List and create branches                                     |
+| `gitlab_commit_list` / `_view` / `_diff` / `_create`    | History, a single commit, its diff, and multi-file commits   |
+| `gitlab_mr_list` / `_view` / `_create` / `_update`      | Merge requests                                               |
+| `gitlab_tag_list`, `gitlab_release_list`                | Tags and releases                                            |
+| `gitlab_ci_job_list` / `gitlab_ci_job_log`              | CI jobs and their traces                                     |
+| `gitlab_ci_variable_list`, `gitlab_ci_environment_list` | CI variables and deployment environments                     |
+| `gitlab_search`                                         | Search the instance, a group, or one project                 |
 
 Results are the raw GitLab payload as JSON text. Lists come back as
 `{ items, total?, pages, complete }`, where `complete: false` means the limit cut the results short.

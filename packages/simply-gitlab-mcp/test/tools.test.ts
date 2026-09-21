@@ -90,6 +90,7 @@ describe('the tool catalogue', () => {
       'gitlab_file_update',
       'gitlab_mr_create',
       'gitlab_mr_update',
+      'gitlab_project_create',
     ]);
   });
 

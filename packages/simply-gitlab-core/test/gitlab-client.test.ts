@@ -67,6 +67,29 @@ describe('GitLabClient addressing', () => {
     await expect(client().getProject('  ')).rejects.toBeInstanceOf(ConfigError);
   });
 
+  it('creates a project with a POST to /projects, sending the body as given', async () => {
+    let received: unknown;
+    server.route('/api/v4/projects', (_req, res, body) => {
+      received = JSON.parse(body) as unknown;
+      respondJson(res, 201, { id: 4711, import_status: 'scheduled' });
+    });
+
+    await expect(client().createProject({ name: 'x', template_name: 'express' })).resolves.toEqual({
+      id: 4711,
+      import_status: 'scheduled',
+    });
+    expect(received).toStrictEqual({ name: 'x', template_name: 'express' });
+    expect(server.requests[0]?.method).toBe('POST');
+  });
+
+  it('URL-encodes a namespace path, which the same route accepts beside an id', async () => {
+    server.route('/api/v4/namespaces/platform%2Fapps', (_req, res) => {
+      respondJson(res, 200, { id: 12, kind: 'group' });
+    });
+
+    await expect(client().getNamespace('platform/apps')).resolves.toEqual({ id: 12, kind: 'group' });
+  });
+
   it('encodes a file path, including its slashes', async () => {
     server.route('/api/v4/projects/1/repository/files/src%2Findex.ts', (req, res) => {
       respondJson(res, 200, { url: req.url });

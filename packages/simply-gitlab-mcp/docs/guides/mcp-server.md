@@ -264,8 +264,8 @@ A few things make the agent's job easier:
 ## Let the agent write
 
 Started without options, the server registers only the 16 read tools. Start it with
-`--allow-writes` to also register the six that create a branch, write a file, push a commit, or
-open and update a merge request. Even then, `GITLAB_READ_ONLY` in the environment refuses every
+`--allow-writes` to also register the seven that create a project, create a branch, write a file,
+push a commit, or open and update a merge request. Even then, `GITLAB_READ_ONLY` in the environment refuses every
 write, exactly as it does for the CLI.
 
 That mirrors the two-credential-file arrangement in [Write safety](/guides/write-safety/): give the
@@ -295,7 +295,7 @@ from a write when it asks.
 
 With writes allowed:
 
-- **Ask for a preview first.** All six write tools accept `dryRun: true`, which returns the request
+- **Ask for a preview first.** All seven write tools accept `dryRun: true`, which returns the request
   that would be sent without sending it. "Show me what you'd send to open a merge request from
   `feature/thing` into `main`, then do it" produces a call like the one below, which you can check
   before the agent repeats it without `dryRun`.
@@ -319,6 +319,11 @@ With writes allowed:
 - **A batch commit is atomic.** `gitlab_commit_create` takes an array of actions — create, update,
   delete, move, chmod — and writes them as one commit. Each action is validated before anything is
   sent, so a malformed entry comes back naming its own index rather than as an opaque `400`.
+- **A new project from a template is not ready immediately.** `gitlab_project_create` returns as
+  soon as the project record exists, with `import_status: "scheduled"`; the template's files land a
+  few seconds later. An agent that creates a project and writes to it in the next call will race
+  the import, so the tool description tells it to poll `gitlab_project_view` until `import_status`
+  reads `finished`.
 
 ## Tools
 
@@ -330,7 +335,7 @@ With writes allowed:
 | `gitlab_branch_list`         | `gitlab_commit_create`         |
 | `gitlab_commit_list`         | `gitlab_mr_create`             |
 | `gitlab_commit_view`         | `gitlab_mr_update`             |
-| `gitlab_commit_diff`         |                                |
+| `gitlab_commit_diff`         | `gitlab_project_create`        |
 | `gitlab_mr_list`             |                                |
 | `gitlab_mr_view`             |                                |
 | `gitlab_tag_list`            |                                |
