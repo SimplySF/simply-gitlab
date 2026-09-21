@@ -13,7 +13,7 @@ project. Output is human-readable by default and raw JSON with `--json`, every w
 
 This repo is a Lerna/pnpm monorepo, following the same conventions as SimplySF's
 [`simply-atlassian`](https://github.com/SimplySF/simply-atlassian),
-[`simply-node`](https://github.com/SimplySF/simply-node), and
+[`simply-plugins-core`](https://github.com/SimplySF/simply-plugins-core), and
 [`simply-plugins`](https://github.com/SimplySF/simply-plugins) repos.
 
 ## Packages
