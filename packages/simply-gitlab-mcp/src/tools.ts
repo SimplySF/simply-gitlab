@@ -160,7 +160,8 @@ export const TOOLS: readonly ToolSpec[] = [
       '"path"; GitLab derives the other. "template" names a built-in template such as "express" ' +
       'or "rails". For a custom template, add "customTemplate" (instance-level), "templateGroup" ' +
       '(a group\'s templates), or pass "templateProject" instead to name the template project by ' +
-      'id or path, which GitLab prefers because a name can be ambiguous; custom templates need a ' +
+      'id or path, which GitLab prefers because a name can be ambiguous — with "templateGroup" too ' +
+      'when the template belongs to a group rather than the instance. Custom templates need a ' +
       'Premium or Ultimate instance.\n\n' +
       'A template is applied asynchronously: the result arrives with import_status "scheduled" ' +
       'and the files follow a few seconds later, so call gitlab_project_view until import_status ' +
@@ -192,7 +193,7 @@ export const TOOLS: readonly ToolSpec[] = [
       templateGroup: z
         .string()
         .optional()
-        .describe('Group whose custom project templates "template" names, by id or full path.'),
+        .describe('Group whose custom project templates "template" or "templateProject" names, by id or full path.'),
       templateProject: z
         .string()
         .optional()

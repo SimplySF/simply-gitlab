@@ -38,7 +38,8 @@ export default class GitlabProjectCreate extends GitLabCommand<typeof GitlabProj
     'create from a custom template instead, add --custom-template for one the instance ' +
     'administrator registered, --template-group for one in a group, or use --template-project ' +
     'to name the template project itself by id or path — which GitLab prefers, because a name ' +
-    'can be ambiguous. Custom templates need a Premium or Ultimate instance.\n\n' +
+    'can be ambiguous. Add --template-group to --template-project when the template belongs to ' +
+    'a group rather than the instance. Custom templates need a Premium or Ultimate instance.\n\n' +
     'A template is applied asynchronously: this command returns as soon as the project record ' +
     'exists, with an import status of "scheduled", and the files arrive a few seconds later. ' +
     'Check "project view" until its import_status reads "finished" before writing to the ' +
@@ -50,6 +51,7 @@ export default class GitlabProjectCreate extends GitLabCommand<typeof GitlabProj
     '<%= config.bin %> <%= command.id %> --name new-service --namespace platform/apps --template express --visibility internal',
     '<%= config.bin %> <%= command.id %> --name new-service --namespace platform/apps --template service-skeleton --template-group platform/templates',
     '<%= config.bin %> <%= command.id %> --path new-service --template-project platform/templates/service-skeleton --dry-run',
+    '<%= config.bin %> <%= command.id %> --name new-service --template-project platform/templates/service-skeleton --template-group platform/templates',
   ];
 
   public static override readonly flags = {
@@ -81,7 +83,7 @@ export default class GitlabProjectCreate extends GitLabCommand<typeof GitlabProj
       default: false,
     }),
     'template-group': Flags.string({
-      summary: 'Group whose custom project templates --template names, by id or full path.',
+      summary: 'Group whose custom project templates --template or --template-project names, by id or full path.',
     }),
     'template-project': Flags.string({
       summary: 'Custom template project to create from, by id or full path. Cannot be combined with --template.',
