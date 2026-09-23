@@ -39,7 +39,7 @@ export interface ProjectCreateInput {
   readonly customTemplate?: boolean;
   /** A custom template by project id. GitLab prefers this to a name, which can be ambiguous. */
   readonly templateProjectId?: number;
-  /** The group whose custom templates `template` names; unset means the instance-level group. */
+  /** The group whose custom templates `template` or `templateProjectId` names; unset means the instance-level group. */
   readonly templateGroupId?: number;
   readonly body?: Record<string, unknown>;
 }
@@ -68,9 +68,11 @@ function assertTemplateSelection(input: {
   if (input.template !== undefined && input.templateProject !== undefined) {
     throw new ConfigError('Pass --template or --template-project, not both.');
   }
-  if (input.templateGroup !== undefined && input.template === undefined) {
+  // A group scopes the lookup of either a name or a project id: GitLab searches a group's custom
+  // templates only when told the group, so a group-level template by id needs both.
+  if (input.templateGroup !== undefined && input.template === undefined && input.templateProject === undefined) {
     throw new ConfigError(
-      "--template-group needs --template: it names which of that group's custom templates to create from.",
+      "--template-group needs --template or --template-project: it names which of that group's custom templates to create from.",
     );
   }
   if (input.customTemplate === true && input.template === undefined) {

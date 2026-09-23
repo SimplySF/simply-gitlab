@@ -49,7 +49,7 @@ template group to its id before building — so both surfaces accept paths every
 | `--topics`                 | `topics`                                                       | Comma-separated                                                                      |
 | `--template`               | `template_name`                                                | Built-in by default                                                                  |
 | `--custom-template`        | `use_custom_template: true`                                    | Needs `--template`; looks it up among the instance's custom templates                |
-| `--template-group`         | `use_custom_template: true`, `group_with_project_templates_id` | Needs `--template`; by id or full path                                               |
+| `--template-group`         | `use_custom_template: true`, `group_with_project_templates_id` | Needs `--template` or `--template-project`; by id or full path                       |
 | `--template-project`       | `use_custom_template: true`, `template_project_id`             | By id or full path. Exclusive with `--template`                                      |
 | `--body` / `--body-file`   | merged under the typed flags                                   | The same escape hatch `mr create` has                                                |
 | `--dry-run`                | nothing                                                        | Prints the request body and sends nothing                                            |
@@ -59,12 +59,12 @@ template group to its id before building — so both surfaces accept paths every
 Each of these is a rule GitLab enforces too; checking them here means the refusal names the flag
 rather than arriving as a 400 whose body says `name is missing`.
 
-| Condition                                    | Error                                                      |
-| -------------------------------------------- | ---------------------------------------------------------- |
-| Neither `name` nor `path` in the merged body | `A project needs a name or a path: pass --name or --path.` |
-| `--template` with `--template-project`       | `Pass --template or --template-project, not both.`         |
-| `--template-group` without `--template`      | `--template-group needs --template: …`                     |
-| `--custom-template` without `--template`     | `--custom-template needs --template: …`                    |
+| Condition                                     | Error                                                        |
+| --------------------------------------------- | ------------------------------------------------------------ |
+| Neither `name` nor `path` in the merged body  | `A project needs a name or a path: pass --name or --path.`   |
+| `--template` with `--template-project`        | `Pass --template or --template-project, not both.`           |
+| `--template-group` with neither template flag | `--template-group needs --template or --template-project: …` |
+| `--custom-template` without `--template`      | `--custom-template needs --template: …`                      |
 
 ### Resolving paths to ids
 

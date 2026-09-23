@@ -71,6 +71,15 @@ describe('buildProjectCreateBody', () => {
     });
   });
 
+  it('sends a template group with a template project, for a group-level template by id', () => {
+    expect(buildProjectCreateBody({ name: 'x', templateProjectId: 99, templateGroupId: 55 })).toStrictEqual({
+      name: 'x',
+      use_custom_template: true,
+      template_project_id: 99,
+      group_with_project_templates_id: 55,
+    });
+  });
+
   it('accepts a path alone, since GitLab derives the name from it', () => {
     expect(buildProjectCreateBody({ path: 'new-service' })).toStrictEqual({ path: 'new-service' });
   });
@@ -101,7 +110,7 @@ describe('buildProjectCreateBody', () => {
 
   it('refuses a template group or custom flag without a template to apply it to', () => {
     expect(() => buildProjectCreateBody({ name: 'x', templateGroupId: 1 })).toThrow(
-      /--template-group needs --template/,
+      /--template-group needs --template or --template-project/,
     );
     expect(() => buildProjectCreateBody({ name: 'x', customTemplate: true })).toThrow(
       /--custom-template needs --template/,

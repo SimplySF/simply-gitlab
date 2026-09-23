@@ -72,6 +72,20 @@ describe('gitlab project create', () => {
     expect(server.requests.map((sent) => sent.method)).toStrictEqual(['GET']);
   });
 
+  it('sends a template group alongside a template project', async () => {
+    const request = (await GitlabProjectCreate.run(
+      argv('--name', 'x', '--template-project', '99', '--template-group', '55', '--dry-run'),
+    )) as Record<string, unknown>;
+
+    expect(request).toStrictEqual({
+      name: 'x',
+      use_custom_template: true,
+      template_project_id: 99,
+      group_with_project_templates_id: 55,
+    });
+    expect(server.requests).toHaveLength(0);
+  });
+
   it('creates the project with a POST and returns the payload', async () => {
     server.route('/api/v4/namespaces/platform%2Fapps', (_req, res) => {
       respondJson(res, 200, { id: 12 });

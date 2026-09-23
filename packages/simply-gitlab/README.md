@@ -1205,7 +1205,8 @@ FLAGS
   --path=<value>              Repository path, the URL slug. The name is derived from it when --name is not given.
   --template=<value>          Template to create from: a built-in name, or with --custom-template or --template-group a
                               custom one.
-  --template-group=<value>    Group whose custom project templates --template names, by id or full path.
+  --template-group=<value>    Group whose custom project templates --template or --template-project names, by id or full
+                              path.
   --template-project=<value>  Custom template project to create from, by id or full path. Cannot be combined with
                               --template.
   --topics=<value>            Comma-separated topics to label the project with.
@@ -1229,7 +1230,8 @@ DESCRIPTION
   --template names one of the built-in templates GitLab ships, such as express or rails. To create from a custom
   template instead, add --custom-template for one the instance administrator registered, --template-group for one in a
   group, or use --template-project to name the template project itself by id or path — which GitLab prefers, because a
-  name can be ambiguous. Custom templates need a Premium or Ultimate instance.
+  name can be ambiguous. Add --template-group to --template-project when the template belongs to a group rather than the
+  instance. Custom templates need a Premium or Ultimate instance.
 
   A template is applied asynchronously: this command returns as soon as the project record exists, with an import status
   of "scheduled", and the files arrive a few seconds later. Check "project view" until its import_status reads
@@ -1244,6 +1246,8 @@ EXAMPLES
   $ simply gitlab project create --name new-service --namespace platform/apps --template service-skeleton --template-group platform/templates
 
   $ simply gitlab project create --path new-service --template-project platform/templates/service-skeleton --dry-run
+
+  $ simply gitlab project create --name new-service --template-project platform/templates/service-skeleton --template-group platform/templates
 
 FLAG DESCRIPTIONS
   -e, --env-file=<value>  Path to a .env file holding connection settings.
