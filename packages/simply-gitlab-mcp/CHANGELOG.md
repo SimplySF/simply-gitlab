@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.2](https://github.com/SimplySF/simply-gitlab/compare/%40simplysf%2Fsimply-gitlab-mcp%400.6.1...%40simplysf%2Fsimply-gitlab-mcp%400.6.2) (2026-09-23)
+
+### Bug Fixes
+
+- **project:** allow --template-group with --template-project ([#16](https://github.com/SimplySF/simply-gitlab/issues/16)) ([794fb32](https://github.com/SimplySF/simply-gitlab/commit/794fb3262a732864f973a10bee301894a68d6319))
+
 ## [0.6.1](https://github.com/SimplySF/simply-gitlab/compare/%40simplysf%2Fsimply-gitlab-mcp%400.6.0...%40simplysf%2Fsimply-gitlab-mcp%400.6.1) (2026-09-23)
 
 ### Bug Fixes
