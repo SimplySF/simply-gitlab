@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.1](https://github.com/SimplySF/simply-gitlab/compare/%40simplysf%2Fsimply-gitlab-mcp%400.6.0...%40simplysf%2Fsimply-gitlab-mcp%400.6.1) (2026-09-23)
+
+### Bug Fixes
+
+- **deps:** Bump zod from 4.5.4 to 4.6.5 ([#12](https://github.com/SimplySF/simply-gitlab/issues/12)) ([89dddac](https://github.com/SimplySF/simply-gitlab/commit/89dddac59bfa2443f366ba7b9fef6f9059dcb2a6))
+
 # [0.6.0](https://github.com/SimplySF/simply-gitlab/compare/%40simplysf%2Fsimply-gitlab-mcp%400.5.0...%40simplysf%2Fsimply-gitlab-mcp%400.6.0) (2026-09-21)
 
 ### Features
