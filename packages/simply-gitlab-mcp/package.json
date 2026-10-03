@@ -34,7 +34,7 @@
     "simply-gitlab-mcp": "./bin/run.js"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.30.0",
+    "@modelcontextprotocol/sdk": "^1.31.0",
     "@oclif/core": "^4.11.2",
     "@simplysf/simply-gitlab-core": "workspace:^0.5.1",
     "zod": "^4.6.5"
