@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.3](https://github.com/SimplySF/simply-gitlab/compare/%40simplysf%2Fsimply-gitlab-mcp%400.6.2...%40simplysf%2Fsimply-gitlab-mcp%400.6.3) (2026-10-13)
+
+### Bug Fixes
+
+- **deps:** Bump @modelcontextprotocol/sdk from 1.30.0 to 1.32.1 ([#24](https://github.com/SimplySF/simply-gitlab/issues/24)) ([a79bc59](https://github.com/SimplySF/simply-gitlab/commit/a79bc59375e27ee25d52fe58b551eb0d38e9e6d4))
+
 ## [0.6.2](https://github.com/SimplySF/simply-gitlab/compare/%40simplysf%2Fsimply-gitlab-mcp%400.6.1...%40simplysf%2Fsimply-gitlab-mcp%400.6.2) (2026-09-23)
 
 ### Bug Fixes
