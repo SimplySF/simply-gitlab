@@ -41,6 +41,7 @@ refactors that keep the public surface identical (though a short doc is welcome 
 | 0006 | [Search across three endpoints](0006-search.md)                                            | Implemented (PR #1) |
 | 0007 | [Project and group configuration baselines](0007-configuration-baselines.md)               | Implemented (PR #4) |
 | 0008 | [Creating a project, from a template or blank](0008-project-create.md)                     | Implemented         |
+| 0009 | [Merge request comments](0009-merge-request-comments.md)                                   | Draft               |
 
 ## Template
 
