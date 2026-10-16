@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.7.0](https://github.com/SimplySF/simply-gitlab/compare/%40simplysf%2Fsimply-gitlab-mcp%400.6.3...%40simplysf%2Fsimply-gitlab-mcp%400.7.0) (2026-10-16)
+
+### Features
+
+- **simply-gitlab-mcp:** add `gitlab mcp install` ([#29](https://github.com/SimplySF/simply-gitlab/issues/29)) ([be20edc](https://github.com/SimplySF/simply-gitlab/commit/be20edc7b467d234709fb4dec6efcec8f58cc46f))
+
 ## [0.6.3](https://github.com/SimplySF/simply-gitlab/compare/%40simplysf%2Fsimply-gitlab-mcp%400.6.2...%40simplysf%2Fsimply-gitlab-mcp%400.6.3) (2026-10-13)
 
 ### Bug Fixes
