@@ -42,6 +42,7 @@ refactors that keep the public surface identical (though a short doc is welcome 
 | 0007 | [Project and group configuration baselines](0007-configuration-baselines.md)               | Implemented (PR #4) |
 | 0008 | [Creating a project, from a template or blank](0008-project-create.md)                     | Implemented         |
 | 0009 | [Merge request comments](0009-merge-request-comments.md)                                   | Draft               |
+| 0010 | [`gitlab mcp install`](0010-mcp-install.md)                                                | In progress         |
 
 ## Template
 
