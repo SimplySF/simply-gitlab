@@ -47,6 +47,10 @@ reads them from a `.env` file instead, and the real environment still wins over 
 For a self-signed or internal CA, add `"NODE_EXTRA_CA_CERTS": "/path/to/ca.pem"` to `env`. This
 server always verifies certificates.
 
+With the `simply` CLI, `simply gitlab mcp install --client <id> --env-file ~/gitlab.env` writes the
+entry into Claude Code, Claude Desktop, Cursor, VS Code, Windsurf, Gemini CLI or Codex for you,
+without touching the rest of that client's configuration. See the MCP server guide for the details.
+
 ## Writes
 
 **Only read tools are registered by default.** Add `--allow-writes` to `args` to register the seven

@@ -30,6 +30,9 @@ Use the smallest relevant topic document rather than loading the whole directory
 - [Merge request comments](docs/design/0009-merge-request-comments.md) (Draft): `gitlab mr comment
 list/create/update`, the quick-action guard, why a comment create is not retried on an ambiguous
   failure, and why delete was left to its own design.
+- [MCP install](docs/design/0010-mcp-install.md): `gitlab mcp install`, which writes the server into
+  MCP clients. The client logic is `simply-gitlab-mcp/src/mcpClients`, kept identical to
+  simply-atlassian's copy: change both together.
 
 The package [README](packages/simply-gitlab/README.md) is the generated user-facing command
 reference. Update command metadata first, then regenerate it as described in `CONTRIBUTING.md`.
