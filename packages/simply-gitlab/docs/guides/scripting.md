@@ -105,8 +105,9 @@ does not need its own retry loop around these commands.
 
 ## Never interactive
 
-No command prompts or blocks on stdin, and there is no `--confirm` flag to hang on. Every write
-takes `--dry-run` instead. See [Write safety](/guides/write-safety/) for the full set of layers and
+No command prompts or blocks on stdin. Every write takes `--dry-run`, and the one that cannot be
+undone, `mr merge`, also needs `--confirm` as a flag rather than an answer to a prompt: without it,
+the command prints the request and exits 1. See [Write safety](/guides/write-safety/) for the full set of layers and
 the two-credential-file arrangement that keeps an agent's normal loop read-only.
 
 ## Help is discovery

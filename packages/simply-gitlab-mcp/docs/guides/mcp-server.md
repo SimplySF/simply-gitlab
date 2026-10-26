@@ -302,8 +302,8 @@ A few things make the agent's job easier:
 ## Let the agent write
 
 Started without options, the server registers only the 16 read tools. Start it with
-`--allow-writes` to also register the seven that create a project, create a branch, write a file,
-push a commit, or open and update a merge request. Even then, `GITLAB_READ_ONLY` in the environment refuses every
+`--allow-writes` to also register the eight that create a project, create a branch, write a file,
+push a commit, or open, update, and merge a merge request. Even then, `GITLAB_READ_ONLY` in the environment refuses every
 write, exactly as it does for the CLI.
 
 That mirrors the two-credential-file arrangement in [Write safety](/guides/write-safety/): give the
@@ -333,7 +333,7 @@ from a write when it asks.
 
 With writes allowed:
 
-- **Ask for a preview first.** All seven write tools accept `dryRun: true`, which returns the request
+- **Ask for a preview first.** All eight write tools accept `dryRun: true`, which returns the request
   that would be sent without sending it. "Show me what you'd send to open a merge request from
   `feature/thing` into `main`, then do it" produces a call like the one below, which you can check
   before the agent repeats it without `dryRun`.
@@ -348,7 +348,11 @@ With writes allowed:
   }
   ```
 
-- **Nothing here deletes.** There is no delete tool in the catalogue, and so no `confirm` gate: every
+- **Merging needs `confirm: true`.** `gitlab_mr_merge` is the one tool whose change cannot be
+  undone, so it carries `destructiveHint` and sends nothing unless the call says `confirm: true`;
+  `dryRun: true` previews it without. Its `sha` input pins the merge to the head the agent actually
+  looked at. `skipMergeTrain` uses GitLab's experimental "merge immediately without restarting the
+  merge train", requires `sha`, and is worth allowing only when a person asked for it. Every other
   write either creates something or edits a merge request, and both are recoverable. That is why
   `dryRun` carries the weight it does.
 - **A file update replaces the whole file.** There is no partial edit, so an agent must read the
@@ -374,7 +378,7 @@ With writes allowed:
 | `gitlab_commit_list`         | `gitlab_mr_create`             |
 | `gitlab_commit_view`         | `gitlab_mr_update`             |
 | `gitlab_commit_diff`         | `gitlab_project_create`        |
-| `gitlab_mr_list`             |                                |
+| `gitlab_mr_list`             | `gitlab_mr_merge`              |
 | `gitlab_mr_view`             |                                |
 | `gitlab_tag_list`            |                                |
 | `gitlab_release_list`        |                                |

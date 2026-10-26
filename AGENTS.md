@@ -33,7 +33,7 @@ list/create/update`, the quick-action guard, why a comment create is not retried
 - [MCP install](docs/design/0010-mcp-install.md): `gitlab mcp install`, which writes the server into
   MCP clients. The client logic is `simply-gitlab-mcp/src/mcpClients`, kept identical to
   simply-atlassian's copy: change both together.
-- [Merging a merge request](docs/design/0011-merge-request-merge.md) (Draft): `gitlab mr merge`,
+- [Merging a merge request](docs/design/0011-merge-request-merge.md): `gitlab mr merge`,
   `--auto-merge` onto a merge train, the experimental `--skip-merge-train`, why `--confirm` returns,
   and how a bare 405 is explained.
 

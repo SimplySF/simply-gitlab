@@ -322,6 +322,14 @@ export class GitLabClient {
     });
   }
 
+  public async mergeMergeRequest(project: ProjectRef, iid: number, body: Record<string, unknown>): Promise<unknown> {
+    return this.request(`/projects/${segment(project)}/merge_requests/${iid}/merge`, {
+      method: 'PUT',
+      body,
+      mutating: true,
+    });
+  }
+
   // --- Tags ---
 
   public async listTags(project: ProjectRef, options: ListTagsOptions = {}, limit = 20): Promise<ListResult> {

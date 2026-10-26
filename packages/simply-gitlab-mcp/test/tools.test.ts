@@ -74,9 +74,20 @@ describe('the tool catalogue', () => {
   });
 
   it('gives every write tool a dryRun input, so a change can always be previewed', () => {
-    for (const tool of TOOLS.filter((entry) => entry.kind === 'write')) {
+    for (const tool of TOOLS.filter((entry) => entry.kind !== 'read')) {
       expect(Object.keys(tool.inputSchema)).toContain('dryRun');
     }
+  });
+
+  it('gives every destructive tool a confirm input, and only those', () => {
+    for (const tool of TOOLS) {
+      expect(Object.keys(tool.inputSchema).includes('confirm'), tool.name).toBe(tool.kind === 'destructive');
+    }
+  });
+
+  it('marks exactly the changes that cannot be undone as destructive', () => {
+    const destructive = TOOLS.filter((tool) => tool.kind === 'destructive').map((tool) => tool.name);
+    expect(destructive).toStrictEqual(['gitlab_mr_merge']);
   });
 
   it('marks exactly the commands that change data as writes', () => {

@@ -58,6 +58,11 @@ describe('selectTools', () => {
     expect(selectTools(true)).toHaveLength(TOOLS.length);
     expect(selectTools(false).length).toBeLessThan(TOOLS.length);
   });
+
+  it('registers a destructive tool only with --allow-writes', () => {
+    expect(selectTools(false).map((tool) => tool.name)).not.toContain('gitlab_mr_merge');
+    expect(selectTools(true).map((tool) => tool.name)).toContain('gitlab_mr_merge');
+  });
 });
 
 describe('invokeTool', () => {
@@ -95,6 +100,37 @@ describe('invokeTool', () => {
 
     expect(payload(result)).toMatchObject({ source_branch: 'feature', title: 'feat: thing' });
     expect(server.requests).toHaveLength(0);
+  });
+
+  it('refuses a merge that was not confirmed, before sending anything', async () => {
+    const result = await invokeTool(spec('gitlab_mr_merge'), context(), { project: 'group/project', mr: 42 });
+
+    expect(result.isError).toBe(true);
+    expect(JSON.stringify(payload(result))).toMatch(/confirm: true/);
+    expect(server.requests).toHaveLength(0);
+  });
+
+  it('previews a merge without confirm, and sends a confirmed one', async () => {
+    server.route('/api/v4/projects/group%2Fproject/merge_requests/42/merge', (_req, res) => {
+      respondJson(res, 200, { iid: 42, state: 'merged' });
+    });
+
+    const preview = await invokeTool(spec('gitlab_mr_merge'), context(), {
+      project: 'group/project',
+      mr: 42,
+      squash: true,
+      dryRun: true,
+    });
+    expect(payload(preview)).toStrictEqual({ squash: true });
+    expect(server.requests).toHaveLength(0);
+
+    const merged = await invokeTool(spec('gitlab_mr_merge'), context(), {
+      project: 'group/project',
+      mr: 42,
+      confirm: true,
+    });
+    expect(payload(merged)).toMatchObject({ state: 'merged' });
+    expect(server.requests[0]).toMatchObject({ method: 'PUT' });
   });
 
   it('hides CI variable values with no way to ask for them', async () => {
