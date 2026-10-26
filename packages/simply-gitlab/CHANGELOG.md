@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.3](https://github.com/SimplySF/simply-gitlab/compare/%40simplysf%2Fsimply-gitlab%400.6.2...%40simplysf%2Fsimply-gitlab%400.6.3) (2026-10-26)
+
+**Note:** Version bump only for package @simplysf/simply-gitlab
+
 ## [0.6.2](https://github.com/SimplySF/simply-gitlab/compare/%40simplysf%2Fsimply-gitlab%400.6.1...%40simplysf%2Fsimply-gitlab%400.6.2) (2026-10-26)
 
 **Note:** Version bump only for package @simplysf/simply-gitlab
