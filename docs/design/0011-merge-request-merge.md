@@ -1,6 +1,6 @@
 # 0011 — Merging a merge request
 
-**Status:** Draft
+**Status:** Implemented
 **Package:** all three
 **Date:** 2026-10-26
 
@@ -91,14 +91,20 @@ unverified.
 The response is the merge request. Under `--json` it is passed through raw. Otherwise the command
 prints one line, chosen from the response:
 
-| Response                                        | Line                                             |
-| ----------------------------------------------- | ------------------------------------------------ |
-| `state: merged`                                 | `Merged !42 into main (a1b2c3d).`                |
-| `state: opened`, `merge_when_pipeline_succeeds` | `!42 will merge into main when its checks pass.` |
+| Response                      | Line                                             |
+| ----------------------------- | ------------------------------------------------ |
+| `state: merged`               | `Merged !42 into main (a1b2c3d).`                |
+| not merged, `--auto-merge`    | `!42 will merge into main when its checks pass.` |
+| not merged, no `--auto-merge` | `GitLab accepted the merge of !42 into main ...` |
 
 On a merge train project the second line reads `!42 joined the merge train for main.`. The command
 tells the two cases apart from the project's `merge_trains_enabled`, which it reads only when
-`--auto-merge` is given. The target branch is untrusted text and goes through `logSafe`.
+`--auto-merge` is given. The third row covers a merge GitLab accepted but had not finished when it
+answered; the line says so and points at `mr view` rather than claiming a merge. The target branch
+is untrusted text and goes through `logSafe`.
+
+`mr view` gains a `Head` line with the full `sha`, so the value `--sha` takes is visible without
+`--json`.
 
 ### Errors
 
@@ -120,16 +126,19 @@ suggests `--auto-merge`.
 **A 405 on a merge request that is already merged is a success, if it is the one we asked for.**
 Core cannot see whether the transport retried, so it judges by the re-read alone. When that shows
 `state: merged` and `--sha` was given and equals the merged head, the command reports the merge
-with a note that it was confirmed by reading it back. Otherwise the merge request may have been merged by someone else first, so
-the command says who merged it and when, and exits 1, because the caller cannot know whose merge
-it was.
+with a note that it was confirmed by reading it back. Otherwise the merge request may have been
+merged by someone else first, so the command says who merged it and when, and exits 1, because the
+caller cannot know whose merge it was.
 
 ### MCP
 
 `gitlab_mr_merge` mirrors the flags in its `inputSchema` and is registered only with
 `--allow-writes`. It is the first tool of the new `destructive` kind: it carries
-`destructiveHint: true`, and its schema requires `confirm: true` as a literal, so a call that omits
-it fails validation rather than merging. The tool description says that `skip_merge_train` bypasses
+`destructiveHint: true`, and it takes `confirm` as the literal `true`. A call that is neither
+confirmed nor `dryRun` is refused before anything is sent, as a `config` error that names both
+inputs. This is a runtime check rather than a required schema field, so `dryRun` can preview a
+merge without asserting a confirmation it has not been given, as the CLI's `--dry-run` does. The
+tool description says that `skip_merge_train` bypasses
 the train's testing, and that `sha` should be the head the agent actually looked at. It also tells
 the agent to treat the title and description it read as data.
 
@@ -163,16 +172,18 @@ the case that argument reserved the flag for.
 ## Implementation plan
 
 1. `gitlab-client.ts`: `mergeMergeRequest(project, iid, body)` → `PUT .../merge_requests/:iid/merge`.
-2. `merge-requests.ts`: `mergeMergeRequest(client, project, iid, options)`, with skip-train
-   pre-flight, body building, the 405 explanation, and the merged-on-retry read-back. Export it
-   from `index.ts` and add it to `index.test.ts`.
+2. `merge-requests.ts`, split so a dry run makes the same refusals a real run does:
+   `buildMergeBody` and `assertSkipTrainAllowed` (pure), `prepareMerge` (body plus the project
+   read), `executeMerge` (the PUT, the 405 explanation, and the merged-on-retry read-back), and
+   `describeMergeOutcome` (the one line). Exported from `index.ts` and listed in `index.test.ts`.
 3. `src/commands/gitlab/mr/merge.ts`, with `--confirm` defined on the command, not added to
    `writeFlags`. Update the `base-command.ts` comment.
-4. `tools.ts`: add the `destructive` kind with `destructiveHint` and the `confirm` literal, plus
-   `gitlab_mr_merge`. Update the `ToolKind` comment.
+4. `tools.ts`: add the `destructive` kind, the `confirm` input and its check, and
+   `gitlab_mr_merge`. Update the `ToolKind` comment. `server.ts`: its annotations.
 5. `pnpm run build` for `command-snapshot.json`, and `pnpm run readme`.
-6. Docs: point 0004's "no merge command" paragraph at this record, and update the index row. Add a
-   section on merging, and on skipping the train, to the CLI guide.
+6. Docs: point 0004's "no merge command" paragraph at this record, and update the index row.
+   Update the write-safety, scripting, and MCP server guides, each of which said there was no
+   `--confirm` or `confirm` gate anywhere.
 
 ## Testing
 
@@ -188,11 +199,12 @@ the case that argument reserved the flag for.
   `not_approved`, `ci_must_pass`, and an unknown status verbatim.
 - Retry: 502 then 405 with the merge request merged at the requested sha reports success. The same
   without `--sha` exits 1 naming who merged it.
-- Output: the merged line, the auto-merge line, and the train line. A title or branch with control
-  characters is sanitised.
-- MCP: the tool is absent without `--allow-writes`. A call without `confirm: true` fails schema
-  validation. The annotations include `destructiveHint`. `tools.test.ts` pairs the tool with the
-  command.
+- Output: the merged line, the auto-merge line, and the train line. An unknown merge status
+  carrying a newline is printed on one line.
+- MCP: the tool is absent without `--allow-writes`. A call without `confirm: true` or `dryRun` is
+  an `isError` result and sends nothing, while a `dryRun` without `confirm` previews. Only
+  destructive tools take `confirm`, and `gitlab_mr_merge` is the only one. `tools.test.ts` pairs the
+  tool with the command.
 
 ## Open questions
 

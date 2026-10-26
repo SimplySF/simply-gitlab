@@ -260,6 +260,30 @@
   },
   {
     "alias": [],
+    "command": "gitlab:mr:merge",
+    "flagAliases": [],
+    "flagChars": ["e", "p"],
+    "flags": [
+      "auto-merge",
+      "confirm",
+      "dry-run",
+      "env-file",
+      "gitlab-token",
+      "gitlab-url",
+      "json",
+      "merge-commit-message",
+      "mr",
+      "project",
+      "remove-source-branch",
+      "sha",
+      "skip-merge-train",
+      "squash",
+      "squash-commit-message"
+    ],
+    "plugin": "@simplysf/simply-gitlab"
+  },
+  {
+    "alias": [],
     "command": "gitlab:mr:update",
     "flagAliases": [],
     "flagChars": ["e", "p"],
