@@ -194,6 +194,26 @@ describe('gitlab config export', () => {
     expect(JSON.stringify(config)).toContain('DEPLOY_KEY');
   });
 
+  it('exports the merge train settings, including parallel pipelines and skipping the train', async () => {
+    stubProject({
+      merge_pipelines_enabled: true,
+      merge_trains_enabled: true,
+      max_pipelines_per_merge_train: 5,
+      merge_trains_skip_train_allowed: true,
+    });
+
+    const config = (await GitlabConfigExport.run(argv('--project', 'group/project'))) as {
+      project: { settings: Record<string, unknown> };
+    };
+
+    expect(config.project.settings).toMatchObject({
+      merge_pipelines_enabled: true,
+      merge_trains_enabled: true,
+      max_pipelines_per_merge_train: 5,
+      merge_trains_skip_train_allowed: true,
+    });
+  });
+
   it('drops attributes that cannot be set back', async () => {
     // A config carrying ids and timestamps would look like intent the moment it was in a file.
     stubProject({ merge_method: 'ff' });
