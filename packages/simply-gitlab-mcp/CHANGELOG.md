@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.4](https://github.com/SimplySF/simply-gitlab/compare/%40simplysf%2Fsimply-gitlab-mcp%400.7.3...%40simplysf%2Fsimply-gitlab-mcp%400.7.4) (2026-10-26)
+
+### Bug Fixes
+
+- **simply-gitlab-mcp:** keep an entry's env when mcp install replaces it ([#39](https://github.com/SimplySF/simply-gitlab/issues/39)) ([e274e54](https://github.com/SimplySF/simply-gitlab/commit/e274e54a5d769588e644fa50064a511841c7f55e)), closes [SimplySF/simply-atlassian#66](https://github.com/SimplySF/simply-atlassian/issues/66)
+
 ## [0.7.3](https://github.com/SimplySF/simply-gitlab/compare/%40simplysf%2Fsimply-gitlab-mcp%400.7.2...%40simplysf%2Fsimply-gitlab-mcp%400.7.3) (2026-10-26)
 
 **Note:** Version bump only for package @simplysf/simply-gitlab-mcp
