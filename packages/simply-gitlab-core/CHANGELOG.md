@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.6.0](https://github.com/SimplySF/simply-gitlab/compare/%40simplysf%2Fsimply-gitlab-core%400.5.3...%40simplysf%2Fsimply-gitlab-core%400.6.0) (2026-10-26)
+
+### Features
+
+- **simply-gitlab-core:** export merge train pipeline settings ([#40](https://github.com/SimplySF/simply-gitlab/issues/40)) ([9417745](https://github.com/SimplySF/simply-gitlab/commit/9417745227a42d62d49296e2a87f2adda22ff6f6))
+
 ## [0.5.3](https://github.com/SimplySF/simply-gitlab/compare/%40simplysf%2Fsimply-gitlab-core%400.5.2...%40simplysf%2Fsimply-gitlab-core%400.5.3) (2026-10-26)
 
 **Note:** Version bump only for package @simplysf/simply-gitlab-core

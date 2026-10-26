@@ -284,6 +284,13 @@ anyone will actually start.
 never values. The output is deliberately verbose — every supported key, not a curated subset —
 because deleting a line is easier than discovering a key exists.
 
+The merge train settings are exported as a group: `merge_pipelines_enabled` (which merge trains
+require), `merge_trains_enabled`, `max_pipelines_per_merge_train` (GitLab 19.0+; `1` runs the train
+sequentially, and the instance limit caps it), and `merge_trains_skip_train_allowed` (the
+experimental "merge immediately without restarting the merge train", which GitLab refuses for the
+fast-forward and semi-linear merge methods). A key the instance does not report is left out rather
+than written as `null`, so an export from an older instance is still a config it can apply.
+
 ### Execution across many targets
 
 Fifty projects is enough that the shape of the run matters.
