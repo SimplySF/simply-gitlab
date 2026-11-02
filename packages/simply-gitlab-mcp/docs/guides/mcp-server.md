@@ -251,16 +251,17 @@ You do not call tools yourself. Describe the outcome, and the agent chooses the 
 their inputs from the descriptions the server publishes. Some examples of what a request turns
 into:
 
-| You ask                                         | The agent calls                                                                      |
-| ----------------------------------------------- | ------------------------------------------------------------------------------------ |
-| "Why did CI fail on group/project?"             | `gitlab_ci_job_list` with `scope: ["failed"]`, then `gitlab_ci_job_log` on the first |
-| "What merge requests am I reviewing?"           | `gitlab_mr_list` with `reviewerUsername`                                             |
-| "Summarise MR 42 and what changed in it."       | `gitlab_mr_view`, then `gitlab_commit_list` on the source branch                     |
-| "Where is `UMCN_Account` defined?"              | `gitlab_search` with `scope: "blobs"` and a `project`                                |
-| "When did `src/index.ts` last change, and who?" | `gitlab_commit_list` with `path: "src/index.ts"`                                     |
-| "Show me the README on the `release` branch."   | `gitlab_file_view` with `ref: "release"`                                             |
-| "What's deployed to production?"                | `gitlab_ci_environment_list`                                                         |
-| "Which CI variables are set for production?"    | `gitlab_ci_variable_list` — keys and scopes only, never values                       |
+| You ask                                           | The agent calls                                                                      |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| "Why did CI fail on group/project?"               | `gitlab_ci_job_list` with `scope: ["failed"]`, then `gitlab_ci_job_log` on the first |
+| "What merge requests am I reviewing?"             | `gitlab_mr_list` with `reviewerUsername`                                             |
+| "Summarise MR 42 and what changed in it."         | `gitlab_mr_view`, then `gitlab_commit_list` on the source branch                     |
+| "What did reviewers say about the code in MR 42?" | `gitlab_mr_comment_list` with `codeOnly: true`                                       |
+| "Where is `UMCN_Account` defined?"                | `gitlab_search` with `scope: "blobs"` and a `project`                                |
+| "When did `src/index.ts` last change, and who?"   | `gitlab_commit_list` with `path: "src/index.ts"`                                     |
+| "Show me the README on the `release` branch."     | `gitlab_file_view` with `ref: "release"`                                             |
+| "What's deployed to production?"                  | `gitlab_ci_environment_list`                                                         |
+| "Which CI variables are set for production?"      | `gitlab_ci_variable_list` — keys and scopes only, never values                       |
 
 Each tool's inputs are the matching command's flags in camel case, with arrays where the CLI takes
 a repeatable or comma-separated flag; see the [Command Reference](/reference/) for what each does.
@@ -297,7 +298,7 @@ A few things make the agent's job easier:
 
 ## Let the agent write
 
-Started without options, the server registers only the 16 read tools. Start it with
+Started without options, the server registers only the 19 read tools. Start it with
 `--allow-writes` to also register the seven that create a project, create a branch, write a file,
 push a commit, or open and update a merge request. Even then, `GITLAB_READ_ONLY` in the environment refuses every
 write, exactly as it does for the CLI.
@@ -372,12 +373,15 @@ With writes allowed:
 | `gitlab_commit_diff`         | `gitlab_project_create`        |
 | `gitlab_mr_list`             |                                |
 | `gitlab_mr_view`             |                                |
+| `gitlab_mr_comment_list`     |                                |
 | `gitlab_tag_list`            |                                |
 | `gitlab_release_list`        |                                |
 | `gitlab_ci_job_list`         |                                |
 | `gitlab_ci_job_log`          |                                |
 | `gitlab_ci_variable_list`    |                                |
 | `gitlab_ci_environment_list` |                                |
+| `gitlab_config_export`       |                                |
+| `gitlab_config_plan`         |                                |
 | `gitlab_search`              |                                |
 
 ### CI variable values are never returned

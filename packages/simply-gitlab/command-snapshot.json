@@ -210,6 +210,25 @@
   },
   {
     "alias": [],
+    "command": "gitlab:mr:comment:list",
+    "flagAliases": [],
+    "flagChars": ["e", "p"],
+    "flags": [
+      "code-only",
+      "env-file",
+      "gitlab-token",
+      "gitlab-url",
+      "include-system",
+      "json",
+      "limit",
+      "mr",
+      "project",
+      "sort"
+    ],
+    "plugin": "@simplysf/simply-gitlab"
+  },
+  {
+    "alias": [],
     "command": "gitlab:mr:create",
     "flagAliases": [],
     "flagChars": ["e", "p"],

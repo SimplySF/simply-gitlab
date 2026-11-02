@@ -1,8 +1,9 @@
 # 0009 — Merge request comments
 
-**Status:** Draft
+**Status:** Partly implemented — `list` has shipped (with `--code-only`); `create` and `update` are
+still Draft
 **Package:** all three
-**Date:** 2026-10-13
+**Date:** 2026-10-13 (list implemented 2026-11-02)
 
 ## Problem
 
@@ -53,8 +54,10 @@ with it. That is a bigger decision than comments, and it deserves its own design
 arriving as part of this one. Those three statements stay true after this doc ships. See
 [Open questions](#open-questions).
 
-The scope is top-level comments, plus editing any comment by id. Thread replies, resolving threads,
-comments on diff lines, and draft review comments are also out of scope; see
+The scope is top-level comments, plus editing any comment by id. **Reading** covers every comment,
+including thread replies and comments on lines of code: `list` returns them all, and
+`--code-only` narrows it to the review comments on the diff. **Writing** thread replies, resolving
+threads, writing comments on diff lines, and draft review comments are out of scope; see
 [Alternatives considered](#alternatives-considered) and [Open questions](#open-questions).
 
 ## Behavior
@@ -131,6 +134,14 @@ to find out.
 | `--limit`          | 20      | Comments to return across all pages                                                          |
 | `--sort`           | `desc`  | `asc` or `desc` by creation time. GitLab's default, so a limit returns the _latest_ comments |
 | `--include-system` | off     | Also return system notes ("added 3 commits", "approved")                                     |
+| `--code-only`      | off     | Only comments on the diff (`DiffNote`): a line, a range, or a whole file. Not with the above |
+
+`--code-only` was added during implementation: the first thing a reader of a merge request's
+comments usually wants is the review comments on the code, and on a busy merge request those are
+buried among the top-level conversation. It and `--include-system` are mutually exclusive (oclif
+`exclusive` on the CLI, a `ConfigError` on the MCP side), because system notes are never on the
+diff and accepting both would silently ignore one. Replies in a code thread are `DiffNote`s too,
+so `--code-only` returns whole review threads, not just their first comment.
 
 System notes are filtered out on our side _(confirm that the REST notes endpoint still has no
 server-side filter)_. For the filter to work, `collect` gains an optional `keep` predicate:
@@ -138,15 +149,24 @@ server-side filter)_. For the filter to work, `collect` gains an optional `keep`
 - The limit counts **kept** items, so `--limit 20` means 20 comments, not 20 notes of which three
   were comments.
 - While a predicate is set, `per_page` is always 100, because the ratio of kept to fetched notes is
-  unknown.
+  unknown. That means a filtered last page can hold more kept items than the limit; `complete` is
+  then `false`, because the limit cut it short.
+- With `--include-system` (and not `--code-only`) every note is wanted, so no predicate is set and
+  GitLab's `X-Total` is reported as usual.
 - `total` is reported as `undefined`, because GitLab's `X-Total` counts system notes and "Showing 5
   of 112" would be wrong. `complete` keeps its meaning, and `MAX_PAGES` still applies.
 
-The table has five columns: **ID** (what `update` takes), **AUTHOR**, **CREATED**, **TYPE**, and
-**BODY**.
+The table has seven columns: **ID** (what `update` takes), **AUTHOR**, **CREATED**, **TYPE**,
+**LOCATION**, **RESOLVED**, and **BODY**.
 
-- **TYPE** is `comment` for a plain note, `thread` for a `DiscussionNote`, `diff` for a `DiffNote`,
-  and `system` for a note with `system: true`.
+- **TYPE** is `comment` for a plain note, `thread` for a `DiscussionNote`, `code` for a `DiffNote`,
+  and `system` for a note with `system: true`. (This draft said `diff`; `code` shipped, to match
+  `--code-only` and the word people use for these.)
+- **LOCATION** is where a code comment sits: `new_path:new_line` for an added or unchanged line,
+  `old_path:old_line` for a removed line (the only file it exists in), and just the path for a
+  comment on a whole file. A range comment shows the line it is anchored to, its last; the full
+  `position`, including `line_range` and the diff SHAs, is in `--json`. Blank for other notes.
+- **RESOLVED** is `yes`/`no` for a note in a resolvable thread, and a dash otherwise.
 - **BODY** is the first line of the comment, cut at 80 characters with an ellipsis. It is printed
   through `logSafe` as the last column.
 
@@ -213,11 +233,11 @@ create.
 
 ### MCP surface
 
-| Tool                       | Kind    | Inputs                                            |
-| -------------------------- | ------- | ------------------------------------------------- |
-| `gitlab_mr_comment_list`   | `read`  | `project`, `mr`, `limit`, `sort`, `includeSystem` |
-| `gitlab_mr_comment_create` | `write` | `project`, `mr`, `message`, `dryRun`              |
-| `gitlab_mr_comment_update` | `write` | `project`, `mr`, `comment`, `message`, `dryRun`   |
+| Tool                       | Kind    | Inputs                                                        |
+| -------------------------- | ------- | ------------------------------------------------------------- |
+| `gitlab_mr_comment_list`   | `read`  | `project`, `mr`, `limit`, `sort`, `includeSystem`, `codeOnly` |
+| `gitlab_mr_comment_create` | `write` | `project`, `mr`, `message`, `dryRun`                          |
+| `gitlab_mr_comment_update` | `write` | `project`, `mr`, `comment`, `message`, `dryRun`               |
 
 The CLI's `--message-file` has no MCP equivalent, just as `--content-file` has none for `file
 create`. Reading local files is a convenience of the CLI, not a capability the MCP server lacks, so
@@ -274,6 +294,10 @@ behavior of seven shipped commands as a side effect of a comments feature. It be
 change, with its own testing of what each endpoint does on a duplicate.
 
 ## Implementation plan
+
+Steps 2, 3 (`listMergeRequestNotes` only), 5, 6 (`list.ts` only), and 7 (`gitlab_mr_comment_list`
+only) have shipped. The read-side helpers landed in `merge-request-comments.ts` as `commentType`,
+`commentLocation`, and `keepComment`; the write-side ones listed in step 4 are still to come.
 
 1. **Core: transport.** Add `replayable?: boolean` to `JsonCall` in `http.ts`. Change `send`/`triage`
    so that a non-replayable call retries only 429 and `ECONNREFUSED`, and otherwise raises with an
