@@ -93,11 +93,20 @@ export { HIDDEN, maskVariables, tailLog } from './cicd.js';
 export { buildCommitBody, parseActionsInput, parseCommitActions, type CommitInput } from './commits.js';
 export {
   assertIid,
+  assertSkipTrainAllowed,
+  buildMergeBody,
   buildMergeRequestCreateBody,
   buildMergeRequestUpdateBody,
+  describeMergeOutcome,
+  executeMerge,
   mergeRequestUrl,
+  prepareMerge,
+  type MergeInput,
+  type MergeOutcome,
+  type MergeOutcomeKind,
   type MergeRequestCreateInput,
   type MergeRequestUpdateInput,
+  type PreparedMerge,
 } from './merge-requests.js';
 export { commentLocation, commentType, keepComment, type CommentType } from './merge-request-comments.js';
 export {

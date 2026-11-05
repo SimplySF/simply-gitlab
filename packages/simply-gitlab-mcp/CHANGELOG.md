@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.8.1](https://github.com/SimplySF/simply-gitlab/compare/%40simplysf%2Fsimply-gitlab-mcp%400.8.0...%40simplysf%2Fsimply-gitlab-mcp%400.8.1) (2026-11-02)
+
+### Bug Fixes
+
+- **deps:** Bump @modelcontextprotocol/sdk from 1.32.1 to 1.32.2 ([#44](https://github.com/SimplySF/simply-gitlab/issues/44)) ([8a8e79d](https://github.com/SimplySF/simply-gitlab/commit/8a8e79dd6222339e8bf3c514c52bab2468aa2ff5))
+
+# [0.8.0](https://github.com/SimplySF/simply-gitlab/compare/%40simplysf%2Fsimply-gitlab-mcp%400.7.5...%40simplysf%2Fsimply-gitlab-mcp%400.8.0) (2026-10-26)
+
+### Features
+
+- **simply-gitlab:** add mr merge with merge train support ([#42](https://github.com/SimplySF/simply-gitlab/issues/42)) ([ee588c6](https://github.com/SimplySF/simply-gitlab/commit/ee588c6a3629580f836143d57760b47cc76d663d))
+
+## [0.7.5](https://github.com/SimplySF/simply-gitlab/compare/%40simplysf%2Fsimply-gitlab-mcp%400.7.4...%40simplysf%2Fsimply-gitlab-mcp%400.7.5) (2026-10-26)
+
+**Note:** Version bump only for package @simplysf/simply-gitlab-mcp
+
+## [0.7.4](https://github.com/SimplySF/simply-gitlab/compare/%40simplysf%2Fsimply-gitlab-mcp%400.7.3...%40simplysf%2Fsimply-gitlab-mcp%400.7.4) (2026-10-26)
+
+### Bug Fixes
+
+- **simply-gitlab-mcp:** keep an entry's env when mcp install replaces it ([#39](https://github.com/SimplySF/simply-gitlab/issues/39)) ([e274e54](https://github.com/SimplySF/simply-gitlab/commit/e274e54a5d769588e644fa50064a511841c7f55e)), closes [SimplySF/simply-atlassian#66](https://github.com/SimplySF/simply-atlassian/issues/66)
+
+## [0.7.3](https://github.com/SimplySF/simply-gitlab/compare/%40simplysf%2Fsimply-gitlab-mcp%400.7.2...%40simplysf%2Fsimply-gitlab-mcp%400.7.3) (2026-10-26)
+
+**Note:** Version bump only for package @simplysf/simply-gitlab-mcp
+
+## [0.7.2](https://github.com/SimplySF/simply-gitlab/compare/%40simplysf%2Fsimply-gitlab-mcp%400.7.1...%40simplysf%2Fsimply-gitlab-mcp%400.7.2) (2026-10-26)
+
+**Note:** Version bump only for package @simplysf/simply-gitlab-mcp
+
 ## [0.7.1](https://github.com/SimplySF/simply-gitlab/compare/%40simplysf%2Fsimply-gitlab-mcp%400.7.0...%40simplysf%2Fsimply-gitlab-mcp%400.7.1) (2026-10-19)
 
 ### Bug Fixes

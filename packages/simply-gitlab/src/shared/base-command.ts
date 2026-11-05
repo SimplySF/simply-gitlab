@@ -76,11 +76,11 @@ function errorName(error: unknown, oclifExit: number | undefined): string {
 /**
  * Flags every write command shares, defined once so the wording cannot drift between them.
  *
- * There is no `--confirm` here, because no command in this CLI destroys anything yet — every
- * write either creates something or edits a merge request, and both are recoverable. Requiring
- * a confirmation for those would train a caller to pass it always, at which point it protects
- * nothing while still implying that it does. The first command that deletes a branch, a tag, or
- * a file is the one that brings the flag back.
+ * There is no `--confirm` here, because nearly every write either creates something or edits a
+ * merge request, and both are recoverable. Requiring a confirmation for those would train a
+ * caller to pass it always, at which point it protects nothing while still implying that it does.
+ * The one write that cannot be undone, `mr merge`, declares `--confirm` itself, and so will the
+ * first command that deletes a branch, a tag, or a file.
  */
 export const writeFlags = {
   'dry-run': Flags.boolean({

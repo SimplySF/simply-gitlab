@@ -25,6 +25,7 @@ interface MergeRequest {
   readonly state?: string;
   readonly source_branch?: string;
   readonly target_branch?: string;
+  readonly sha?: string;
   readonly author?: { readonly username?: string };
   readonly merge_status?: string;
   readonly detailed_merge_status?: string;
@@ -62,6 +63,8 @@ export default class GitlabMrView extends GitLabCommand<typeof GitlabMrView> {
         ['Title', mr.title],
         ['State', mr.draft === true ? `${mr.state ?? 'opened'} (draft)` : mr.state],
         ['Branches', `${mr.source_branch ?? '?'} -> ${mr.target_branch ?? '?'}`],
+        // In full, because it is what mr merge --sha takes.
+        ['Head', mr.sha],
         ['Author', mr.author?.username],
         ['Merge status', mr.detailed_merge_status ?? mr.merge_status],
         ['Conflicts', mr.has_conflicts === true ? 'yes' : undefined],

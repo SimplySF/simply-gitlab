@@ -72,6 +72,7 @@ const INSTRUCTIONS =
 const ANNOTATIONS: Readonly<Record<ToolKind, ToolAnnotations>> = {
   read: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true },
   write: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: true },
+  destructive: { readOnlyHint: false, destructiveHint: true, idempotentHint: false, openWorldHint: true },
 };
 
 /** Which tools a server with the given options registers. Exported so `--help` can list them. */

@@ -59,7 +59,11 @@ const SETTING_KEYS = [
   'only_allow_merge_if_all_discussions_are_resolved',
   'allow_merge_on_skipped_pipeline',
   'remove_source_branch_after_merge',
+  'merge_pipelines_enabled',
   'merge_trains_enabled',
+  // Both are absent from the response on instances too old to have them, and pick() drops them.
+  'max_pipelines_per_merge_train',
+  'merge_trains_skip_train_allowed',
   'printing_merge_request_link_enabled',
   'resolve_outdated_diff_discussions',
   'merge_requests_template',

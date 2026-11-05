@@ -3,23 +3,25 @@ title: Write safety
 description: The layers between a Simply GitLab command and a change to your repository, which of them is a real boundary, and why CI variable values are hidden by default.
 ---
 
-Seven commands change data — `project create`, `branch create`, `file create`, `file update`,
-`commit create`, `mr create`, and `mr update`. Nothing in this CLI deletes anything. Those seven sit
-behind several layers, and only the last is a real boundary.
+Eight commands change data — `project create`, `branch create`, `file create`, `file update`,
+`commit create`, `mr create`, `mr update`, and `mr merge`. Nothing in this CLI deletes anything.
+Those eight sit behind several layers, and only the last is a real boundary.
 
-## No `--confirm`, deliberately
+## `--confirm` only where it cannot be undone
 
-Every write here either creates something or edits a merge request, and both are recoverable: a
+Seven of those writes either create something or edit a merge request, and both are recoverable: a
 branch can be deleted, a file can be committed over, a closed merge request can be reopened.
 Requiring a confirmation for actions like those would train you to pass it always, at which point
 it protects nothing while still implying that it does.
 
-So there is no `--confirm` flag anywhere in this CLI. The first command that irreversibly destroys
-something is the one that brings it back.
+`mr merge` is the exception, because no command undoes a merge. Without `--confirm` it prints the
+request it would send and exits 1. Pass `--sha` with the head you reviewed (the `Head` line of
+`mr view`) as well, so that GitLab refuses if anything was pushed since. `--skip-merge-train`,
+which merges without the merge train testing the change, requires it.
 
 ## `--dry-run`
 
-Accepted by all seven. It prints the exact request body that would be sent and sends nothing, which
+Accepted by all eight. It prints the exact request body that would be sent and sends nothing, which
 is the cheapest way to see what is about to happen. The one nuance is `project create`: a namespace
 or template given as a path is still looked up, so the printed ids are the ones that would be sent.
 

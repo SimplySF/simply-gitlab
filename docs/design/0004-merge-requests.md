@@ -77,10 +77,10 @@ replaces is the kind of thing a caller discovers by losing labels.
 an unchanged merge request, so without this a caller who misspelled a flag would be told the update
 succeeded and see nothing different.
 
-`--state close` and `--state reopen` are the buttons of those names. Neither merges anything —
-there is no merge command here, deliberately: merging is the one merge-request action that is not
-reversible by another command in this CLI, and it deserves its own design alongside the `--confirm`
-flag it would need.
+`--state close` and `--state reopen` are the buttons of those names. Neither merges anything.
+Merging is the one merge-request action that is not reversible by another command in this CLI, so
+it got its own design alongside the `--confirm` flag it needs: `mr merge`, in
+[0011](0011-merge-request-merge.md).
 
 ## Alternatives considered
 

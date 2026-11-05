@@ -332,6 +332,14 @@ export class GitLabClient {
     });
   }
 
+  public async mergeMergeRequest(project: ProjectRef, iid: number, body: Record<string, unknown>): Promise<unknown> {
+    return this.request(`/projects/${segment(project)}/merge_requests/${iid}/merge`, {
+      method: 'PUT',
+      body,
+      mutating: true,
+    });
+  }
+
   /**
    * A merge request's comments, from the notes endpoint. System notes share that endpoint and its
    * pagination, and it has no server-side filter for them, so they are dropped here and the limit

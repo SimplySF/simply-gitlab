@@ -18,6 +18,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { respondJson, startTestServer, type TestServer } from '@simplysf/simply-gitlab-core/testing';
 import GitlabMrCreate from '../../../src/commands/gitlab/mr/create.js';
 import GitlabMrList from '../../../src/commands/gitlab/mr/list.js';
+import GitlabMrMerge from '../../../src/commands/gitlab/mr/merge.js';
 import GitlabMrUpdate from '../../../src/commands/gitlab/mr/update.js';
 
 let server: TestServer;
@@ -134,5 +135,88 @@ describe('gitlab mr update', () => {
 
     expect(server.requests[0]?.method).toBe('PUT');
     expect(server.requests[0]?.url).toBe('/api/v4/projects/group%2Fproject/merge_requests/42');
+  });
+});
+
+describe('gitlab mr merge', () => {
+  const SHA = 'a'.repeat(40);
+  const MERGE_PATH = '/api/v4/projects/group%2Fproject/merge_requests/42/merge';
+
+  afterEach(() => {
+    delete process.env.GITLAB_READ_ONLY;
+  });
+
+  it('sends nothing without --confirm, and says how to send it', async () => {
+    await expect(GitlabMrMerge.run(argv('--mr', '42', '--sha', SHA))).rejects.toThrow(/Pass --confirm/);
+    expect(server.requests).toHaveLength(0);
+  });
+
+  it('returns the request under --dry-run without sending it', async () => {
+    const request = await GitlabMrMerge.run(argv('--mr', '42', '--squash', '--remove-source-branch', '--dry-run'));
+
+    expect(request).toStrictEqual({ squash: true, should_remove_source_branch: true });
+    expect(server.requests).toHaveLength(0);
+  });
+
+  it('merges with --confirm, pinned to the reviewed head', async () => {
+    server.route(MERGE_PATH, (_req, res) => {
+      respondJson(res, 200, { iid: 42, state: 'merged', target_branch: 'main' });
+    });
+
+    const merged = await GitlabMrMerge.run(argv('--mr', '42', '--sha', SHA, '--confirm'));
+
+    expect(merged).toMatchObject({ state: 'merged' });
+    expect(server.requests[0]).toMatchObject({ method: 'PUT', url: MERGE_PATH });
+    expect(JSON.parse(server.requests[0]?.body ?? '{}')).toStrictEqual({ sha: SHA });
+  });
+
+  it('refuses --auto-merge with --skip-merge-train', async () => {
+    await expect(
+      GitlabMrMerge.run(argv('--mr', '42', '--auto-merge', '--skip-merge-train', '--sha', SHA, '--confirm')),
+    ).rejects.toThrow(/cannot also be provided|--auto-merge/);
+    expect(server.requests).toHaveLength(0);
+  });
+
+  it('refuses --skip-merge-train without --sha before any request', async () => {
+    await expect(GitlabMrMerge.run(argv('--mr', '42', '--skip-merge-train', '--confirm'))).rejects.toThrow(
+      /needs --sha/,
+    );
+    expect(server.requests).toHaveLength(0);
+  });
+
+  it('checks the project allows skipping the train, even on a dry run', async () => {
+    server.route('/api/v4/projects/group%2Fproject', (_req, res) => {
+      respondJson(res, 200, { merge_trains_enabled: true, merge_trains_skip_train_allowed: false });
+    });
+
+    await expect(
+      GitlabMrMerge.run(argv('--mr', '42', '--skip-merge-train', '--sha', SHA, '--dry-run')),
+    ).rejects.toThrow(/does not allow skipping the merge train/);
+    expect(server.requests.every((request) => request.method === 'GET')).toBe(true);
+  });
+
+  it('skips the train when the project allows it', async () => {
+    server.route('/api/v4/projects/group%2Fproject', (_req, res) => {
+      respondJson(res, 200, {
+        merge_trains_enabled: true,
+        merge_trains_skip_train_allowed: true,
+        merge_method: 'merge',
+      });
+    });
+    server.route(MERGE_PATH, (_req, res) => {
+      respondJson(res, 200, { iid: 42, state: 'merged', target_branch: 'main' });
+    });
+
+    await GitlabMrMerge.run(argv('--mr', '42', '--skip-merge-train', '--sha', SHA, '--confirm'));
+
+    const put = server.requests.find((request) => request.method === 'PUT');
+    expect(JSON.parse(put?.body ?? '{}')).toStrictEqual({ sha: SHA, skip_merge_train: true });
+  });
+
+  it('is refused under GITLAB_READ_ONLY like every write', async () => {
+    process.env.GITLAB_READ_ONLY = '1';
+
+    await expect(GitlabMrMerge.run(argv('--mr', '42', '--confirm'))).rejects.toThrow(/GITLAB_READ_ONLY/);
+    expect(server.requests).toHaveLength(0);
   });
 });
