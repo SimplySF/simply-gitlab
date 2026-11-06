@@ -292,10 +292,13 @@ fast-forward and semi-linear merge methods). A key the instance does not report 
 than written as `null`, so an export from an older instance is still a config it can apply.
 
 The project feature toggles are exported as their `*_access_level` attributes: environments, feature
-flags, infrastructure, model experiments, model registry, monitor, pages, releases, requirements, and
-snippets. Each takes `disabled`, `private`, or `enabled`, and `pages_access_level` also takes
-`public`. The `*_enabled` booleans are not used for these, because a boolean cannot express `private`
-and GitLab has deprecated `snippets_enabled` in favour of `snippets_access_level`.
+flags, infrastructure, issues, model experiments, model registry, monitor, package registry, pages,
+releases, requirements, snippets, and wiki. Each takes `disabled`, `private`, or `enabled`, and
+`pages_access_level` and `package_registry_access_level` also take `public`. The `*_enabled` booleans
+are not exported, because a boolean cannot express `private` and GitLab has deprecated them in favour
+of the access levels. A baseline that already declares `issues_enabled`, `wiki_enabled`, or
+`packages_enabled` keeps working: `settings` keys are passed through by name, and only `export`
+stopped writing them.
 
 ### Execution across many targets
 

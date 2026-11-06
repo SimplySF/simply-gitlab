@@ -43,13 +43,16 @@ const FEATURE_ACCESS_LEVELS = {
   environments_access_level: 'enabled',
   feature_flags_access_level: 'private',
   infrastructure_access_level: 'disabled',
+  issues_access_level: 'enabled',
   model_experiments_access_level: 'enabled',
   model_registry_access_level: 'private',
   monitor_access_level: 'disabled',
+  package_registry_access_level: 'public',
   pages_access_level: 'public',
   releases_access_level: 'enabled',
   requirements_access_level: 'private',
   snippets_access_level: 'disabled',
+  wiki_access_level: 'private',
 };
 
 describe('exportProject: settings', () => {
@@ -70,7 +73,14 @@ describe('exportProject: settings', () => {
   });
 
   it('does not export the boolean a feature access level replaces', async () => {
-    stubProject({ snippets_enabled: true, requirements_enabled: true, snippets_access_level: 'enabled' });
+    stubProject({
+      issues_enabled: true,
+      packages_enabled: true,
+      requirements_enabled: true,
+      snippets_enabled: true,
+      wiki_enabled: true,
+      snippets_access_level: 'enabled',
+    });
 
     const desired = await exportProject(client(), 'group/project', { sections: ['settings'] });
 
