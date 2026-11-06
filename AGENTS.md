@@ -27,9 +27,10 @@ Use the smallest relevant topic document rather than loading the whole directory
 - [Creating a project](docs/design/0008-project-create.md): `gitlab project create`, the four
   template attributes and when `use_custom_template` is set, path-to-id resolution, and why a dry
   run still looks ids up.
-- [Merge request comments](docs/design/0009-merge-request-comments.md) (Draft): `gitlab mr comment
-list/create/update`, the quick-action guard, why a comment create is not retried on an ambiguous
-  failure, and why delete was left to its own design.
+- [Merge request comments](docs/design/0009-merge-request-comments.md) (`list` shipped, the rest
+  Draft): `gitlab mr comment list/create/update`, reading code comments with `--code-only`, the
+  quick-action guard, why a comment create is not retried on an ambiguous failure, and why delete
+  was left to its own design.
 - [MCP install](docs/design/0010-mcp-install.md): `gitlab mcp install`, which writes the server into
   MCP clients. The client logic is `simply-gitlab-mcp/src/mcpClients`, kept identical to
   simply-atlassian's copy: change both together.

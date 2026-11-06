@@ -54,6 +54,7 @@ export {
   type ListCommitsOptions,
   type ListEnvironmentsOptions,
   type ListJobsOptions,
+  type ListMergeRequestNotesOptions,
   type ListMergeRequestsOptions,
   type ListProjectsOptions,
   type ListResult,
@@ -75,6 +76,7 @@ export { assertNotEmpty, mergeBody, parseBodyInput, readTextFile } from './json-
 export { formatKeyValue, formatTable, type Column, type Pair } from './output.js';
 export {
   branchColumns,
+  commentColumns,
   commitColumns,
   environmentColumns,
   jobColumns,
@@ -106,6 +108,7 @@ export {
   type MergeRequestUpdateInput,
   type PreparedMerge,
 } from './merge-requests.js';
+export { commentLocation, commentType, keepComment, type CommentType } from './merge-request-comments.js';
 export {
   buildProjectCreateBody,
   prepareProjectCreate,

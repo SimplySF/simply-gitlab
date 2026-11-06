@@ -59,6 +59,7 @@ describe('@simplysf/simply-gitlab-core', () => {
         // shared input handling and rendering
         'assertNotEmpty',
         'branchColumns',
+        'commentColumns',
         'commitColumns',
         'environmentColumns',
         'formatKeyValue',
@@ -116,7 +117,10 @@ describe('@simplysf/simply-gitlab-core', () => {
         'buildMergeRequestCreateBody',
         'buildMergeRequestUpdateBody',
         'buildProjectCreateBody',
+        'commentLocation',
+        'commentType',
         'decodeFileContent',
+        'keepComment',
         'describeMergeOutcome',
         'executeMerge',
         'maskVariables',

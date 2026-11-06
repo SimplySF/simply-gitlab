@@ -18,6 +18,7 @@ import { buildAuthHeaders } from './auth.js';
 import type { GitLabConfig } from './config.js';
 import { ConfigError } from './errors.js';
 import { HttpTransport, type JsonCall, type QueryValue } from './http.js';
+import { keepComment } from './merge-request-comments.js';
 
 /** Everything a caller needs after following pages: the items plus why paging stopped. */
 export interface ListResult<T = unknown> {
@@ -79,6 +80,15 @@ export interface ListMergeRequestsOptions {
   readonly labels?: readonly string[];
   readonly orderBy?: string;
   readonly sort?: 'asc' | 'desc';
+}
+
+export interface ListMergeRequestNotesOptions {
+  /** By creation time. GitLab's default is `desc`, so a limit returns the latest comments. */
+  readonly sort?: 'asc' | 'desc';
+  /** Also return the notes GitLab writes itself ("added 3 commits"). Ignored with `codeOnly`. */
+  readonly includeSystem?: boolean;
+  /** Only comments on the diff: a line, a range of lines, or a whole file. */
+  readonly codeOnly?: boolean;
 }
 
 export type JobScope =
@@ -330,6 +340,27 @@ export class GitLabClient {
     });
   }
 
+  /**
+   * A merge request's comments, from the notes endpoint. System notes share that endpoint and its
+   * pagination, and it has no server-side filter for them, so they are dropped here and the limit
+   * counts what is kept. See docs/design/0009-merge-request-comments.md.
+   */
+  public async listMergeRequestNotes(
+    project: ProjectRef,
+    iid: number,
+    options: ListMergeRequestNotesOptions = {},
+    limit = 20,
+  ): Promise<ListResult> {
+    // Unfiltered only when every note is wanted, so that list keeps GitLab's own total.
+    const keepsAll = options.includeSystem === true && options.codeOnly !== true;
+    return this.collect(
+      `/projects/${segment(project)}/merge_requests/${iid}/notes`,
+      query({ sort: options.sort, order_by: 'created_at' }),
+      limit,
+      keepsAll ? undefined : (note): boolean => keepComment(note, options),
+    );
+  }
+
   // --- Tags ---
 
   public async listTags(project: ProjectRef, options: ListTagsOptions = {}, limit = 20): Promise<ListResult> {
@@ -543,8 +574,17 @@ export class GitLabClient {
    * page, and reports which of the two happened. A caller that gets `complete: false` was cut
    * short by its own limit and knows more exists — the alternative, returning a short list with
    * no signal, is how a partial answer gets mistaken for the whole one.
+   *
+   * With `keep`, only the items it accepts are returned and the limit counts those. Every page is
+   * then asked for at full size, because how many of a page will be kept is unknown, and `total`
+   * is left undefined, because the instance's count includes the items that were dropped.
    */
-  private async collect<T>(path: string, params: Record<string, QueryValue>, limit: number): Promise<ListResult<T>> {
+  private async collect<T>(
+    path: string,
+    params: Record<string, QueryValue>,
+    limit: number,
+    keep?: (item: T) => boolean,
+  ): Promise<ListResult<T>> {
     if (!Number.isInteger(limit) || limit < 1) {
       throw new ConfigError(`A limit must be a positive whole number, got ${limit}.`);
     }
@@ -560,10 +600,14 @@ export class GitLabClient {
       const response = await this.transport.jsonPaged<T[]>({
         method: 'GET',
         path: `${API_BASE}${path}`,
-        query: { ...params, per_page: Math.min(MAX_PER_PAGE, limit - items.length), page },
+        query: {
+          ...params,
+          per_page: keep === undefined ? Math.min(MAX_PER_PAGE, limit - items.length) : MAX_PER_PAGE,
+          page,
+        },
       });
       pages += 1;
-      total = response.pagination.total ?? total;
+      if (keep === undefined) total = response.pagination.total ?? total;
 
       // Every list endpoint answers with a JSON array. A non-array here means the route matched
       // something else — a redirect to a sign-in page, most often — and slicing it would produce
@@ -572,14 +616,15 @@ export class GitLabClient {
         throw new ConfigError(`GET ${path} did not return a list. Check that the URL points at a GitLab instance.`);
       }
 
-      items.push(...response.data);
+      items.push(...(keep === undefined ? response.data : response.data.filter(keep)));
 
       const nextPage = response.pagination.nextPage;
       // No next-page header, an empty page, or a cursor that fails to advance all mean the same
       // thing: this was the last page. The last of the three matters because a misconfigured
       // reverse proxy that strips or pins the header would otherwise loop until MAX_PAGES.
       if (response.data.length === 0 || nextPage === undefined || nextPage <= page) {
-        return { items: items.slice(0, limit), total, pages, complete: true };
+        // A filtered last page can still hold more than the limit; that is a cut, not the end.
+        return { items: items.slice(0, limit), total, pages, complete: items.length <= limit };
       }
       page = nextPage;
     }

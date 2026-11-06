@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.9.0](https://github.com/SimplySF/simply-gitlab/compare/%40simplysf%2Fsimply-gitlab-mcp%400.8.1...%40simplysf%2Fsimply-gitlab-mcp%400.9.0) (2026-11-06)
+
+### Features
+
+- **mr:** read merge request comments, including code review comments ([#47](https://github.com/SimplySF/simply-gitlab/issues/47)) ([f37a1d9](https://github.com/SimplySF/simply-gitlab/commit/f37a1d9fbb3bb79037025cbf982a71b76dce1649))
+
 ## [0.8.1](https://github.com/SimplySF/simply-gitlab/compare/%40simplysf%2Fsimply-gitlab-mcp%400.8.0...%40simplysf%2Fsimply-gitlab-mcp%400.8.1) (2026-11-02)
 
 ### Bug Fixes
