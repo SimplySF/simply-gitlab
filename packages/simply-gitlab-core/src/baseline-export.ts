@@ -82,6 +82,7 @@ const SETTING_KEYS = [
   // Repository
   'default_branch',
   // Feature visibility
+  'analytics_access_level',
   'environments_access_level',
   'feature_flags_access_level',
   'infrastructure_access_level',
@@ -92,7 +93,9 @@ const SETTING_KEYS = [
   'package_registry_access_level',
   'pages_access_level',
   'releases_access_level',
+  'repository_access_level',
   'requirements_access_level',
+  'security_and_compliance_access_level',
   'snippets_access_level',
   'wiki_access_level',
 ] as const;

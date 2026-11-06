@@ -40,6 +40,7 @@ function stubProject(project: Record<string, unknown>): void {
 }
 
 const FEATURE_ACCESS_LEVELS = {
+  analytics_access_level: 'private',
   environments_access_level: 'enabled',
   feature_flags_access_level: 'private',
   infrastructure_access_level: 'disabled',
@@ -50,7 +51,9 @@ const FEATURE_ACCESS_LEVELS = {
   package_registry_access_level: 'public',
   pages_access_level: 'public',
   releases_access_level: 'enabled',
+  repository_access_level: 'enabled',
   requirements_access_level: 'private',
+  security_and_compliance_access_level: 'private',
   snippets_access_level: 'disabled',
   wiki_access_level: 'private',
 };

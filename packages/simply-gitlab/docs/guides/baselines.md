@@ -33,21 +33,24 @@ scopes, and flags, never values.
 
 Project features are exported as access levels rather than on/off booleans:
 
-| Feature           | Key                              |
-| ----------------- | -------------------------------- |
-| Environments      | `environments_access_level`      |
-| Feature flags     | `feature_flags_access_level`     |
-| Infrastructure    | `infrastructure_access_level`    |
-| Issues            | `issues_access_level`            |
-| Model experiments | `model_experiments_access_level` |
-| Model registry    | `model_registry_access_level`    |
-| Monitor           | `monitor_access_level`           |
-| Package registry  | `package_registry_access_level`  |
-| Pages             | `pages_access_level`             |
-| Releases          | `releases_access_level`          |
-| Requirements      | `requirements_access_level`      |
-| Snippets          | `snippets_access_level`          |
-| Wiki              | `wiki_access_level`              |
+| Feature                 | Key                                    |
+| ----------------------- | -------------------------------------- |
+| Analytics               | `analytics_access_level`               |
+| Environments            | `environments_access_level`            |
+| Feature flags           | `feature_flags_access_level`           |
+| Infrastructure          | `infrastructure_access_level`          |
+| Issues                  | `issues_access_level`                  |
+| Model experiments       | `model_experiments_access_level`       |
+| Model registry          | `model_registry_access_level`          |
+| Monitor                 | `monitor_access_level`                 |
+| Package registry        | `package_registry_access_level`        |
+| Pages                   | `pages_access_level`                   |
+| Releases                | `releases_access_level`                |
+| Repository              | `repository_access_level`              |
+| Requirements            | `requirements_access_level`            |
+| Security and compliance | `security_and_compliance_access_level` |
+| Snippets                | `snippets_access_level`                |
+| Wiki                    | `wiki_access_level`                    |
 
 Each takes `disabled`, `private` (project members only), or `enabled` (everyone with access to the
 project). `package_registry_access_level` and `pages_access_level` also take `public`.
@@ -55,6 +58,11 @@ project). `package_registry_access_level` and `pages_access_level` also take `pu
 Export no longer writes `issues_enabled`, `wiki_enabled`, or `packages_enabled`, which GitLab has
 deprecated. A baseline that declares them still works, but replace them rather than declaring both,
 since each pair controls the same feature.
+
+GitLab refuses a `repository_access_level` lower than the project's merge request or pipeline access
+level. Export does not write those two, so a baseline that tightens the repository can fail on a
+project where they are still open. Declare `merge_requests_access_level` and `builds_access_level`
+alongside it by hand, as `settings` accepts any attribute GitLab does.
 
 A key the instance does not report is left out of the export. Written in by hand, the same key shows
 as a change on every `plan`, because there is nothing on the instance to compare it with.
