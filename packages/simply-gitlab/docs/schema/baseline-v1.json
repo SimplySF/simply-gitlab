@@ -68,7 +68,7 @@
       "properties": {
         "settings": {
           "type": "object",
-          "description": "Attributes for PUT /projects/:id — merge method, CI config path, build timeout, and the rest. Names are GitLab's own; only what you declare is compared."
+          "description": "Attributes for PUT /projects/:id — merge method, CI config path, build timeout, feature access levels, and the rest. Names are GitLab's own; only what you declare is compared."
         },
         "protectedBranches": {
           "$ref": "#/$defs/section",
