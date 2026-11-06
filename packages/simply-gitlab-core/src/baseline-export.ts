@@ -83,10 +83,12 @@ const SETTING_KEYS = [
   'default_branch',
   // Feature visibility
   'analytics_access_level',
+  'builds_access_level',
   'environments_access_level',
   'feature_flags_access_level',
   'infrastructure_access_level',
   'issues_access_level',
+  'merge_requests_access_level',
   'model_experiments_access_level',
   'model_registry_access_level',
   'monitor_access_level',

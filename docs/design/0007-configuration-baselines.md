@@ -291,10 +291,10 @@ experimental "merge immediately without restarting the merge train", which GitLa
 fast-forward and semi-linear merge methods). A key the instance does not report is left out rather
 than written as `null`, so an export from an older instance is still a config it can apply.
 
-The project feature toggles are exported as their `*_access_level` attributes: analytics,
-environments, feature flags, infrastructure, issues, model experiments, model registry, monitor,
-package registry, pages, releases, repository, requirements, security and compliance, snippets, and
-wiki. Each takes `disabled`, `private`, or `enabled`, and
+The project feature toggles are exported as their `*_access_level` attributes: analytics, builds,
+environments, feature flags, infrastructure, issues, merge requests, model experiments, model
+registry, monitor, package registry, pages, releases, repository, requirements, security and
+compliance, snippets, and wiki. Each takes `disabled`, `private`, or `enabled`, and
 `pages_access_level` and `package_registry_access_level` also take `public`. The `*_enabled` booleans
 are not exported, because a boolean cannot express `private` and GitLab has deprecated them in favour
 of the access levels. A baseline that already declares `issues_enabled`, `wiki_enabled`, or
@@ -302,8 +302,9 @@ of the access levels. A baseline that already declares `issues_enabled`, `wiki_e
 stopped writing them.
 
 GitLab refuses a `repository_access_level` lower than `merge_requests_access_level` or
-`builds_access_level`. Those two are not exported, so tightening the repository in a baseline can
-fail on a project where they are still open unless they are declared by hand as well.
+`builds_access_level`, so the three are exported together: changes to them land in one
+`PUT /projects/:id`, and a baseline that keeps all three can tighten them at once. A baseline trimmed
+to the repository alone can still fail on a project where the other two are open.
 
 ### Execution across many targets
 
