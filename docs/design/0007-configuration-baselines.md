@@ -291,6 +291,12 @@ experimental "merge immediately without restarting the merge train", which GitLa
 fast-forward and semi-linear merge methods). A key the instance does not report is left out rather
 than written as `null`, so an export from an older instance is still a config it can apply.
 
+The project feature toggles are exported as their `*_access_level` attributes: environments, feature
+flags, infrastructure, model experiments, model registry, monitor, pages, releases, requirements, and
+snippets. Each takes `disabled`, `private`, or `enabled`, and `pages_access_level` also takes
+`public`. The `*_enabled` booleans are not used for these, because a boolean cannot express `private`
+and GitLab has deprecated `snippets_enabled` in favour of `snippets_access_level`.
+
 ### Execution across many targets
 
 Fifty projects is enough that the shape of the run matters.

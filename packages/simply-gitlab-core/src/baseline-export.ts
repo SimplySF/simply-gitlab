@@ -84,6 +84,17 @@ const SETTING_KEYS = [
   'issues_enabled',
   'wiki_enabled',
   'packages_enabled',
+  // Feature visibility
+  'environments_access_level',
+  'feature_flags_access_level',
+  'infrastructure_access_level',
+  'model_experiments_access_level',
+  'model_registry_access_level',
+  'monitor_access_level',
+  'pages_access_level',
+  'releases_access_level',
+  'requirements_access_level',
+  'snippets_access_level',
 ] as const;
 
 /** Approval settings that can be set back, as opposed to reported. */
