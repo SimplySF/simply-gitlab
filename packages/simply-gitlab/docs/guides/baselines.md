@@ -143,7 +143,7 @@ guarantee rather than an approximation. A second run against a converged project
 at all.
 
 Sections are applied in a fixed order: settings, protected branches, protected tags, approval
-settings, approval rules, push rules. That order exists because an approval rule scoped to `main`
+settings, approval rules, push rules, badges. That order exists because an approval rule scoped to `main`
 needs `main` protected before it can reference it.
 
 One project failing does not abandon the other forty-nine. There is no transaction across GitLab
@@ -165,7 +165,7 @@ where it stopped, and `plan` afterwards shows what is left.
 }
 ```
 
-Lists merge by a natural key — `name` for branches, tags, and rules; `key` plus `environment_scope`
+Lists merge by a natural key — `name` for branches, tags, rules, and badges; `key` plus `environment_scope`
 for variables — so an override adjusts one entry rather than restating the array. The rule above
 changes one number and inherits the usernames from the baseline.
 
@@ -201,6 +201,29 @@ over time:
 ```sh
 simply gitlab config plan --config ./baseline.json --json | jq '.summary'
 ```
+
+## Badges
+
+`badges` declares a project's own badges by name. GitLab's placeholders work in both URLs, so one
+entry fits every project in the baseline:
+
+```json
+"badges": [
+  {
+    "name": "Pipeline",
+    "link_url": "https://gitlab.example.com/%{project_path}/-/pipelines",
+    "image_url": "https://gitlab.example.com/%{project_path}/badges/%{default_branch}/pipeline.svg"
+  }
+]
+```
+
+A new badge needs both URLs; `plan` reports the project as failed if one is missing.
+
+Badges inherited from a parent group are ignored, because they belong to the group. A badge with no
+name is left out of an export, since a baseline matches badges by name. If it is still on a project,
+`plan` shows it as `(unnamed badge <id>)`, and turning on `prune` removes it.
+
+If two badges on a project share a name, only the last one GitLab lists is compared.
 
 ## CI/CD variables are reported, not written
 

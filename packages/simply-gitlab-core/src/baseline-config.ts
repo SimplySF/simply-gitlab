@@ -59,6 +59,7 @@ export interface ProjectDesired {
   readonly approvals?: Readonly<Record<string, unknown>>;
   readonly approvalRules?: Section;
   readonly pushRules?: Readonly<Record<string, unknown>>;
+  readonly badges?: Section;
   readonly variables?: Section;
 }
 
@@ -87,7 +88,7 @@ export interface NormalizedSection {
 }
 
 /** The list sections, in the order `apply` reconciles them. */
-export const LIST_SECTIONS = ['protectedBranches', 'protectedTags', 'approvalRules', 'variables'] as const;
+export const LIST_SECTIONS = ['protectedBranches', 'protectedTags', 'approvalRules', 'badges', 'variables'] as const;
 export type ListSection = (typeof LIST_SECTIONS)[number];
 
 /** The object sections, which merge key by key rather than by entry. */
@@ -104,6 +105,7 @@ const SECTION_KEYS: Readonly<Record<ListSection, readonly string[]>> = {
   protectedBranches: ['name'],
   protectedTags: ['name'],
   approvalRules: ['name'],
+  badges: ['name'],
   variables: ['key', 'environment_scope'],
 };
 

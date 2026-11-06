@@ -138,6 +138,15 @@ async function execute(client: GitLabClient, target: TargetPlan, action: Action)
       if (action.exists) await client.updatePushRules(ref, action.body);
       else await client.createPushRules(ref, action.body);
       return;
+    case 'createBadge':
+      await client.createBadge(ref, action.body);
+      return;
+    case 'updateBadge':
+      await client.updateBadge(ref, action.badgeId, action.body);
+      return;
+    case 'deleteBadge':
+      await client.deleteBadge(ref, action.badgeId);
+      return;
     default: {
       const exhaustive: never = action;
       throw new ConfigError(`Unknown action ${JSON.stringify(exhaustive)}`);

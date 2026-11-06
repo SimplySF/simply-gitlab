@@ -167,6 +167,7 @@ lines long.
 | `approvals`         | `POST /projects/:id/approvals`                     | Partial                                |
 | `approvalRules`     | `POST` / `PUT` / `DELETE .../approval_rules`       | `PUT` by rule id                       |
 | `pushRules`         | `POST` / `PUT /projects/:id/push_rule`             | `PUT` when one exists, `POST` when not |
+| `badges`            | `POST` / `PUT` / `DELETE .../badges`               | `PUT` by badge id                      |
 | `variables`         | read only — see below                              | —                                      |
 
 Two of those deserve their own note.
@@ -199,7 +200,7 @@ before they reach the API:
 The last one creates an ordering dependency inside a single project: a rule scoped to `main` cannot
 be created until `main` is protected and its protection has an id. So sections are reconciled in a
 fixed order — settings, protected branches, protected tags, approval settings, approval rules, push
-rules — and the protected-branch ids are read back after that section runs rather than assumed.
+rules, badges — and the protected-branch ids are read back after that section runs rather than assumed.
 
 An unresolvable reference is a plan-time failure for that target, reported with the path or name
 that could not be found. It is not deferred to apply, because the point of `plan` is to be told
@@ -369,6 +370,27 @@ than merely intended.
 
 An agent that should apply a baseline can run the CLI, where it is a shell command a person can see
 and approve, rather than a tool call inside a loop.
+
+### Badges
+
+`badges` holds a project's own badges, keyed by `name`. Four things about GitLab's badges API shape
+how the section behaves.
+
+- **The list includes inherited badges.** `GET /projects/:id/badges` also returns badges from parent
+  groups, marked `kind: "group"`. They belong to the group, so export, plan, and `prune` all ignore
+  them. Managing group badges is out of scope; the `group` section still covers settings only.
+- **URLs are compared raw.** A badge reports `link_url` and `image_url` alongside `rendered_*`
+  versions with placeholders such as `%{project_path}` filled in. Only the raw pair is exported and
+  compared, because the placeholders are what let one baseline fit many projects.
+- **A name is optional in GitLab but required here.** Without one there is no key to reconcile by. An
+  unnamed badge is left out of `export`. `plan` reports it as `(unnamed badge <id>)`, and `prune`
+  removes it like any other undeclared badge.
+- **Names are not unique in GitLab.** When two project badges share a name, the last one listed is
+  the one reconciled and the other is not reported.
+
+A badge that does not exist yet needs both `link_url` and `image_url`, which `POST` requires. An
+override can restate only the field it changes, so this cannot be checked when the file is validated;
+it is a plan-time failure for that target instead.
 
 ## Alternatives considered
 

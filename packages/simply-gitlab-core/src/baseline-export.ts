@@ -34,6 +34,7 @@ export const EXPORTABLE_SECTIONS = [
   'approvals',
   'approvalRules',
   'pushRules',
+  'badges',
   'variables',
 ] as const;
 
@@ -231,6 +232,19 @@ async function optional<T>(read: () => Promise<T>): Promise<T | undefined> {
   }
 }
 
+/**
+ * A project's own badge, in the shape `POST` accepts, or nothing for one a config cannot hold.
+ *
+ * Group badges belong to the group, and a badge with no name has no key to reconcile by. The URLs
+ * stay raw: the `rendered_*` pair has this project's path baked in, and copying those would pin
+ * every project in a baseline to the one it was exported from.
+ */
+function exportBadge(badge: Record<string, unknown>): Entry | undefined {
+  if (badge.kind === 'group') return undefined;
+  if (typeof badge.name !== 'string' || badge.name.trim() === '') return undefined;
+  return pick(badge, ['name', 'link_url', 'image_url']);
+}
+
 /** Reads one project and returns the `project` block of a config describing it. */
 export async function exportProject(
   client: GitLabClient,
@@ -262,6 +276,11 @@ export async function exportProject(
   if (wanted.has('pushRules')) {
     const pushRules = await optional(() => client.getPushRules(project));
     if (pushRules !== undefined && pushRules !== null) desired.pushRules = pick(asRecord(pushRules), PUSH_RULE_KEYS);
+  }
+  if (wanted.has('badges')) {
+    desired.badges = (await client.listBadges(project)).items
+      .map((badge) => exportBadge(asRecord(badge)))
+      .filter((badge): badge is Entry => badge !== undefined);
   }
   if (wanted.has('variables')) {
     const variables = await optional(() => client.listVariables(project, 200));
