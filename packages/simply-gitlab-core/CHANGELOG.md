@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.9.0](https://github.com/SimplySF/simply-gitlab/compare/%40simplysf%2Fsimply-gitlab-core%400.8.0...%40simplysf%2Fsimply-gitlab-core%400.9.0) (2026-11-06)
+
+### Features
+
+- **simply-gitlab-core:** export project feature access levels ([#48](https://github.com/SimplySF/simply-gitlab/issues/48)) ([d8d38b8](https://github.com/SimplySF/simply-gitlab/commit/d8d38b83ab6aa567d02f9ec7f1012d3eb8748756))
+
 # [0.8.0](https://github.com/SimplySF/simply-gitlab/compare/%40simplysf%2Fsimply-gitlab-core%400.7.0...%40simplysf%2Fsimply-gitlab-core%400.8.0) (2026-11-06)
 
 ### Features
