@@ -23,7 +23,7 @@ import {
   normalizeSection,
   type ProjectDesired,
 } from './baseline-config.js';
-import { AuthError, HttpError } from './errors.js';
+import { AuthError, ConfigError, HttpError } from './errors.js';
 import type { GitLabClient, ProjectRef } from './gitlab-client.js';
 
 /**
@@ -91,7 +91,10 @@ export type Action =
       readonly branches?: readonly string[];
     }
   | { readonly kind: 'deleteApprovalRule'; readonly ruleId: number }
-  | { readonly kind: 'setPushRules'; readonly body: Record<string, unknown>; readonly exists: boolean };
+  | { readonly kind: 'setPushRules'; readonly body: Record<string, unknown>; readonly exists: boolean }
+  | { readonly kind: 'createBadge'; readonly body: Record<string, unknown> }
+  | { readonly kind: 'updateBadge'; readonly badgeId: number; readonly body: Record<string, unknown> }
+  | { readonly kind: 'deleteBadge'; readonly badgeId: number };
 
 /** Whether a plan would change anything if applied. */
 export function hasChanges(plan: BaselinePlan): boolean {
@@ -416,6 +419,50 @@ function summarise(entry: Entry): string {
     .join(', ');
 }
 
+/**
+ * What a badge is called in a plan. GitLab allows a badge with no name, and giving each one its own
+ * label keeps it visible as drift instead of collapsing them all onto one empty key.
+ */
+function badgeName(badge: Record<string, unknown>): string {
+  if (typeof badge.name === 'string' && badge.name.trim() !== '') return badge.name;
+  return `(unnamed badge ${String(badge.id)})`;
+}
+
+/**
+ * Badges, keyed by name. The list also returns badges inherited from parent groups; those belong to
+ * the group and the project API cannot change them, so they are not this section's to report or
+ * prune. URLs compare in their raw form, because `%{project_path}` is what makes one baseline fit
+ * many projects.
+ */
+async function planBadges(client: GitLabClient, ref: ProjectRef, desired: ProjectDesired): Promise<SectionPlan[]> {
+  const section = normalizeSection(desired.badges);
+  if (section === undefined) return [];
+
+  const actual = (await client.listBadges(ref)).items
+    .map(asRecord)
+    .filter((badge) => badge.kind !== 'group')
+    .map((badge): Record<string, unknown> => ({ ...badge, name: badgeName(badge) }));
+  const idByName = new Map(actual.map((badge) => [String(badge.name), Number(badge.id)]));
+
+  for (const entry of section.entries) {
+    if (!idByName.has(String(entry.name)) && (entry.link_url === undefined || entry.image_url === undefined)) {
+      // An override may restate only the field it changes, so this can only be judged against the
+      // project. Reported here rather than left to a 400 from apply, because plan is where to learn it.
+      throw new ConfigError(
+        `Badge "${String(entry.name)}" does not exist on this project, so it needs both link_url and image_url.`,
+      );
+    }
+  }
+
+  return [
+    planKeyedSection('badges', section, actual, {
+      create: (entry) => ({ kind: 'createBadge', body: { ...entry } }),
+      update: (entry, body) => ({ kind: 'updateBadge', badgeId: Number(idByName.get(String(entry.name))), body }),
+      remove: (entry) => ({ kind: 'deleteBadge', badgeId: Number(entry.id) }),
+    }),
+  ];
+}
+
 interface KeyedHandlers {
   readonly create: (entry: Entry) => Action;
   readonly update: (entry: Entry, body: Record<string, unknown>) => Action;
@@ -492,6 +539,7 @@ const PROJECT_PLANNERS = [
   planApprovals,
   planApprovalRules,
   planPushRules,
+  planBadges,
   planVariables,
 ] as const;
 

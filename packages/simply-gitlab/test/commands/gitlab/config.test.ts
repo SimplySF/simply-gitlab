@@ -53,7 +53,7 @@ function stubProject(settings: Record<string, unknown> = {}): void {
     if (req.method === 'PUT') respondJson(res, 200, { ...settings, ...(JSON.parse(body) as object) });
     else respondJson(res, 200, { id: 7, path_with_namespace: 'group/project', ...settings });
   });
-  for (const path of ['protected_branches', 'protected_tags', 'approval_rules', 'variables']) {
+  for (const path of ['protected_branches', 'protected_tags', 'approval_rules', 'badges', 'variables']) {
     server.route(`/api/v4/projects/${PROJECT}/${path}`, (_req, res) => {
       respondJson(res, 200, []);
     });
@@ -180,6 +180,23 @@ describe('gitlab config export', () => {
     expect(config.version).toBe(1);
     expect(config.targets.projects).toStrictEqual(['group/project']);
     expect(config.project.settings).toMatchObject({ merge_method: 'ff', build_timeout: 3600 });
+  });
+
+  it('exports badges when asked for that section', async () => {
+    stubProject();
+    server.route(`/api/v4/projects/${PROJECT}/badges`, (_req, res) => {
+      respondJson(res, 200, [
+        { id: 1, name: 'Pipeline', link_url: 'https://l.test', image_url: 'https://i.test', kind: 'project' },
+      ]);
+    });
+
+    const config = (await GitlabConfigExport.run(argv('--project', 'group/project', '--section', 'badges'))) as {
+      project: Record<string, unknown>;
+    };
+
+    expect(config.project).toStrictEqual({
+      badges: [{ name: 'Pipeline', link_url: 'https://l.test', image_url: 'https://i.test' }],
+    });
   });
 
   it('never copies a variable value into the file', async () => {

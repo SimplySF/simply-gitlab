@@ -836,7 +836,7 @@ export const TOOLS: readonly ToolSpec[] = [
     description:
       'Read one project and return a baseline configuration describing it — merge, CI, and feature ' +
       'visibility settings, protected branches and tags, approval settings and rules, push rules, ' +
-      'and variable metadata. ' +
+      'badges, and variable metadata. ' +
       'The output is the file gitlab_config_plan takes, so this is how a baseline gets written: ' +
       'export the project that already looks right, then delete what does not matter.\n\n' +
       'Variables are exported as metadata only — keys, scopes, and flags, never values.',

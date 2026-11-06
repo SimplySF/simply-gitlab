@@ -498,6 +498,23 @@ export class GitLabClient {
     return this.request(`/projects/${segment(project)}/approvals`, { method: 'POST', body, mutating: true });
   }
 
+  /** Includes badges inherited from parent groups, which report `kind: "group"`. */
+  public async listBadges(project: ProjectRef, limit = 100): Promise<ListResult> {
+    return this.collect(`/projects/${segment(project)}/badges`, {}, limit);
+  }
+
+  public async createBadge(project: ProjectRef, body: Record<string, unknown>): Promise<unknown> {
+    return this.request(`/projects/${segment(project)}/badges`, { method: 'POST', body, mutating: true });
+  }
+
+  public async updateBadge(project: ProjectRef, badgeId: number, body: Record<string, unknown>): Promise<unknown> {
+    return this.request(`/projects/${segment(project)}/badges/${badgeId}`, { method: 'PUT', body, mutating: true });
+  }
+
+  public async deleteBadge(project: ProjectRef, badgeId: number): Promise<unknown> {
+    return this.request(`/projects/${segment(project)}/badges/${badgeId}`, { method: 'DELETE', mutating: true });
+  }
+
   public async listApprovalRules(project: ProjectRef, limit = 100): Promise<ListResult> {
     return this.collect(`/projects/${segment(project)}/approval_rules`, {}, limit);
   }

@@ -90,6 +90,10 @@
           "type": "object",
           "description": "Push rules (Premium/Ultimate)."
         },
+        "badges": {
+          "$ref": "#/$defs/section",
+          "description": "The project's own badges, keyed by name. link_url and image_url are required for a new badge and accept GitLab's placeholders, such as %{project_path}. Badges inherited from a group are ignored."
+        },
         "variables": {
           "$ref": "#/$defs/section",
           "description": "CI/CD variable metadata, keyed by key + environment_scope. Reported only, never written: creating or updating a variable requires its value, and this file holds none."
