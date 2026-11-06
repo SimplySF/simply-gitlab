@@ -21,7 +21,7 @@ Use the smallest relevant topic document rather than loading the whole directory
   variable value policy — the one place the CLI and the MCP server deliberately differ.
 - [Search](docs/design/0006-search.md): why `--project` selects an endpoint rather than a filter,
   and the Advanced Search caveat.
-- [Configuration baselines](docs/design/0007-configuration-baselines.md) (Draft): the planned
+- [Configuration baselines](docs/design/0007-configuration-baselines.md): the
   `gitlab config export/plan/apply` surface for holding many projects to one JSON baseline —
   the config shape, merge semantics, opt-in pruning, and why `apply` gets no MCP tool.
 - [Creating a project](docs/design/0008-project-create.md): `gitlab project create`, the four
