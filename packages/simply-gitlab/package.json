@@ -65,6 +65,9 @@
       "gitlab:mr": {
         "description": "Read and manage merge requests."
       },
+      "gitlab:mr:comment": {
+        "description": "Read the comments on a merge request."
+      },
       "gitlab:tag": {
         "description": "List repository tags."
       },

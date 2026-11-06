@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { commentLocation, commentType } from './merge-request-comments.js';
 import type { Column } from './output.js';
 
 /**
@@ -93,6 +94,27 @@ export const mergeRequestColumns: ReadonlyArray<Column<Row>> = [
   { header: 'AUTHOR', value: (row) => at(row, 'author', 'username') },
   { header: 'UPDATED', value: (row) => day(row.updated_at) },
   { header: 'TITLE', value: (row) => row.title },
+];
+
+/** How much of a comment's first line a table shows before cutting it. */
+const BODY_WIDTH = 80;
+
+/** The first line of a comment, cut to fit a table row. `--json` has the whole body. */
+function firstLine(value: unknown): unknown {
+  if (typeof value !== 'string') return value;
+  const line = value.trimStart().split('\n', 1)[0]?.trimEnd() ?? '';
+  return line.length > BODY_WIDTH ? `${line.slice(0, BODY_WIDTH - 1)}…` : line;
+}
+
+export const commentColumns: ReadonlyArray<Column<Row>> = [
+  { header: 'ID', value: (row) => row.id },
+  { header: 'AUTHOR', value: (row) => at(row, 'author', 'username') },
+  { header: 'CREATED', value: (row) => day(row.created_at) },
+  { header: 'TYPE', value: (row) => commentType(row) },
+  { header: 'LOCATION', value: (row) => commentLocation(row) },
+  // Only a resolvable note can be resolved; anything else is a dash, not a "no".
+  { header: 'RESOLVED', value: (row) => (row.resolvable === true ? flag(row.resolved) : undefined) },
+  { header: 'BODY', value: (row) => firstLine(row.body) },
 ];
 
 export const jobColumns: ReadonlyArray<Column<Row>> = [

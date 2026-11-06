@@ -54,6 +54,10 @@ describe('selectTools', () => {
     expect(selectTools(false).every((tool) => tool.kind === 'read')).toBe(true);
   });
 
+  it('registers the comment list without --allow-writes', () => {
+    expect(selectTools(false).map((tool) => tool.name)).toContain('gitlab_mr_comment_list');
+  });
+
   it('registers everything with --allow-writes', () => {
     expect(selectTools(true)).toHaveLength(TOOLS.length);
     expect(selectTools(false).length).toBeLessThan(TOOLS.length);
@@ -142,6 +146,36 @@ describe('invokeTool', () => {
 
     expect(JSON.stringify(payload(result))).not.toContain('a-real-secret');
     expect(payload(result)).toMatchObject({ items: [{ key: 'DEPLOY_KEY', value: HIDDEN }] });
+  });
+
+  it('lists only the code comments on a merge request with codeOnly', async () => {
+    server.route('/api/v4/projects/group%2Fproject/merge_requests/42/notes', (_req, res) => {
+      respondJson(res, 200, [
+        { id: 1, type: null, system: false, body: 'Looks good' },
+        { id: 2, type: 'DiffNote', system: false, body: 'Off by one', position: { new_path: 'a.ts', new_line: 3 } },
+        { id: 3, type: null, system: true, body: 'added 3 commits' },
+      ]);
+    });
+
+    const result = await invokeTool(spec('gitlab_mr_comment_list'), context(), {
+      project: 'group/project',
+      mr: 42,
+      codeOnly: true,
+    });
+
+    expect(payload(result)).toMatchObject({ items: [{ id: 2, position: { new_path: 'a.ts' } }], complete: true });
+  });
+
+  it('refuses codeOnly with includeSystem before making a request', async () => {
+    const result = await invokeTool(spec('gitlab_mr_comment_list'), context(), {
+      project: 'group/project',
+      mr: 42,
+      codeOnly: true,
+      includeSystem: true,
+    });
+
+    expect(payload(result)).toMatchObject({ code: 'config' });
+    expect(server.requests).toHaveLength(0);
   });
 
   it('reports a failure as an isError result rather than throwing', async () => {
