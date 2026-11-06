@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.10.0](https://github.com/SimplySF/simply-gitlab/compare/%40simplysf%2Fsimply-gitlab-core%400.9.0...%40simplysf%2Fsimply-gitlab-core%400.10.0) (2026-11-06)
+
+### Features
+
+- **simply-gitlab-core:** add badges to configuration baselines ([#49](https://github.com/SimplySF/simply-gitlab/issues/49)) ([f756659](https://github.com/SimplySF/simply-gitlab/commit/f756659c79824d0c607dd37fe0579c06b6e73aec))
+
 # [0.9.0](https://github.com/SimplySF/simply-gitlab/compare/%40simplysf%2Fsimply-gitlab-core%400.8.0...%40simplysf%2Fsimply-gitlab-core%400.9.0) (2026-11-06)
 
 ### Features
