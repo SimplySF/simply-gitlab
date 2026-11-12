@@ -1,6 +1,6 @@
 # 0012 — Prefixing environment variables with `SIMPLY_`
 
-**Status:** Implemented
+**Status:** Implemented (PR #52)
 **Package:** `simply-gitlab-core`, `simply-gitlab`, `simply-gitlab-mcp`
 **Date:** 2026-11-12
 

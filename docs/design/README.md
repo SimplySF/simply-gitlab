@@ -31,20 +31,20 @@ refactors that keep the public surface identical (though a short doc is welcome 
 
 ## Index
 
-| #    | Title                                                                                      | Status              |
-| ---- | ------------------------------------------------------------------------------------------ | ------------------- |
-| 0001 | [GitLab client core (config, auth, HTTP, paging)](0001-gitlab-client-core.md)              | Implemented (PR #1) |
-| 0002 | [Migrating gitlab-mcp into a CLI, MCP server, and core](0002-migration-from-gitlab-mcp.md) | Implemented (PR #1) |
-| 0003 | [Reading and writing repository content](0003-repository-content.md)                       | Implemented (PR #1) |
-| 0004 | [Merge requests](0004-merge-requests.md)                                                   | Implemented (PR #1) |
-| 0005 | [CI/CD reads, and the CI variable value policy](0005-cicd-and-variable-values.md)          | Implemented (PR #1) |
-| 0006 | [Search across three endpoints](0006-search.md)                                            | Implemented (PR #1) |
-| 0007 | [Project and group configuration baselines](0007-configuration-baselines.md)               | Implemented (PR #4) |
-| 0008 | [Creating a project, from a template or blank](0008-project-create.md)                     | Implemented         |
-| 0009 | [Merge request comments](0009-merge-request-comments.md)                                   | Partly implemented  |
-| 0010 | [`gitlab mcp install`](0010-mcp-install.md)                                                | In progress         |
-| 0011 | [Merging a merge request](0011-merge-request-merge.md)                                     | Implemented         |
-| 0012 | [Prefixing environment variables with `SIMPLY_`](0012-simply-env-prefix.md)                | Implemented         |
+| #    | Title                                                                                      | Status               |
+| ---- | ------------------------------------------------------------------------------------------ | -------------------- |
+| 0001 | [GitLab client core (config, auth, HTTP, paging)](0001-gitlab-client-core.md)              | Implemented (PR #1)  |
+| 0002 | [Migrating gitlab-mcp into a CLI, MCP server, and core](0002-migration-from-gitlab-mcp.md) | Implemented (PR #1)  |
+| 0003 | [Reading and writing repository content](0003-repository-content.md)                       | Implemented (PR #1)  |
+| 0004 | [Merge requests](0004-merge-requests.md)                                                   | Implemented (PR #1)  |
+| 0005 | [CI/CD reads, and the CI variable value policy](0005-cicd-and-variable-values.md)          | Implemented (PR #1)  |
+| 0006 | [Search across three endpoints](0006-search.md)                                            | Implemented (PR #1)  |
+| 0007 | [Project and group configuration baselines](0007-configuration-baselines.md)               | Implemented (PR #4)  |
+| 0008 | [Creating a project, from a template or blank](0008-project-create.md)                     | Implemented          |
+| 0009 | [Merge request comments](0009-merge-request-comments.md)                                   | Partly implemented   |
+| 0010 | [`gitlab mcp install`](0010-mcp-install.md)                                                | In progress          |
+| 0011 | [Merging a merge request](0011-merge-request-merge.md)                                     | Implemented          |
+| 0012 | [Prefixing environment variables with `SIMPLY_`](0012-simply-env-prefix.md)                | Implemented (PR #52) |
 
 ## Template
 
