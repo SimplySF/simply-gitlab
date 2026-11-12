@@ -27,7 +27,7 @@ beforeEach(async () => {
 
 afterEach(async () => {
   await server.close();
-  delete process.env.GITLAB_READ_ONLY;
+  delete process.env.SIMPLY_GITLAB_READ_ONLY;
 });
 
 function argv(...extra: string[]): string[] {
@@ -142,9 +142,9 @@ describe('gitlab project create', () => {
   });
 
   it('is a write, so the read-only guard refuses it before any request', async () => {
-    process.env.GITLAB_READ_ONLY = '1';
+    process.env.SIMPLY_GITLAB_READ_ONLY = '1';
 
-    await expect(GitlabProjectCreate.run(argv('--name', 'x', '--dry-run'))).rejects.toThrow(/GITLAB_READ_ONLY/);
+    await expect(GitlabProjectCreate.run(argv('--name', 'x', '--dry-run'))).rejects.toThrow(/SIMPLY_GITLAB_READ_ONLY/);
     expect(server.requests).toHaveLength(0);
   });
 });

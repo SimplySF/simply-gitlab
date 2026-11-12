@@ -21,7 +21,7 @@ import { ConfigError } from '../src/errors.js';
 const token = 'glpat-0123456789abcdef';
 
 function env(overrides: EnvLike = {}): EnvLike {
-  return { GITLAB_TOKEN: token, ...overrides };
+  return { SIMPLY_GITLAB_TOKEN: token, ...overrides };
 }
 
 describe('resolveGitLabConfig', () => {
@@ -29,19 +29,19 @@ describe('resolveGitLabConfig', () => {
     expect(resolveGitLabConfig({}, env())).toStrictEqual({ url: DEFAULT_URL, token });
   });
 
-  it('treats an empty GITLAB_URL as unset rather than as a URL', () => {
-    expect(resolveGitLabConfig({}, env({ GITLAB_URL: '   ' })).url).toBe(DEFAULT_URL);
+  it('treats an empty SIMPLY_GITLAB_URL as unset rather than as a URL', () => {
+    expect(resolveGitLabConfig({}, env({ SIMPLY_GITLAB_URL: '   ' })).url).toBe(DEFAULT_URL);
   });
 
   it('keeps the subpath a self-managed instance is served under', () => {
-    expect(resolveGitLabConfig({}, env({ GITLAB_URL: 'https://example.com/gitlab/' })).url).toBe(
+    expect(resolveGitLabConfig({}, env({ SIMPLY_GITLAB_URL: 'https://example.com/gitlab/' })).url).toBe(
       'https://example.com/gitlab',
     );
   });
 
   it('drops the path of a pasted gitlab.com project URL', () => {
     // Otherwise every request goes to /group/project/api/v4/... and 404s with nothing naming the cause.
-    expect(resolveGitLabConfig({}, env({ GITLAB_URL: 'https://gitlab.com/group/project' })).url).toBe(
+    expect(resolveGitLabConfig({}, env({ SIMPLY_GITLAB_URL: 'https://gitlab.com/group/project' })).url).toBe(
       'https://gitlab.com',
     );
   });
@@ -53,23 +53,23 @@ describe('resolveGitLabConfig', () => {
 
   it('refuses a missing token, naming both the variable and the flag', () => {
     expect(() => resolveGitLabConfig({}, {})).toThrow(ConfigError);
-    expect(() => resolveGitLabConfig({}, {})).toThrow(/GITLAB_TOKEN or pass --gitlab-token/);
+    expect(() => resolveGitLabConfig({}, {})).toThrow(/SIMPLY_GITLAB_TOKEN or pass --gitlab-token/);
   });
 
   it('refuses a URL that is not one', () => {
-    expect(() => resolveGitLabConfig({}, env({ GITLAB_URL: 'gitlab.example.com' }))).toThrow(/not a valid URL/);
+    expect(() => resolveGitLabConfig({}, env({ SIMPLY_GITLAB_URL: 'gitlab.example.com' }))).toThrow(/not a valid URL/);
   });
 
   it('refuses a non-HTTP scheme', () => {
-    expect(() => resolveGitLabConfig({}, env({ GITLAB_URL: 'ssh://git@example.com' }))).toThrow(/http or https/);
+    expect(() => resolveGitLabConfig({}, env({ SIMPLY_GITLAB_URL: 'ssh://git@example.com' }))).toThrow(/http or https/);
   });
 
   it('refuses a certificate-verification opt-out instead of ignoring it', () => {
     // Silently ignoring it would leave a user believing verification is off when it is on.
-    expect(() => resolveGitLabConfig({}, env({ GITLAB_SSL_VERIFY: 'false' }))).toThrow(/NODE_EXTRA_CA_CERTS/);
+    expect(() => resolveGitLabConfig({}, env({ SIMPLY_GITLAB_SSL_VERIFY: 'false' }))).toThrow(/NODE_EXTRA_CA_CERTS/);
   });
 
-  it('leaves a truthy GITLAB_SSL_VERIFY alone', () => {
-    expect(() => resolveGitLabConfig({}, env({ GITLAB_SSL_VERIFY: 'true' }))).not.toThrow();
+  it('leaves a truthy SIMPLY_GITLAB_SSL_VERIFY alone', () => {
+    expect(() => resolveGitLabConfig({}, env({ SIMPLY_GITLAB_SSL_VERIFY: 'true' }))).not.toThrow();
   });
 });

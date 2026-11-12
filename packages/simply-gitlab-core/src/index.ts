@@ -36,6 +36,14 @@ export {
   type GitLabConfig,
 } from './config.js';
 export { loadEnvFile, parseEnvFile } from './env-file.js';
+export {
+  CONNECTION_ENV,
+  deprecatedEnvInUse,
+  deprecatedEnvWarning,
+  envValue,
+  LEGACY_ENV,
+  type EnvName,
+} from './env-vars.js';
 export { AuthError, CliError, ConfigError, HttpError, NetworkError } from './errors.js';
 export {
   HttpTransport,

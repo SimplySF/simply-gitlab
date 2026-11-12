@@ -80,7 +80,7 @@ describe('gitlab mcp install', () => {
 
   it('writes the read-only server under simply-gitlab, launched through simply at project scope', async () => {
     const envFile = path.join(cwd, 'gitlab.env');
-    fs.writeFileSync(envFile, 'GITLAB_URL=https://gitlab.example.test');
+    fs.writeFileSync(envFile, 'SIMPLY_GITLAB_URL=https://gitlab.example.test');
 
     const result = await GitlabMcpInstall.run(['--client', 'vscode', '--scope', 'project', '--env-file', 'gitlab.env']);
 

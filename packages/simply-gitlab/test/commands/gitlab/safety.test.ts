@@ -31,7 +31,7 @@ beforeEach(async () => {
 
 afterEach(async () => {
   await server.close();
-  delete process.env.GITLAB_READ_ONLY;
+  delete process.env.SIMPLY_GITLAB_READ_ONLY;
 });
 
 function argv(...extra: string[]): string[] {
@@ -40,14 +40,16 @@ function argv(...extra: string[]): string[] {
 
 describe('the read-only guard', () => {
   it('refuses a write command before it issues a request', async () => {
-    process.env.GITLAB_READ_ONLY = '1';
+    process.env.SIMPLY_GITLAB_READ_ONLY = '1';
 
-    await expect(GitlabBranchCreate.run(argv('--branch', 'x', '--ref', 'main'))).rejects.toThrow(/GITLAB_READ_ONLY/);
+    await expect(GitlabBranchCreate.run(argv('--branch', 'x', '--ref', 'main'))).rejects.toThrow(
+      /SIMPLY_GITLAB_READ_ONLY/,
+    );
     expect(server.requests).toHaveLength(0);
   });
 
   it('leaves read commands alone', async () => {
-    process.env.GITLAB_READ_ONLY = '1';
+    process.env.SIMPLY_GITLAB_READ_ONLY = '1';
     server.route('/api/v4/projects/group%2Fproject/variables', (_req, res) => {
       respondJson(res, 200, []);
     });

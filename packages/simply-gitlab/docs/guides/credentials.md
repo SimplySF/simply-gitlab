@@ -8,12 +8,25 @@ Connection settings come from environment variables, from flags, or from a `.env
 ignored.
 
 ```
-GITLAB_TOKEN=glpat-...
-GITLAB_URL=https://gitlab.example.com   # omit entirely for gitlab.com
+SIMPLY_GITLAB_TOKEN=glpat-...
+SIMPLY_GITLAB_URL=https://gitlab.example.com   # omit entirely for gitlab.com
 ```
 
-There are only two settings, and one of them has a default — `GITLAB_URL` is `https://gitlab.com`
+There are only two settings, and one of them has a default — `SIMPLY_GITLAB_URL` is `https://gitlab.com`
 unless you say otherwise. A gitlab.com user needs the token and nothing else.
+
+## Renamed variables
+
+Every variable now starts with `SIMPLY_`. The unprefixed names — `GITLAB_URL`, `GITLAB_TOKEN`,
+`GITLAB_SSL_VERIFY`, `GITLAB_READ_ONLY`, and `GITLAB_PROJECT` — are shared with other GitLab tools
+such as `glab` and most GitLab MCP servers, so a shell set up for one of those quietly configured
+this CLI as well.
+
+The old names are deprecated, not yet removed. Each still works while its `SIMPLY_` name is unset,
+and a command that relies on one prints a warning to stderr naming the rename. Once both are set the
+`SIMPLY_` name wins and the old one is ignored without comment, so another tool can keep its own
+`GITLAB_TOKEN`. The unprefixed names will stop working in a future major release; rename them, in
+your shell and in any `.env` file, by adding the prefix.
 
 ## Tokens and scopes
 
@@ -44,16 +57,16 @@ simply gitlab mr list -e ~/gitlab.env --project group/project
 simply gitlab mr update -e ~/gitlab-write.env --project group/project --mr 42 --state close
 ```
 
-A variable exported as an empty string does not outrank the file. `export GITLAB_TOKEN=` in a
+A variable exported as an empty string does not outrank the file. `export SIMPLY_GITLAB_TOKEN=` in a
 wrapper script would otherwise discard the real token and fail as though nothing were configured.
 
 ## Naming a project
 
-Not a credential, but it belongs in the same shell profile. `GITLAB_PROJECT` sets the default for
+Not a credential, but it belongs in the same shell profile. `SIMPLY_GITLAB_PROJECT` sets the default for
 `-p/--project`:
 
 ```sh
-export GITLAB_PROJECT=group/subgroup/project
+export SIMPLY_GITLAB_PROJECT=group/subgroup/project
 simply gitlab mr list
 ```
 
@@ -61,11 +74,11 @@ A project is named by numeric id or full path, and the path is URL-encoded for y
 
 ## Self-managed instances
 
-Set `GITLAB_URL` to the instance origin. A subpath is kept, because self-managed instances are
+Set `SIMPLY_GITLAB_URL` to the instance origin. A subpath is kept, because self-managed instances are
 routinely served from one:
 
 ```
-GITLAB_URL=https://example.com/gitlab
+SIMPLY_GITLAB_URL=https://example.com/gitlab
 ```
 
 One thing to watch: pasting a **project** URL from gitlab.com — `https://gitlab.com/group/project`
@@ -82,7 +95,7 @@ authority, trust that CA rather than disabling verification:
 NODE_EXTRA_CA_CERTS=/path/to/ca.pem simply gitlab project list
 ```
 
-A `GITLAB_SSL_VERIFY=false` carried over from other GitLab tooling is rejected with an error rather
+A `SIMPLY_GITLAB_SSL_VERIFY=false` carried over from other GitLab tooling is rejected with an error rather
 than silently ignored, so nobody ends up believing verification is off when it is on, or the
 reverse.
 

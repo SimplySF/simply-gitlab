@@ -15,6 +15,7 @@
  */
 
 import process from 'node:process';
+import { envValue } from './env-vars.js';
 import { ConfigError } from './errors.js';
 
 export interface GitLabConfig {
@@ -32,12 +33,13 @@ export interface ConfigOverrides {
 
 export type EnvLike = Record<string, string | undefined>;
 
-export const URL_ENV = 'GITLAB_URL';
-export const TOKEN_ENV = 'GITLAB_TOKEN';
-const SSL_VERIFY_ENV = 'GITLAB_SSL_VERIFY';
+// The deprecated unprefixed names are still read, as a fallback: see env-vars.ts.
+export const URL_ENV = 'SIMPLY_GITLAB_URL';
+export const TOKEN_ENV = 'SIMPLY_GITLAB_TOKEN';
+const SSL_VERIFY_ENV = 'SIMPLY_GITLAB_SSL_VERIFY';
 
 /**
- * Where an unconfigured `GITLAB_URL` points. GitLab is one product with one API, and the great
+ * Where an unconfigured `SIMPLY_GITLAB_URL` points. GitLab is one product with one API, and the great
  * majority of tokens are gitlab.com tokens, so requiring the URL would be ceremony for the common
  * case. A self-managed instance sets the variable.
  */
@@ -75,13 +77,13 @@ function normalizeUrl(rawUrl: string): string {
 }
 
 /**
- * Certificate verification is not negotiable, so a `GITLAB_SSL_VERIFY=false` carried over from
+ * Certificate verification is not negotiable, so a `*_SSL_VERIFY=false` carried over from
  * other GitLab tooling fails loudly rather than being silently ignored — the alternative is a
  * user believing verification is off when it is on, or vice versa. The fix keeps verification
  * intact.
  */
 function rejectSslOptOut(env: EnvLike): void {
-  const raw = env[SSL_VERIFY_ENV];
+  const raw = envValue(env, SSL_VERIFY_ENV);
   if (raw !== undefined && FALSE_VALUES.has(raw.trim().toLowerCase())) {
     throw new ConfigError(
       `${SSL_VERIFY_ENV}=${raw} is not supported: this CLI always verifies TLS certificates. ` +
@@ -93,8 +95,8 @@ function rejectSslOptOut(env: EnvLike): void {
 export function resolveGitLabConfig(overrides: ConfigOverrides = {}, env: EnvLike = process.env): GitLabConfig {
   rejectSslOptOut(env);
 
-  const rawUrl = (overrides.url ?? env[URL_ENV])?.trim();
-  const token = (overrides.token ?? env[TOKEN_ENV])?.trim();
+  const rawUrl = (overrides.url ?? envValue(env, URL_ENV))?.trim();
+  const token = (overrides.token ?? envValue(env, TOKEN_ENV))?.trim();
 
   if (!token) {
     throw new ConfigError(

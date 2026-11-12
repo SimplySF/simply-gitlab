@@ -42,7 +42,7 @@ export default class GitlabMcp extends Command {
     'simply appear to hang, waiting for a client that is not there.\n\n' +
     'Point a client at it with "command": "simply", "args": ["gitlab", "mcp"]. The plugin installs ' +
     'itself on first use, so nothing needs installing beyond the simply CLI.\n\n' +
-    'Only read tools are registered unless --allow-writes is passed, and GITLAB_READ_ONLY still ' +
+    'Only read tools are registered unless --allow-writes is passed, and SIMPLY_GITLAB_READ_ONLY still ' +
     'refuses every write even then.';
 
   public static override readonly examples = [
@@ -65,7 +65,7 @@ export default class GitlabMcp extends Command {
       summary: 'Also register the tools that change data.',
       description:
         'Off by default, so a server launched without thinking about it can only read. ' +
-        'GITLAB_READ_ONLY in the environment still refuses every write even when this is on.',
+        'SIMPLY_GITLAB_READ_ONLY in the environment still refuses every write even when this is on.',
       default: false,
     }),
     'env-file': Flags.string({

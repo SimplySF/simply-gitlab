@@ -34,12 +34,16 @@ forms.
 The server reads the same variables as the CLI, described in [Credentials](/guides/credentials/):
 
 ```
-GITLAB_TOKEN=glpat-...
-GITLAB_URL=https://gitlab.example.com   # omit entirely for gitlab.com
+SIMPLY_GITLAB_TOKEN=glpat-...
+SIMPLY_GITLAB_URL=https://gitlab.example.com   # omit entirely for gitlab.com
 ```
 
-There are only two, and `GITLAB_URL` defaults to `https://gitlab.com` — a gitlab.com user needs the
+There are only two, and `SIMPLY_GITLAB_URL` defaults to `https://gitlab.com` — a gitlab.com user needs the
 token and nothing else.
+
+The unprefixed names (`GITLAB_URL`, `GITLAB_TOKEN`, `GITLAB_READ_ONLY`, `GITLAB_SSL_VERIFY`) still
+work while the `SIMPLY_` name is unset, but are deprecated: the server writes one warning naming each
+one to stderr, which a client shows in its server log, when it starts.
 
 Put them in a `.env` file and pass it with `--env-file`, or set them in the `env` block of the
 client's server entry. A variable already in the environment wins over the file, as it does for the
@@ -118,8 +122,8 @@ The same entry with the settings inline and no global install:
       "command": "npx",
       "args": ["gitlab", "mcp"],
       "env": {
-        "GITLAB_URL": "https://gitlab.example.com",
-        "GITLAB_TOKEN": "glpat-..."
+        "SIMPLY_GITLAB_URL": "https://gitlab.example.com",
+        "SIMPLY_GITLAB_TOKEN": "glpat-..."
       }
     }
   }
@@ -163,8 +167,8 @@ project, with the same `mcpServers` shape as Claude Desktop:
 
 ```sh
 gemini mcp add --scope user \
-  -e GITLAB_URL=https://gitlab.example.com \
-  -e GITLAB_TOKEN=glpat-... \
+  -e SIMPLY_GITLAB_URL=https://gitlab.example.com \
+  -e SIMPLY_GITLAB_TOKEN=glpat-... \
   simply-gitlab simply-gitlab-mcp
 ```
 
@@ -181,8 +185,8 @@ the settings file without an env file:
       "command": "npx",
       "args": ["gitlab", "mcp"],
       "env": {
-        "GITLAB_URL": "https://gitlab.example.com",
-        "GITLAB_TOKEN": "$GITLAB_TOKEN"
+        "SIMPLY_GITLAB_URL": "https://gitlab.example.com",
+        "SIMPLY_GITLAB_TOKEN": "$SIMPLY_GITLAB_TOKEN"
       }
     }
   }
@@ -304,7 +308,7 @@ A few things make the agent's job easier:
 
 Started without options, the server registers only the 19 read tools. Start it with
 `--allow-writes` to also register the eight that create a project, create a branch, write a file,
-push a commit, or open, update, and merge a merge request. Even then, `GITLAB_READ_ONLY` in the environment refuses every
+push a commit, or open, update, and merge a merge request. Even then, `SIMPLY_GITLAB_READ_ONLY` in the environment refuses every
 write, exactly as it does for the CLI.
 
 That mirrors the two-credential-file arrangement in [Write safety](/guides/write-safety/): give the
@@ -432,18 +436,18 @@ instructions.
 Run `simply-gitlab-mcp --help` at a terminal first. If it prints the tool list, the package is
 installed and working, and the problem is in how the client launches it or what it passes.
 
-| Symptom                                                        | Cause and fix                                                                                                                                                                                                                              |
-| -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| The client reports the server failed to start                  | Desktop apps do not load your shell profile, so the command may not be on their `PATH`. Use the full path to the executable (it lives in the directory `npm prefix -g` reports, under `bin/` on macOS and Linux), or the `npx` form above. |
-| The client's log says `Env file ... not found.`                | The only startup failure. The path is wrong or relative; make it absolute. The server exits with code 2.                                                                                                                                   |
-| Every tool returns `code: "config"` naming `GITLAB_TOKEN`      | The settings are not reaching the server: the env file is not being read, or the variable was set in a shell the client did not inherit. Pass `--env-file` or an `env` block explicitly.                                                   |
-| `code: "auth"` with status `401`                               | The token is wrong, expired, or revoked. Create a new one under **Preferences › Access tokens**.                                                                                                                                           |
-| `code: "auth"` with status `403` on a write                    | The token is `read_api`-scoped, or your role on the project does not permit the change. The first is the intended outcome for the everyday server; use the write-capable entry for this change.                                            |
-| `code: "error"` with status `404` on a project you can see     | The project reference is wrong. Use the numeric id, or the full path including every parent group — and do not URL-encode it yourself.                                                                                                     |
-| A merge request tool acts on the wrong merge request           | An `id` was passed where an `iid` belongs. The `iid` is the number in the web URL; both are integers, so nothing rejects the wrong one.                                                                                                    |
-| The agent says it has no tool to create or update anything     | The server was started without `--allow-writes`. That is the default; see [Let the agent write](#let-the-agent-write).                                                                                                                     |
-| A write returns `code: "config"` mentioning `GITLAB_READ_ONLY` | The variable is set in the environment or the env file. Unset it, or point the write server at a credential file meant for writing.                                                                                                        |
-| A blob search returns nothing for code you know exists         | Advanced Search is probably not enabled on the instance; GitLab answers those scopes with an empty list and a `200`. Try `scope: "merge_requests"` or the project's file tree instead.                                                     |
+| Symptom                                                               | Cause and fix                                                                                                                                                                                                                              |
+| --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| The client reports the server failed to start                         | Desktop apps do not load your shell profile, so the command may not be on their `PATH`. Use the full path to the executable (it lives in the directory `npm prefix -g` reports, under `bin/` on macOS and Linux), or the `npx` form above. |
+| The client's log says `Env file ... not found.`                       | The only startup failure. The path is wrong or relative; make it absolute. The server exits with code 2.                                                                                                                                   |
+| Every tool returns `code: "config"` naming `SIMPLY_GITLAB_TOKEN`      | The settings are not reaching the server: the env file is not being read, or the variable was set in a shell the client did not inherit. Pass `--env-file` or an `env` block explicitly.                                                   |
+| `code: "auth"` with status `401`                                      | The token is wrong, expired, or revoked. Create a new one under **Preferences › Access tokens**.                                                                                                                                           |
+| `code: "auth"` with status `403` on a write                           | The token is `read_api`-scoped, or your role on the project does not permit the change. The first is the intended outcome for the everyday server; use the write-capable entry for this change.                                            |
+| `code: "error"` with status `404` on a project you can see            | The project reference is wrong. Use the numeric id, or the full path including every parent group — and do not URL-encode it yourself.                                                                                                     |
+| A merge request tool acts on the wrong merge request                  | An `id` was passed where an `iid` belongs. The `iid` is the number in the web URL; both are integers, so nothing rejects the wrong one.                                                                                                    |
+| The agent says it has no tool to create or update anything            | The server was started without `--allow-writes`. That is the default; see [Let the agent write](#let-the-agent-write).                                                                                                                     |
+| A write returns `code: "config"` mentioning `SIMPLY_GITLAB_READ_ONLY` | The variable is set in the environment or the env file. Unset it, or point the write server at a credential file meant for writing.                                                                                                        |
+| A blob search returns nothing for code you know exists                | Advanced Search is probably not enabled on the instance; GitLab answers those scopes with an empty list and a `200`. Try `scope: "merge_requests"` or the project's file tree instead.                                                     |
 
 ## Embed in your own process
 

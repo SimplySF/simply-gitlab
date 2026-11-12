@@ -32,7 +32,7 @@ beforeEach(async () => {
 
 afterEach(async () => {
   await server.close();
-  delete process.env.GITLAB_READ_ONLY;
+  delete process.env.SIMPLY_GITLAB_READ_ONLY;
 });
 
 const PROJECT = 'group%2Fproject';
@@ -159,10 +159,12 @@ describe('gitlab config apply', () => {
   });
 
   it('is refused by the read-only guard before any request', async () => {
-    process.env.GITLAB_READ_ONLY = '1';
+    process.env.SIMPLY_GITLAB_READ_ONLY = '1';
     stubProject({ merge_method: 'merge' });
 
-    await expect(GitlabConfigApply.run(argv('--config', configFile(baseline)))).rejects.toThrow(/GITLAB_READ_ONLY/);
+    await expect(GitlabConfigApply.run(argv('--config', configFile(baseline)))).rejects.toThrow(
+      /SIMPLY_GITLAB_READ_ONLY/,
+    );
     expect(server.requests).toHaveLength(0);
   });
 });

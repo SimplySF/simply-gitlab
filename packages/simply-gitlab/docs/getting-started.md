@@ -40,11 +40,11 @@ Every command reads its connection settings from environment variables, from fla
 `.env` file passed with `-e/--env-file`:
 
 ```
-GITLAB_TOKEN=glpat-...
-GITLAB_URL=https://gitlab.example.com   # omit entirely for gitlab.com
+SIMPLY_GITLAB_TOKEN=glpat-...
+SIMPLY_GITLAB_URL=https://gitlab.example.com   # omit entirely for gitlab.com
 ```
 
-`GITLAB_URL` defaults to `https://gitlab.com`, so a gitlab.com user needs only the token. See
+`SIMPLY_GITLAB_URL` defaults to `https://gitlab.com`, so a gitlab.com user needs only the token. See
 [Credentials](/guides/credentials/) for precedence between flags, environment, and file, and for
 trusting an internal certificate authority.
 
@@ -70,13 +70,13 @@ simply gitlab mr list --project group/subgroup/project
 ```
 
 The path is URL-encoded for you — do not encode it yourself. If you work in one project most of
-the time, set `GITLAB_PROJECT` and drop the flag.
+the time, set `SIMPLY_GITLAB_PROJECT` and drop the flag.
 
 ## Where to go next
 
 - The [Command Reference](/reference/) lists every command by topic, with its flags and examples.
 - [Credentials](/guides/credentials/) covers tokens, precedence, and certificates.
-- [Write safety](/guides/write-safety/) explains `--dry-run`, `GITLAB_READ_ONLY`, and why a
+- [Write safety](/guides/write-safety/) explains `--dry-run`, `SIMPLY_GITLAB_READ_ONLY`, and why a
   `read_api` token is the only one of those that actually binds.
 - [Scripts and agents](/guides/scripting/) covers the `--json` contract and exit codes.
 - [MCP server](/guides/mcp-server/) gives an AI agent the same capabilities as tools, read-only by

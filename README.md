@@ -48,19 +48,20 @@ simply-gitlab-mcp --help
 
 Two settings, as environment variables or flags:
 
-| Setting      | Variable       | Flag             | Default              |
-| ------------ | -------------- | ---------------- | -------------------- |
-| Instance URL | `GITLAB_URL`   | `--gitlab-url`   | `https://gitlab.com` |
-| Access token | `GITLAB_TOKEN` | `--gitlab-token` | required             |
+| Setting      | Variable              | Flag             | Default              |
+| ------------ | --------------------- | ---------------- | -------------------- |
+| Instance URL | `SIMPLY_GITLAB_URL`   | `--gitlab-url`   | `https://gitlab.com` |
+| Access token | `SIMPLY_GITLAB_TOKEN` | `--gitlab-token` | required             |
 
 The token is a personal, project, or group access token, created under **Preferences › Access
 tokens**. `read_api` is enough for every read command; `api` is needed to write. A `.env` file works
 too, with `--env-file`; the real environment always wins over the file, and only GitLab connection
-variables are read from it.
+variables are read from it. The unprefixed `GITLAB_*` names are deprecated but still work, with a
+warning; see the Credentials guide.
 
 ```sh
-export GITLAB_URL=https://gitlab.example.com   # omit for gitlab.com
-export GITLAB_TOKEN=glpat-…
+export SIMPLY_GITLAB_URL=https://gitlab.example.com   # omit for gitlab.com
+export SIMPLY_GITLAB_TOKEN=glpat-…
 
 simply gitlab project list --membership
 simply gitlab mr list --project group/project --state opened
@@ -76,7 +77,7 @@ URL-encode it.
 
 - **Writes are off by default on the MCP server.** Start it with `--allow-writes` to register the
   six tools that change data.
-- **`GITLAB_READ_ONLY=1` refuses every write**, on both surfaces, before any request is made. It is a
+- **`SIMPLY_GITLAB_READ_ONLY=1` refuses every write**, on both surfaces, before any request is made. It is a
   guardrail against running against the wrong project, not a security boundary — the boundary that
   binds is a `read_api`-scoped token.
 - **Every write command takes `--dry-run`**, which prints the exact request body and sends nothing.

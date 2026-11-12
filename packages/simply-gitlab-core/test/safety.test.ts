@@ -31,8 +31,12 @@ function envFile(contents: string): string {
 describe('parseEnvFile', () => {
   it('reads assignments, tolerating export, quotes, and comments', () => {
     expect(
-      parseEnvFile(['# a comment', 'export GITLAB_URL=https://example.com', 'GITLAB_TOKEN="tok en" # note'].join('\n')),
-    ).toStrictEqual({ GITLAB_URL: 'https://example.com', GITLAB_TOKEN: 'tok en' });
+      parseEnvFile(
+        ['# a comment', 'export SIMPLY_GITLAB_URL=https://example.com', 'SIMPLY_GITLAB_TOKEN="tok en" # note'].join(
+          '\n',
+        ),
+      ),
+    ).toStrictEqual({ SIMPLY_GITLAB_URL: 'https://example.com', SIMPLY_GITLAB_TOKEN: 'tok en' });
   });
 });
 
@@ -40,15 +44,36 @@ describe('loadEnvFile', () => {
   it('applies only the GitLab connection variables', () => {
     // Without the allowlist, a file could set NODE_TLS_REJECT_UNAUTHORIZED and hand over the token.
     const env: NodeJS.ProcessEnv = {};
-    loadEnvFile(envFile('GITLAB_TOKEN=abc\nNODE_TLS_REJECT_UNAUTHORIZED=0\nUNRELATED=1\n'), env);
-    expect(env).toStrictEqual({ GITLAB_TOKEN: 'abc' });
+    loadEnvFile(envFile('SIMPLY_GITLAB_TOKEN=abc\nNODE_TLS_REJECT_UNAUTHORIZED=0\nUNRELATED=1\n'), env);
+    expect(env).toStrictEqual({ SIMPLY_GITLAB_TOKEN: 'abc' });
   });
 
   it('lets the real environment win, but not an empty export', () => {
-    const env: NodeJS.ProcessEnv = { GITLAB_URL: 'https://real.example.com', GITLAB_TOKEN: '' };
-    loadEnvFile(envFile('GITLAB_URL=https://file.example.com\nGITLAB_TOKEN=from-file\n'), env);
-    expect(env.GITLAB_URL).toBe('https://real.example.com');
-    expect(env.GITLAB_TOKEN).toBe('from-file');
+    const env: NodeJS.ProcessEnv = { SIMPLY_GITLAB_URL: 'https://real.example.com', SIMPLY_GITLAB_TOKEN: '' };
+    loadEnvFile(envFile('SIMPLY_GITLAB_URL=https://file.example.com\nSIMPLY_GITLAB_TOKEN=from-file\n'), env);
+    expect(env.SIMPLY_GITLAB_URL).toBe('https://real.example.com');
+    expect(env.SIMPLY_GITLAB_TOKEN).toBe('from-file');
+  });
+
+  it('still applies a deprecated unprefixed name', () => {
+    const env: NodeJS.ProcessEnv = {};
+    loadEnvFile(envFile('GITLAB_TOKEN=from-file\n'), env);
+    expect(env).toStrictEqual({ GITLAB_TOKEN: 'from-file' });
+  });
+
+  it('treats both names of a setting as one when the environment already sets it', () => {
+    // The prefixed name wins on lookup, so without this a file's SIMPLY_GITLAB_READ_ONLY=0 would
+    // outrank a real GITLAB_READ_ONLY=1 and turn the guard off from a file.
+    const env: NodeJS.ProcessEnv = { GITLAB_READ_ONLY: '1', SIMPLY_GITLAB_URL: 'https://real.example.com' };
+    loadEnvFile(envFile('SIMPLY_GITLAB_READ_ONLY=0\nGITLAB_URL=https://file.example.com\n'), env);
+    expect(env.SIMPLY_GITLAB_READ_ONLY).toBeUndefined();
+    expect(env.GITLAB_URL).toBeUndefined();
+  });
+
+  it('does not accept GITLAB_PROJECT, under either name', () => {
+    const env: NodeJS.ProcessEnv = {};
+    loadEnvFile(envFile('SIMPLY_GITLAB_PROJECT=a/b\nGITLAB_PROJECT=a/b\n'), env);
+    expect(env).toStrictEqual({});
   });
 
   it('refuses a path the caller named but that cannot be read', () => {
@@ -58,12 +83,12 @@ describe('loadEnvFile', () => {
 
 describe('the read-only guard', () => {
   it.each(['1', 'true', 'YES', ' on '])('treats %p as read-only', (value) => {
-    expect(isReadOnly({ GITLAB_READ_ONLY: value })).toBe(true);
-    expect(() => assertWritesAllowed({ GITLAB_READ_ONLY: value })).toThrow(/GITLAB_READ_ONLY/);
+    expect(isReadOnly({ SIMPLY_GITLAB_READ_ONLY: value })).toBe(true);
+    expect(() => assertWritesAllowed({ SIMPLY_GITLAB_READ_ONLY: value })).toThrow(/SIMPLY_GITLAB_READ_ONLY/);
   });
 
   it.each([undefined, '', 'false', 'nope'])('treats %p as not read-only', (value) => {
-    expect(isReadOnly({ GITLAB_READ_ONLY: value })).toBe(false);
-    expect(() => assertWritesAllowed({ GITLAB_READ_ONLY: value })).not.toThrow();
+    expect(isReadOnly({ SIMPLY_GITLAB_READ_ONLY: value })).toBe(false);
+    expect(() => assertWritesAllowed({ SIMPLY_GITLAB_READ_ONLY: value })).not.toThrow();
   });
 });
