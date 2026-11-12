@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.12.0](https://github.com/SimplySF/simply-gitlab/compare/%40simplysf%2Fsimply-gitlab%400.11.0...%40simplysf%2Fsimply-gitlab%400.12.0) (2026-11-12)
+
+### Features
+
+- **simply-gitlab-core:** prefix environment variables with SIMPLY_ ([#52](https://github.com/SimplySF/simply-gitlab/issues/52)) ([cd7db0d](https://github.com/SimplySF/simply-gitlab/commit/cd7db0d2c8abee9df02e1707819c1e0f14082821))
+
 # [0.11.0](https://github.com/SimplySF/simply-gitlab/compare/%40simplysf%2Fsimply-gitlab%400.10.0...%40simplysf%2Fsimply-gitlab%400.11.0) (2026-11-06)
 
 ### Features
