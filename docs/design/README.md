@@ -44,6 +44,7 @@ refactors that keep the public surface identical (though a short doc is welcome 
 | 0009 | [Merge request comments](0009-merge-request-comments.md)                                   | Partly implemented  |
 | 0010 | [`gitlab mcp install`](0010-mcp-install.md)                                                | In progress         |
 | 0011 | [Merging a merge request](0011-merge-request-merge.md)                                     | Implemented         |
+| 0012 | [Prefixing environment variables with `SIMPLY_`](0012-simply-env-prefix.md)                | Implemented         |
 
 ## Template
 

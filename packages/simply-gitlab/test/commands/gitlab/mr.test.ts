@@ -143,7 +143,7 @@ describe('gitlab mr merge', () => {
   const MERGE_PATH = '/api/v4/projects/group%2Fproject/merge_requests/42/merge';
 
   afterEach(() => {
-    delete process.env.GITLAB_READ_ONLY;
+    delete process.env.SIMPLY_GITLAB_READ_ONLY;
   });
 
   it('sends nothing without --confirm, and says how to send it', async () => {
@@ -213,10 +213,10 @@ describe('gitlab mr merge', () => {
     expect(JSON.parse(put?.body ?? '{}')).toStrictEqual({ sha: SHA, skip_merge_train: true });
   });
 
-  it('is refused under GITLAB_READ_ONLY like every write', async () => {
-    process.env.GITLAB_READ_ONLY = '1';
+  it('is refused under SIMPLY_GITLAB_READ_ONLY like every write', async () => {
+    process.env.SIMPLY_GITLAB_READ_ONLY = '1';
 
-    await expect(GitlabMrMerge.run(argv('--mr', '42', '--confirm'))).rejects.toThrow(/GITLAB_READ_ONLY/);
+    await expect(GitlabMrMerge.run(argv('--mr', '42', '--confirm'))).rejects.toThrow(/SIMPLY_GITLAB_READ_ONLY/);
     expect(server.requests).toHaveLength(0);
   });
 });

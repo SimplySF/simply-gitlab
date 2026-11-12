@@ -21,7 +21,7 @@ npm install @simplysf/simply-gitlab-core
 ```ts
 import { GitLabClient, resolveGitLabConfig } from '@simplysf/simply-gitlab-core';
 
-// Reads GITLAB_URL (default https://gitlab.com) and GITLAB_TOKEN, and throws a ConfigError
+// Reads SIMPLY_GITLAB_URL (default https://gitlab.com) and SIMPLY_GITLAB_TOKEN, and throws a ConfigError
 // naming what is missing.
 const client = new GitLabClient(resolveGitLabConfig());
 
@@ -47,7 +47,7 @@ traces, and its offset-pagination headers.
 **Errors** — `ConfigError` (exit 2), `AuthError` (3), `NetworkError` (1), `HttpError` (1), all
 extending `CliError`.
 
-**Safety** — `assertWritesAllowed`/`isReadOnly` for `GITLAB_READ_ONLY`; `redactSecrets` and
+**Safety** — `assertWritesAllowed`/`isReadOnly` for `SIMPLY_GITLAB_READ_ONLY`; `redactSecrets` and
 `sanitiseDeep` to keep a token out of any message or response body; `stripControl` and
 `stripControlOneLine` for text the instance chose.
 

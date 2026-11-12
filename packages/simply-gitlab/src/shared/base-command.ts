@@ -22,6 +22,8 @@ import {
   CliError,
   collectSecrets,
   type ConfigOverrides,
+  deprecatedEnvWarning,
+  LEGACY_ENV,
   GitLabClient,
   type GitLabConfig,
   HttpError,
@@ -95,9 +97,25 @@ export const projectFlag = {
     char: 'p',
     summary: 'Project id, or its full path such as group/subgroup/project.',
     required: true,
-    env: 'GITLAB_PROJECT',
+    env: 'SIMPLY_GITLAB_PROJECT',
   }),
 };
+
+/**
+ * `--project` with its environment binding pointed at the deprecated `GITLAB_PROJECT` when that is
+ * the only one set. oclif binds a flag to exactly one variable and rejects a missing required flag
+ * during parsing, before any fallback of ours could run, so the deprecated name has to be offered to
+ * the parser itself. A copy is returned; the shared flag definition is never modified.
+ */
+function withLegacyProjectEnv<F extends Interfaces.FlagInput | undefined>(flags: F): F {
+  const project = (flags as Record<string, unknown> | undefined)?.project;
+  if (project === undefined) return flags;
+  // Only when the deprecated name is what would supply the value: the prefixed name always wins.
+  const current = process.env.SIMPLY_GITLAB_PROJECT;
+  const legacy = process.env[LEGACY_ENV.SIMPLY_GITLAB_PROJECT];
+  if ((current !== undefined && current !== '') || !legacy) return flags;
+  return { ...flags, project: { ...(project as object), env: LEGACY_ENV.SIMPLY_GITLAB_PROJECT } };
+}
 
 /** The paging ceiling, worded once so every list command reads the same. */
 export function limitFlag(fallback: number, what: string): { limit: Interfaces.OptionFlag<number> } {
@@ -116,8 +134,9 @@ const envFileFlag = {
     summary: 'Path to a .env file holding connection settings.',
     description:
       'Loaded before anything else. Variables already present in the environment win, so the ' +
-      'file never overrides an explicit export, and only GitLab connection variables are read ' +
-      'from it. A path that cannot be read is an error.',
+      'file never overrides an explicit export, and only GitLab connection variables ' +
+      '(SIMPLY_GITLAB_URL, SIMPLY_GITLAB_TOKEN, SIMPLY_GITLAB_SSL_VERIFY, SIMPLY_GITLAB_READ_ONLY, and ' +
+      'their deprecated unprefixed names) are read from it. A path that cannot be read is an error.',
     helpGroup: 'CONNECTION',
   }),
 };
@@ -126,12 +145,12 @@ const gitlabFlags = {
   ...envFileFlag,
   'gitlab-url': Flags.string({
     summary: 'Base URL of the GitLab instance. Defaults to https://gitlab.com.',
-    env: 'GITLAB_URL',
+    env: 'SIMPLY_GITLAB_URL',
     helpGroup: 'CONNECTION',
   }),
   'gitlab-token': Flags.string({
     summary: 'Personal, project, or group access token.',
-    env: 'GITLAB_TOKEN',
+    env: 'SIMPLY_GITLAB_TOKEN',
     helpGroup: 'CONNECTION',
   }),
 };
@@ -169,7 +188,7 @@ export abstract class GitLabCommand<T extends typeof Command> extends Command {
     await super.init();
     const { args, flags } = await this.parse({
       baseFlags: (this.constructor as typeof GitLabCommand).baseFlags,
-      flags: this.ctor.flags,
+      flags: withLegacyProjectEnv(this.ctor.flags),
       enableJsonFlag: this.ctor.enableJsonFlag,
       args: this.ctor.args,
       strict: this.ctor.strict,
@@ -180,6 +199,11 @@ export abstract class GitLabCommand<T extends typeof Command> extends Command {
     // Applied here, before anything reads configuration, so every later lookup sees the file.
     const envFile = this.rawFlags['env-file'];
     if (typeof envFile === 'string') loadEnvFile(envFile);
+
+    // After the env file, so a deprecated name carried in one is reported too. `warn` goes to
+    // stderr and is silent under --json, so it never reaches a machine reader's stdout.
+    const deprecation = deprecatedEnvWarning(process.env);
+    if (deprecation !== undefined) this.warn(deprecation);
 
     // After the env file, so a read-only guard carried in a credential file is honoured, and
     // before run(), so no write command can issue a request first.

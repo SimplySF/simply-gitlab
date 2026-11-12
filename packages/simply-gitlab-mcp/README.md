@@ -32,17 +32,21 @@ a local server. Point your client at it and give it two environment variables:
       "command": "npx",
       "args": ["-y", "@simplysf/simply-gitlab-mcp"],
       "env": {
-        "GITLAB_URL": "https://gitlab.example.com",
-        "GITLAB_TOKEN": "glpat-…"
+        "SIMPLY_GITLAB_URL": "https://gitlab.example.com",
+        "SIMPLY_GITLAB_TOKEN": "glpat-…"
       }
     }
   }
 }
 ```
 
-`GITLAB_URL` defaults to `https://gitlab.com` and can be omitted there. `GITLAB_TOKEN` is a personal,
+`SIMPLY_GITLAB_URL` defaults to `https://gitlab.com` and can be omitted there. `SIMPLY_GITLAB_TOKEN` is a personal,
 project, or group access token; `read_api` is enough unless you enable writes. `--env-file <path>`
 reads them from a `.env` file instead, and the real environment still wins over the file.
+
+The unprefixed names (`GITLAB_URL`, `GITLAB_TOKEN`, `GITLAB_READ_ONLY`, `GITLAB_SSL_VERIFY`) still
+work while the `SIMPLY_` name is unset, but are deprecated: the server writes one warning naming each
+one to stderr, which a client shows in its server log, when it starts.
 
 For a self-signed or internal CA, add `"NODE_EXTRA_CA_CERTS": "/path/to/ca.pem"` to `env`. This
 server always verifies certificates.
@@ -62,7 +66,7 @@ that change data:
 Every one of them accepts `dryRun: true`, which returns the exact request that would be sent and
 sends nothing.
 
-`GITLAB_READ_ONLY=1` refuses every write even with `--allow-writes`, before any request is made —
+`SIMPLY_GITLAB_READ_ONLY=1` refuses every write even with `--allow-writes`, before any request is made —
 useful when a client's configuration is shared but a particular token is not meant to write. It is a
 guardrail, not a security boundary: the boundary that binds is a `read_api`-scoped token, which makes
 GitLab refuse the write server-side.

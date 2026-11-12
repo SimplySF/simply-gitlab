@@ -55,7 +55,7 @@ simply gitlab file update --project group/project --path README.md --branch main
 
 Without it, the last writer silently wins.
 
-## `GITLAB_READ_ONLY`
+## `SIMPLY_GITLAB_READ_ONLY`
 
 Set it to `1`, `true`, `yes`, or `on` and every write command refuses before making any request.
 Reads are unaffected. This guards against misconfiguration: the wrong credential file, the wrong

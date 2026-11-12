@@ -43,6 +43,12 @@ describe('@simplysf/simply-gitlab-core', () => {
         'URL_ENV',
         'buildAuthHeaders',
         'loadEnvFile',
+        // environment variable names and their deprecated spellings
+        'CONNECTION_ENV',
+        'LEGACY_ENV',
+        'deprecatedEnvInUse',
+        'deprecatedEnvWarning',
+        'envValue',
         'parseEnvFile',
         'resolveGitLabConfig',
         'stripControl',

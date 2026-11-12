@@ -56,8 +56,8 @@ Connection settings come from environment variables, from flags, or from a `.env
 ignored.
 
 ```
-GITLAB_URL=https://gitlab.example.com   # omit for gitlab.com
-GITLAB_TOKEN=glpat-...
+SIMPLY_GITLAB_URL=https://gitlab.example.com   # omit for gitlab.com
+SIMPLY_GITLAB_TOKEN=glpat-...
 ```
 
 The token is a personal, project, or group access token, created under **Preferences › Access
@@ -66,9 +66,9 @@ tokens**. `read_api` is enough for every read command; `api` is needed to write.
 Explicit flags beat the environment, which beats the file's contents. Certificate verification is
 always on: for an instance behind an internal or agency CA, trust that CA with
 `NODE_EXTRA_CA_CERTS=/path/to/ca.pem` rather than disabling verification —
-`GITLAB_SSL_VERIFY=false` is refused with an error rather than ignored.
+`SIMPLY_GITLAB_SSL_VERIFY=false` is refused with an error rather than ignored.
 
-`GITLAB_PROJECT` sets the default for `-p/--project`, so a shell in one repository's context need
+`SIMPLY_GITLAB_PROJECT` sets the default for `-p/--project`, so a shell in one repository's context need
 not repeat it.
 
 ## Naming a project
@@ -95,7 +95,7 @@ Six commands change data: `branch create`, `file create`, `file update`, `commit
 **`--dry-run`** is on every one of them. It prints the exact request body that would be sent and
 sends nothing, which is the cheapest way to check a command before running it for real.
 
-**`GITLAB_READ_ONLY=1`** refuses every write before any request is made. It is a guardrail against
+**`SIMPLY_GITLAB_READ_ONLY=1`** refuses every write before any request is made. It is a guardrail against
 running against the wrong project or with the wrong credentials, not a security boundary — anyone
 who can set the variable can unset it.
 
@@ -169,15 +169,16 @@ USAGE
     [--gitlab-token <value>] [--dry-run]
 
 FLAGS
-  -p, --project=<value>  (required) [env: GITLAB_PROJECT] Project id, or its full path such as group/subgroup/project.
+  -p, --project=<value>  (required) [env: SIMPLY_GITLAB_PROJECT] Project id, or its full path such as
+                         group/subgroup/project.
       --branch=<value>   (required) Name of the new branch.
       --dry-run          Print the request that would be sent and exit without sending it.
       --ref=<value>      (required) Branch, tag, or commit SHA to branch from.
 
 CONNECTION FLAGS
   -e, --env-file=<value>      Path to a .env file holding connection settings.
-      --gitlab-token=<value>  [env: GITLAB_TOKEN] Personal, project, or group access token.
-      --gitlab-url=<value>    [env: GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
+      --gitlab-token=<value>  [env: SIMPLY_GITLAB_TOKEN] Personal, project, or group access token.
+      --gitlab-url=<value>    [env: SIMPLY_GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -197,10 +198,12 @@ FLAG DESCRIPTIONS
   -e, --env-file=<value>  Path to a .env file holding connection settings.
 
     Loaded before anything else. Variables already present in the environment win, so the file never overrides an
-    explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
+    explicit export, and only GitLab connection variables (SIMPLY_GITLAB_URL, SIMPLY_GITLAB_TOKEN,
+    SIMPLY_GITLAB_SSL_VERIFY, SIMPLY_GITLAB_READ_ONLY, and their deprecated unprefixed names) are read from it. A path
+    that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/branch/create.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.10.0/packages/simply-gitlab/lib/commands/gitlab/branch/create.js)_
+_See code: [lib/commands/gitlab/branch/create.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.11.0/packages/simply-gitlab/lib/commands/gitlab/branch/create.js)_
 
 ## `simply gitlab branch list`
 
@@ -212,14 +215,15 @@ USAGE
     <value>] [--search <value>]
 
 FLAGS
-  -p, --project=<value>  (required) [env: GITLAB_PROJECT] Project id, or its full path such as group/subgroup/project.
+  -p, --project=<value>  (required) [env: SIMPLY_GITLAB_PROJECT] Project id, or its full path such as
+                         group/subgroup/project.
       --limit=<value>    [default: 20] Maximum number of branches to return across all pages.
       --search=<value>   Return only branches whose name contains this term.
 
 CONNECTION FLAGS
   -e, --env-file=<value>      Path to a .env file holding connection settings.
-      --gitlab-token=<value>  [env: GITLAB_TOKEN] Personal, project, or group access token.
-      --gitlab-url=<value>    [env: GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
+      --gitlab-token=<value>  [env: SIMPLY_GITLAB_TOKEN] Personal, project, or group access token.
+      --gitlab-url=<value>    [env: SIMPLY_GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -240,10 +244,12 @@ FLAG DESCRIPTIONS
   -e, --env-file=<value>  Path to a .env file holding connection settings.
 
     Loaded before anything else. Variables already present in the environment win, so the file never overrides an
-    explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
+    explicit export, and only GitLab connection variables (SIMPLY_GITLAB_URL, SIMPLY_GITLAB_TOKEN,
+    SIMPLY_GITLAB_SSL_VERIFY, SIMPLY_GITLAB_READ_ONLY, and their deprecated unprefixed names) are read from it. A path
+    that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/branch/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.10.0/packages/simply-gitlab/lib/commands/gitlab/branch/list.js)_
+_See code: [lib/commands/gitlab/branch/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.11.0/packages/simply-gitlab/lib/commands/gitlab/branch/list.js)_
 
 ## `simply gitlab ci environment list`
 
@@ -255,7 +261,8 @@ USAGE
     <value>] [--name <value>] [--search <value>] [--state available|stopped]
 
 FLAGS
-  -p, --project=<value>  (required) [env: GITLAB_PROJECT] Project id, or its full path such as group/subgroup/project.
+  -p, --project=<value>  (required) [env: SIMPLY_GITLAB_PROJECT] Project id, or its full path such as
+                         group/subgroup/project.
       --limit=<value>    [default: 20] Maximum number of environments to return across all pages.
       --name=<value>     Return the environment with exactly this name.
       --search=<value>   Return environments whose name contains this term.
@@ -264,8 +271,8 @@ FLAGS
 
 CONNECTION FLAGS
   -e, --env-file=<value>      Path to a .env file holding connection settings.
-      --gitlab-token=<value>  [env: GITLAB_TOKEN] Personal, project, or group access token.
-      --gitlab-url=<value>    [env: GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
+      --gitlab-token=<value>  [env: SIMPLY_GITLAB_TOKEN] Personal, project, or group access token.
+      --gitlab-url=<value>    [env: SIMPLY_GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -286,10 +293,12 @@ FLAG DESCRIPTIONS
   -e, --env-file=<value>  Path to a .env file holding connection settings.
 
     Loaded before anything else. Variables already present in the environment win, so the file never overrides an
-    explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
+    explicit export, and only GitLab connection variables (SIMPLY_GITLAB_URL, SIMPLY_GITLAB_TOKEN,
+    SIMPLY_GITLAB_SSL_VERIFY, SIMPLY_GITLAB_READ_ONLY, and their deprecated unprefixed names) are read from it. A path
+    that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/ci/environment/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.10.0/packages/simply-gitlab/lib/commands/gitlab/ci/environment/list.js)_
+_See code: [lib/commands/gitlab/ci/environment/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.11.0/packages/simply-gitlab/lib/commands/gitlab/ci/environment/list.js)_
 
 ## `simply gitlab ci job list`
 
@@ -301,7 +310,8 @@ USAGE
     <value>] [--scope created|pending|running|failed|success|canceled|skipped|waiting_for_resource|manual...]
 
 FLAGS
-  -p, --project=<value>    (required) [env: GITLAB_PROJECT] Project id, or its full path such as group/subgroup/project.
+  -p, --project=<value>    (required) [env: SIMPLY_GITLAB_PROJECT] Project id, or its full path such as
+                           group/subgroup/project.
       --limit=<value>      [default: 20] Maximum number of jobs to return across all pages.
       --scope=<option>...  Job states to include. Repeatable.
                            <options:
@@ -309,8 +319,8 @@ FLAGS
 
 CONNECTION FLAGS
   -e, --env-file=<value>      Path to a .env file holding connection settings.
-      --gitlab-token=<value>  [env: GITLAB_TOKEN] Personal, project, or group access token.
-      --gitlab-url=<value>    [env: GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
+      --gitlab-token=<value>  [env: SIMPLY_GITLAB_TOKEN] Personal, project, or group access token.
+      --gitlab-url=<value>    [env: SIMPLY_GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -330,10 +340,12 @@ FLAG DESCRIPTIONS
   -e, --env-file=<value>  Path to a .env file holding connection settings.
 
     Loaded before anything else. Variables already present in the environment win, so the file never overrides an
-    explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
+    explicit export, and only GitLab connection variables (SIMPLY_GITLAB_URL, SIMPLY_GITLAB_TOKEN,
+    SIMPLY_GITLAB_SSL_VERIFY, SIMPLY_GITLAB_READ_ONLY, and their deprecated unprefixed names) are read from it. A path
+    that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/ci/job/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.10.0/packages/simply-gitlab/lib/commands/gitlab/ci/job/list.js)_
+_See code: [lib/commands/gitlab/ci/job/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.11.0/packages/simply-gitlab/lib/commands/gitlab/ci/job/list.js)_
 
 ## `simply gitlab ci job log`
 
@@ -345,14 +357,15 @@ USAGE
     <value>] [--tail <value>]
 
 FLAGS
-  -p, --project=<value>  (required) [env: GITLAB_PROJECT] Project id, or its full path such as group/subgroup/project.
+  -p, --project=<value>  (required) [env: SIMPLY_GITLAB_PROJECT] Project id, or its full path such as
+                         group/subgroup/project.
       --job=<value>      (required) Job id, as listed by ci job list.
       --tail=<value>     [default: 200] Print only the last N lines. 0 prints the whole trace.
 
 CONNECTION FLAGS
   -e, --env-file=<value>      Path to a .env file holding connection settings.
-      --gitlab-token=<value>  [env: GITLAB_TOKEN] Personal, project, or group access token.
-      --gitlab-url=<value>    [env: GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
+      --gitlab-token=<value>  [env: SIMPLY_GITLAB_TOKEN] Personal, project, or group access token.
+      --gitlab-url=<value>    [env: SIMPLY_GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -375,10 +388,12 @@ FLAG DESCRIPTIONS
   -e, --env-file=<value>  Path to a .env file holding connection settings.
 
     Loaded before anything else. Variables already present in the environment win, so the file never overrides an
-    explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
+    explicit export, and only GitLab connection variables (SIMPLY_GITLAB_URL, SIMPLY_GITLAB_TOKEN,
+    SIMPLY_GITLAB_SSL_VERIFY, SIMPLY_GITLAB_READ_ONLY, and their deprecated unprefixed names) are read from it. A path
+    that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/ci/job/log.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.10.0/packages/simply-gitlab/lib/commands/gitlab/ci/job/log.js)_
+_See code: [lib/commands/gitlab/ci/job/log.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.11.0/packages/simply-gitlab/lib/commands/gitlab/ci/job/log.js)_
 
 ## `simply gitlab ci variable list`
 
@@ -390,14 +405,15 @@ USAGE
     <value>] [--reveal]
 
 FLAGS
-  -p, --project=<value>  (required) [env: GITLAB_PROJECT] Project id, or its full path such as group/subgroup/project.
+  -p, --project=<value>  (required) [env: SIMPLY_GITLAB_PROJECT] Project id, or its full path such as
+                         group/subgroup/project.
       --limit=<value>    [default: 50] Maximum number of variables to return across all pages.
       --reveal           Print the variable values in clear text.
 
 CONNECTION FLAGS
   -e, --env-file=<value>      Path to a .env file holding connection settings.
-      --gitlab-token=<value>  [env: GITLAB_TOKEN] Personal, project, or group access token.
-      --gitlab-url=<value>    [env: GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
+      --gitlab-token=<value>  [env: SIMPLY_GITLAB_TOKEN] Personal, project, or group access token.
+      --gitlab-url=<value>    [env: SIMPLY_GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -421,7 +437,9 @@ FLAG DESCRIPTIONS
   -e, --env-file=<value>  Path to a .env file holding connection settings.
 
     Loaded before anything else. Variables already present in the environment win, so the file never overrides an
-    explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
+    explicit export, and only GitLab connection variables (SIMPLY_GITLAB_URL, SIMPLY_GITLAB_TOKEN,
+    SIMPLY_GITLAB_SSL_VERIFY, SIMPLY_GITLAB_READ_ONLY, and their deprecated unprefixed names) are read from it. A path
+    that cannot be read is an error.
 
   --reveal  Print the variable values in clear text.
 
@@ -429,7 +447,7 @@ FLAG DESCRIPTIONS
     where this output is going.
 ```
 
-_See code: [lib/commands/gitlab/ci/variable/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.10.0/packages/simply-gitlab/lib/commands/gitlab/ci/variable/list.js)_
+_See code: [lib/commands/gitlab/ci/variable/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.11.0/packages/simply-gitlab/lib/commands/gitlab/ci/variable/list.js)_
 
 ## `simply gitlab commit create`
 
@@ -442,7 +460,7 @@ USAGE
     <value>] [--author-email <value>] [--author-name <value>] [--force] [--body <value> | --body-file <value>]
 
 FLAGS
-  -p, --project=<value>       (required) [env: GITLAB_PROJECT] Project id, or its full path such as
+  -p, --project=<value>       (required) [env: SIMPLY_GITLAB_PROJECT] Project id, or its full path such as
                               group/subgroup/project.
       --actions=<value>       JSON array of file actions.
       --author-email=<value>  Commit author email.
@@ -458,8 +476,8 @@ FLAGS
 
 CONNECTION FLAGS
   -e, --env-file=<value>      Path to a .env file holding connection settings.
-      --gitlab-token=<value>  [env: GITLAB_TOKEN] Personal, project, or group access token.
-      --gitlab-url=<value>    [env: GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
+      --gitlab-token=<value>  [env: SIMPLY_GITLAB_TOKEN] Personal, project, or group access token.
+      --gitlab-url=<value>    [env: SIMPLY_GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -486,10 +504,12 @@ FLAG DESCRIPTIONS
   -e, --env-file=<value>  Path to a .env file holding connection settings.
 
     Loaded before anything else. Variables already present in the environment win, so the file never overrides an
-    explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
+    explicit export, and only GitLab connection variables (SIMPLY_GITLAB_URL, SIMPLY_GITLAB_TOKEN,
+    SIMPLY_GITLAB_SSL_VERIFY, SIMPLY_GITLAB_READ_ONLY, and their deprecated unprefixed names) are read from it. A path
+    that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/commit/create.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.10.0/packages/simply-gitlab/lib/commands/gitlab/commit/create.js)_
+_See code: [lib/commands/gitlab/commit/create.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.11.0/packages/simply-gitlab/lib/commands/gitlab/commit/create.js)_
 
 ## `simply gitlab commit diff`
 
@@ -501,14 +521,15 @@ USAGE
     <value>] [--stat]
 
 FLAGS
-  -p, --project=<value>  (required) [env: GITLAB_PROJECT] Project id, or its full path such as group/subgroup/project.
+  -p, --project=<value>  (required) [env: SIMPLY_GITLAB_PROJECT] Project id, or its full path such as
+                         group/subgroup/project.
       --sha=<value>      (required) Commit SHA, or the name of a branch or tag.
       --stat             List the changed files without printing the hunks.
 
 CONNECTION FLAGS
   -e, --env-file=<value>      Path to a .env file holding connection settings.
-      --gitlab-token=<value>  [env: GITLAB_TOKEN] Personal, project, or group access token.
-      --gitlab-url=<value>    [env: GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
+      --gitlab-token=<value>  [env: SIMPLY_GITLAB_TOKEN] Personal, project, or group access token.
+      --gitlab-url=<value>    [env: SIMPLY_GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -528,10 +549,12 @@ FLAG DESCRIPTIONS
   -e, --env-file=<value>  Path to a .env file holding connection settings.
 
     Loaded before anything else. Variables already present in the environment win, so the file never overrides an
-    explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
+    explicit export, and only GitLab connection variables (SIMPLY_GITLAB_URL, SIMPLY_GITLAB_TOKEN,
+    SIMPLY_GITLAB_SSL_VERIFY, SIMPLY_GITLAB_READ_ONLY, and their deprecated unprefixed names) are read from it. A path
+    that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/commit/diff.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.10.0/packages/simply-gitlab/lib/commands/gitlab/commit/diff.js)_
+_See code: [lib/commands/gitlab/commit/diff.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.11.0/packages/simply-gitlab/lib/commands/gitlab/commit/diff.js)_
 
 ## `simply gitlab commit list`
 
@@ -543,7 +566,8 @@ USAGE
     <value>] [--ref <value>] [--path <value>] [--since <value>] [--until <value>] [--author <value>] [--stats]
 
 FLAGS
-  -p, --project=<value>  (required) [env: GITLAB_PROJECT] Project id, or its full path such as group/subgroup/project.
+  -p, --project=<value>  (required) [env: SIMPLY_GITLAB_PROJECT] Project id, or its full path such as
+                         group/subgroup/project.
       --author=<value>   Only commits by this author name or email.
       --limit=<value>    [default: 20] Maximum number of commits to return across all pages.
       --path=<value>     Only commits that touched this file or directory.
@@ -554,8 +578,8 @@ FLAGS
 
 CONNECTION FLAGS
   -e, --env-file=<value>      Path to a .env file holding connection settings.
-      --gitlab-token=<value>  [env: GITLAB_TOKEN] Personal, project, or group access token.
-      --gitlab-url=<value>    [env: GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
+      --gitlab-token=<value>  [env: SIMPLY_GITLAB_TOKEN] Personal, project, or group access token.
+      --gitlab-url=<value>    [env: SIMPLY_GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -579,10 +603,12 @@ FLAG DESCRIPTIONS
   -e, --env-file=<value>  Path to a .env file holding connection settings.
 
     Loaded before anything else. Variables already present in the environment win, so the file never overrides an
-    explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
+    explicit export, and only GitLab connection variables (SIMPLY_GITLAB_URL, SIMPLY_GITLAB_TOKEN,
+    SIMPLY_GITLAB_SSL_VERIFY, SIMPLY_GITLAB_READ_ONLY, and their deprecated unprefixed names) are read from it. A path
+    that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/commit/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.10.0/packages/simply-gitlab/lib/commands/gitlab/commit/list.js)_
+_See code: [lib/commands/gitlab/commit/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.11.0/packages/simply-gitlab/lib/commands/gitlab/commit/list.js)_
 
 ## `simply gitlab commit view`
 
@@ -594,13 +620,14 @@ USAGE
     <value>]
 
 FLAGS
-  -p, --project=<value>  (required) [env: GITLAB_PROJECT] Project id, or its full path such as group/subgroup/project.
+  -p, --project=<value>  (required) [env: SIMPLY_GITLAB_PROJECT] Project id, or its full path such as
+                         group/subgroup/project.
       --sha=<value>      (required) Commit SHA, or the name of a branch or tag.
 
 CONNECTION FLAGS
   -e, --env-file=<value>      Path to a .env file holding connection settings.
-      --gitlab-token=<value>  [env: GITLAB_TOKEN] Personal, project, or group access token.
-      --gitlab-url=<value>    [env: GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
+      --gitlab-token=<value>  [env: SIMPLY_GITLAB_TOKEN] Personal, project, or group access token.
+      --gitlab-url=<value>    [env: SIMPLY_GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -620,10 +647,12 @@ FLAG DESCRIPTIONS
   -e, --env-file=<value>  Path to a .env file holding connection settings.
 
     Loaded before anything else. Variables already present in the environment win, so the file never overrides an
-    explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
+    explicit export, and only GitLab connection variables (SIMPLY_GITLAB_URL, SIMPLY_GITLAB_TOKEN,
+    SIMPLY_GITLAB_SSL_VERIFY, SIMPLY_GITLAB_READ_ONLY, and their deprecated unprefixed names) are read from it. A path
+    that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/commit/view.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.10.0/packages/simply-gitlab/lib/commands/gitlab/commit/view.js)_
+_See code: [lib/commands/gitlab/commit/view.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.11.0/packages/simply-gitlab/lib/commands/gitlab/commit/view.js)_
 
 ## `simply gitlab config apply`
 
@@ -643,8 +672,8 @@ FLAGS
 
 CONNECTION FLAGS
   -e, --env-file=<value>      Path to a .env file holding connection settings.
-      --gitlab-token=<value>  [env: GITLAB_TOKEN] Personal, project, or group access token.
-      --gitlab-url=<value>    [env: GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
+      --gitlab-token=<value>  [env: SIMPLY_GITLAB_TOKEN] Personal, project, or group access token.
+      --gitlab-url=<value>    [env: SIMPLY_GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -677,7 +706,9 @@ FLAG DESCRIPTIONS
   -e, --env-file=<value>  Path to a .env file holding connection settings.
 
     Loaded before anything else. Variables already present in the environment win, so the file never overrides an
-    explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
+    explicit export, and only GitLab connection variables (SIMPLY_GITLAB_URL, SIMPLY_GITLAB_TOKEN,
+    SIMPLY_GITLAB_SSL_VERIFY, SIMPLY_GITLAB_READ_ONLY, and their deprecated unprefixed names) are read from it. A path
+    that cannot be read is an error.
 
   --concurrency=<value>  How many targets to work on at once.
 
@@ -690,7 +721,7 @@ FLAG DESCRIPTIONS
     the config does not target is an error rather than a silent no-op.
 ```
 
-_See code: [lib/commands/gitlab/config/apply.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.10.0/packages/simply-gitlab/lib/commands/gitlab/config/apply.js)_
+_See code: [lib/commands/gitlab/config/apply.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.11.0/packages/simply-gitlab/lib/commands/gitlab/config/apply.js)_
 
 ## `simply gitlab config export`
 
@@ -702,7 +733,7 @@ USAGE
     [--section settings|protectedBranches|protectedTags|approvals|approvalRules|pushRules|badges|variables...]
 
 FLAGS
-  -p, --project=<value>      (required) [env: GITLAB_PROJECT] Project id, or its full path such as
+  -p, --project=<value>      (required) [env: SIMPLY_GITLAB_PROJECT] Project id, or its full path such as
                              group/subgroup/project.
       --section=<option>...  Comma-separated sections to export. Defaults to all of them.
                              <options: settings|protectedBranches|protectedTags|approvals|approvalRules|pushRules|badges
@@ -710,8 +741,8 @@ FLAGS
 
 CONNECTION FLAGS
   -e, --env-file=<value>      Path to a .env file holding connection settings.
-      --gitlab-token=<value>  [env: GITLAB_TOKEN] Personal, project, or group access token.
-      --gitlab-url=<value>    [env: GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
+      --gitlab-token=<value>  [env: SIMPLY_GITLAB_TOKEN] Personal, project, or group access token.
+      --gitlab-url=<value>    [env: SIMPLY_GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -738,10 +769,12 @@ FLAG DESCRIPTIONS
   -e, --env-file=<value>  Path to a .env file holding connection settings.
 
     Loaded before anything else. Variables already present in the environment win, so the file never overrides an
-    explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
+    explicit export, and only GitLab connection variables (SIMPLY_GITLAB_URL, SIMPLY_GITLAB_TOKEN,
+    SIMPLY_GITLAB_SSL_VERIFY, SIMPLY_GITLAB_READ_ONLY, and their deprecated unprefixed names) are read from it. A path
+    that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/config/export.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.10.0/packages/simply-gitlab/lib/commands/gitlab/config/export.js)_
+_See code: [lib/commands/gitlab/config/export.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.11.0/packages/simply-gitlab/lib/commands/gitlab/config/export.js)_
 
 ## `simply gitlab config plan`
 
@@ -761,8 +794,8 @@ FLAGS
 
 CONNECTION FLAGS
   -e, --env-file=<value>      Path to a .env file holding connection settings.
-      --gitlab-token=<value>  [env: GITLAB_TOKEN] Personal, project, or group access token.
-      --gitlab-url=<value>    [env: GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
+      --gitlab-token=<value>  [env: SIMPLY_GITLAB_TOKEN] Personal, project, or group access token.
+      --gitlab-url=<value>    [env: SIMPLY_GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -796,7 +829,9 @@ FLAG DESCRIPTIONS
   -e, --env-file=<value>  Path to a .env file holding connection settings.
 
     Loaded before anything else. Variables already present in the environment win, so the file never overrides an
-    explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
+    explicit export, and only GitLab connection variables (SIMPLY_GITLAB_URL, SIMPLY_GITLAB_TOKEN,
+    SIMPLY_GITLAB_SSL_VERIFY, SIMPLY_GITLAB_READ_ONLY, and their deprecated unprefixed names) are read from it. A path
+    that cannot be read is an error.
 
   --concurrency=<value>  How many targets to work on at once.
 
@@ -809,7 +844,7 @@ FLAG DESCRIPTIONS
     the config does not target is an error rather than a silent no-op.
 ```
 
-_See code: [lib/commands/gitlab/config/plan.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.10.0/packages/simply-gitlab/lib/commands/gitlab/config/plan.js)_
+_See code: [lib/commands/gitlab/config/plan.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.11.0/packages/simply-gitlab/lib/commands/gitlab/config/plan.js)_
 
 ## `simply gitlab file create`
 
@@ -822,7 +857,7 @@ USAGE
     [--start-branch <value>] [--author-email <value>] [--author-name <value>]
 
 FLAGS
-  -p, --project=<value>       (required) [env: GITLAB_PROJECT] Project id, or its full path such as
+  -p, --project=<value>       (required) [env: SIMPLY_GITLAB_PROJECT] Project id, or its full path such as
                               group/subgroup/project.
       --author-email=<value>  Commit author email.
       --author-name=<value>   Commit author name.
@@ -836,8 +871,8 @@ FLAGS
 
 CONNECTION FLAGS
   -e, --env-file=<value>      Path to a .env file holding connection settings.
-      --gitlab-token=<value>  [env: GITLAB_TOKEN] Personal, project, or group access token.
-      --gitlab-url=<value>    [env: GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
+      --gitlab-token=<value>  [env: SIMPLY_GITLAB_TOKEN] Personal, project, or group access token.
+      --gitlab-url=<value>    [env: SIMPLY_GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -858,10 +893,12 @@ FLAG DESCRIPTIONS
   -e, --env-file=<value>  Path to a .env file holding connection settings.
 
     Loaded before anything else. Variables already present in the environment win, so the file never overrides an
-    explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
+    explicit export, and only GitLab connection variables (SIMPLY_GITLAB_URL, SIMPLY_GITLAB_TOKEN,
+    SIMPLY_GITLAB_SSL_VERIFY, SIMPLY_GITLAB_READ_ONLY, and their deprecated unprefixed names) are read from it. A path
+    that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/file/create.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.10.0/packages/simply-gitlab/lib/commands/gitlab/file/create.js)_
+_See code: [lib/commands/gitlab/file/create.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.11.0/packages/simply-gitlab/lib/commands/gitlab/file/create.js)_
 
 ## `simply gitlab file update`
 
@@ -874,7 +911,7 @@ USAGE
     [--start-branch <value>] [--last-commit-id <value>] [--author-email <value>] [--author-name <value>]
 
 FLAGS
-  -p, --project=<value>         (required) [env: GITLAB_PROJECT] Project id, or its full path such as
+  -p, --project=<value>         (required) [env: SIMPLY_GITLAB_PROJECT] Project id, or its full path such as
                                 group/subgroup/project.
       --author-email=<value>    Commit author email.
       --author-name=<value>     Commit author name.
@@ -889,8 +926,8 @@ FLAGS
 
 CONNECTION FLAGS
   -e, --env-file=<value>      Path to a .env file holding connection settings.
-      --gitlab-token=<value>  [env: GITLAB_TOKEN] Personal, project, or group access token.
-      --gitlab-url=<value>    [env: GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
+      --gitlab-token=<value>  [env: SIMPLY_GITLAB_TOKEN] Personal, project, or group access token.
+      --gitlab-url=<value>    [env: SIMPLY_GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -911,10 +948,12 @@ FLAG DESCRIPTIONS
   -e, --env-file=<value>  Path to a .env file holding connection settings.
 
     Loaded before anything else. Variables already present in the environment win, so the file never overrides an
-    explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
+    explicit export, and only GitLab connection variables (SIMPLY_GITLAB_URL, SIMPLY_GITLAB_TOKEN,
+    SIMPLY_GITLAB_SSL_VERIFY, SIMPLY_GITLAB_READ_ONLY, and their deprecated unprefixed names) are read from it. A path
+    that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/file/update.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.10.0/packages/simply-gitlab/lib/commands/gitlab/file/update.js)_
+_See code: [lib/commands/gitlab/file/update.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.11.0/packages/simply-gitlab/lib/commands/gitlab/file/update.js)_
 
 ## `simply gitlab file view`
 
@@ -926,15 +965,16 @@ USAGE
     [--gitlab-token <value>] [--raw]
 
 FLAGS
-  -p, --project=<value>  (required) [env: GITLAB_PROJECT] Project id, or its full path such as group/subgroup/project.
+  -p, --project=<value>  (required) [env: SIMPLY_GITLAB_PROJECT] Project id, or its full path such as
+                         group/subgroup/project.
       --path=<value>     (required) Path to the file within the repository.
       --raw              Print only the file contents, with no metadata header.
       --ref=<value>      (required) Branch, tag, or commit SHA to read from.
 
 CONNECTION FLAGS
   -e, --env-file=<value>      Path to a .env file holding connection settings.
-      --gitlab-token=<value>  [env: GITLAB_TOKEN] Personal, project, or group access token.
-      --gitlab-url=<value>    [env: GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
+      --gitlab-token=<value>  [env: SIMPLY_GITLAB_TOKEN] Personal, project, or group access token.
+      --gitlab-url=<value>    [env: SIMPLY_GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -957,10 +997,12 @@ FLAG DESCRIPTIONS
   -e, --env-file=<value>  Path to a .env file holding connection settings.
 
     Loaded before anything else. Variables already present in the environment win, so the file never overrides an
-    explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
+    explicit export, and only GitLab connection variables (SIMPLY_GITLAB_URL, SIMPLY_GITLAB_TOKEN,
+    SIMPLY_GITLAB_SSL_VERIFY, SIMPLY_GITLAB_READ_ONLY, and their deprecated unprefixed names) are read from it. A path
+    that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/file/view.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.10.0/packages/simply-gitlab/lib/commands/gitlab/file/view.js)_
+_See code: [lib/commands/gitlab/file/view.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.11.0/packages/simply-gitlab/lib/commands/gitlab/file/view.js)_
 
 ## `simply gitlab mr comment list`
 
@@ -972,7 +1014,8 @@ USAGE
     <value>] [--limit <value>] [--sort asc|desc] [--include-system | --code-only]
 
 FLAGS
-  -p, --project=<value>  (required) [env: GITLAB_PROJECT] Project id, or its full path such as group/subgroup/project.
+  -p, --project=<value>  (required) [env: SIMPLY_GITLAB_PROJECT] Project id, or its full path such as
+                         group/subgroup/project.
       --code-only        Only return comments on the diff: on a line, a range of lines, or a whole file.
       --include-system   Also return the notes GitLab writes itself, such as "added 3 commits".
       --limit=<value>    [default: 20] Maximum number of comments to return across all pages.
@@ -982,8 +1025,8 @@ FLAGS
 
 CONNECTION FLAGS
   -e, --env-file=<value>      Path to a .env file holding connection settings.
-      --gitlab-token=<value>  [env: GITLAB_TOKEN] Personal, project, or group access token.
-      --gitlab-url=<value>    [env: GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
+      --gitlab-token=<value>  [env: SIMPLY_GITLAB_TOKEN] Personal, project, or group access token.
+      --gitlab-url=<value>    [env: SIMPLY_GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -1010,10 +1053,12 @@ FLAG DESCRIPTIONS
   -e, --env-file=<value>  Path to a .env file holding connection settings.
 
     Loaded before anything else. Variables already present in the environment win, so the file never overrides an
-    explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
+    explicit export, and only GitLab connection variables (SIMPLY_GITLAB_URL, SIMPLY_GITLAB_TOKEN,
+    SIMPLY_GITLAB_SSL_VERIFY, SIMPLY_GITLAB_READ_ONLY, and their deprecated unprefixed names) are read from it. A path
+    that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/mr/comment/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.10.0/packages/simply-gitlab/lib/commands/gitlab/mr/comment/list.js)_
+_See code: [lib/commands/gitlab/mr/comment/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.11.0/packages/simply-gitlab/lib/commands/gitlab/mr/comment/list.js)_
 
 ## `simply gitlab mr create`
 
@@ -1027,7 +1072,7 @@ USAGE
     [--milestone-id <value>] [--body <value> | --body-file <value>]
 
 FLAGS
-  -p, --project=<value>         (required) [env: GITLAB_PROJECT] Project id, or its full path such as
+  -p, --project=<value>         (required) [env: SIMPLY_GITLAB_PROJECT] Project id, or its full path such as
                                 group/subgroup/project.
       --assignee-id=<value>...  User id to assign. Repeatable.
       --body=<value>            Raw JSON request body.
@@ -1046,8 +1091,8 @@ FLAGS
 
 CONNECTION FLAGS
   -e, --env-file=<value>      Path to a .env file holding connection settings.
-      --gitlab-token=<value>  [env: GITLAB_TOKEN] Personal, project, or group access token.
-      --gitlab-url=<value>    [env: GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
+      --gitlab-token=<value>  [env: SIMPLY_GITLAB_TOKEN] Personal, project, or group access token.
+      --gitlab-url=<value>    [env: SIMPLY_GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -1071,10 +1116,12 @@ FLAG DESCRIPTIONS
   -e, --env-file=<value>  Path to a .env file holding connection settings.
 
     Loaded before anything else. Variables already present in the environment win, so the file never overrides an
-    explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
+    explicit export, and only GitLab connection variables (SIMPLY_GITLAB_URL, SIMPLY_GITLAB_TOKEN,
+    SIMPLY_GITLAB_SSL_VERIFY, SIMPLY_GITLAB_READ_ONLY, and their deprecated unprefixed names) are read from it. A path
+    that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/mr/create.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.10.0/packages/simply-gitlab/lib/commands/gitlab/mr/create.js)_
+_See code: [lib/commands/gitlab/mr/create.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.11.0/packages/simply-gitlab/lib/commands/gitlab/mr/create.js)_
 
 ## `simply gitlab mr list`
 
@@ -1087,7 +1134,7 @@ USAGE
     [--author-username <value>] [--reviewer-username <value>] [--labels <value>] [--search <value>]
 
 FLAGS
-  -p, --project=<value>            (required) [env: GITLAB_PROJECT] Project id, or its full path such as
+  -p, --project=<value>            (required) [env: SIMPLY_GITLAB_PROJECT] Project id, or its full path such as
                                    group/subgroup/project.
       --author-username=<value>    Only merge requests opened by this username.
       --labels=<value>             Comma-separated labels every result must carry.
@@ -1101,8 +1148,8 @@ FLAGS
 
 CONNECTION FLAGS
   -e, --env-file=<value>      Path to a .env file holding connection settings.
-      --gitlab-token=<value>  [env: GITLAB_TOKEN] Personal, project, or group access token.
-      --gitlab-url=<value>    [env: GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
+      --gitlab-token=<value>  [env: SIMPLY_GITLAB_TOKEN] Personal, project, or group access token.
+      --gitlab-url=<value>    [env: SIMPLY_GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -1125,10 +1172,12 @@ FLAG DESCRIPTIONS
   -e, --env-file=<value>  Path to a .env file holding connection settings.
 
     Loaded before anything else. Variables already present in the environment win, so the file never overrides an
-    explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
+    explicit export, and only GitLab connection variables (SIMPLY_GITLAB_URL, SIMPLY_GITLAB_TOKEN,
+    SIMPLY_GITLAB_SSL_VERIFY, SIMPLY_GITLAB_READ_ONLY, and their deprecated unprefixed names) are read from it. A path
+    that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/mr/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.10.0/packages/simply-gitlab/lib/commands/gitlab/mr/list.js)_
+_See code: [lib/commands/gitlab/mr/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.11.0/packages/simply-gitlab/lib/commands/gitlab/mr/list.js)_
 
 ## `simply gitlab mr merge`
 
@@ -1141,7 +1190,7 @@ USAGE
     [--merge-commit-message <value>] [--squash-commit-message <value>] [--confirm]
 
 FLAGS
-  -p, --project=<value>                (required) [env: GITLAB_PROJECT] Project id, or its full path such as
+  -p, --project=<value>                (required) [env: SIMPLY_GITLAB_PROJECT] Project id, or its full path such as
                                        group/subgroup/project.
       --auto-merge                     Merge when checks pass. On a project with merge trains, this joins the train.
       --confirm                        Send the merge. Without it, nothing is sent.
@@ -1157,8 +1206,8 @@ FLAGS
 
 CONNECTION FLAGS
   -e, --env-file=<value>      Path to a .env file holding connection settings.
-      --gitlab-token=<value>  [env: GITLAB_TOKEN] Personal, project, or group access token.
-      --gitlab-url=<value>    [env: GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
+      --gitlab-token=<value>  [env: SIMPLY_GITLAB_TOKEN] Personal, project, or group access token.
+      --gitlab-url=<value>    [env: SIMPLY_GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -1189,10 +1238,12 @@ FLAG DESCRIPTIONS
   -e, --env-file=<value>  Path to a .env file holding connection settings.
 
     Loaded before anything else. Variables already present in the environment win, so the file never overrides an
-    explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
+    explicit export, and only GitLab connection variables (SIMPLY_GITLAB_URL, SIMPLY_GITLAB_TOKEN,
+    SIMPLY_GITLAB_SSL_VERIFY, SIMPLY_GITLAB_READ_ONLY, and their deprecated unprefixed names) are read from it. A path
+    that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/mr/merge.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.10.0/packages/simply-gitlab/lib/commands/gitlab/mr/merge.js)_
+_See code: [lib/commands/gitlab/mr/merge.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.11.0/packages/simply-gitlab/lib/commands/gitlab/mr/merge.js)_
 
 ## `simply gitlab mr update`
 
@@ -1206,7 +1257,7 @@ USAGE
     [--milestone-id <value>] [--body <value> | --body-file <value>]
 
 FLAGS
-  -p, --project=<value>            (required) [env: GITLAB_PROJECT] Project id, or its full path such as
+  -p, --project=<value>            (required) [env: SIMPLY_GITLAB_PROJECT] Project id, or its full path such as
                                    group/subgroup/project.
       --assignee-id=<value>...     User id to assign, replacing the set. Repeatable.
       --body=<value>               Raw JSON request body.
@@ -1226,8 +1277,8 @@ FLAGS
 
 CONNECTION FLAGS
   -e, --env-file=<value>      Path to a .env file holding connection settings.
-      --gitlab-token=<value>  [env: GITLAB_TOKEN] Personal, project, or group access token.
-      --gitlab-url=<value>    [env: GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
+      --gitlab-token=<value>  [env: SIMPLY_GITLAB_TOKEN] Personal, project, or group access token.
+      --gitlab-url=<value>    [env: SIMPLY_GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -1253,10 +1304,12 @@ FLAG DESCRIPTIONS
   -e, --env-file=<value>  Path to a .env file holding connection settings.
 
     Loaded before anything else. Variables already present in the environment win, so the file never overrides an
-    explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
+    explicit export, and only GitLab connection variables (SIMPLY_GITLAB_URL, SIMPLY_GITLAB_TOKEN,
+    SIMPLY_GITLAB_SSL_VERIFY, SIMPLY_GITLAB_READ_ONLY, and their deprecated unprefixed names) are read from it. A path
+    that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/mr/update.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.10.0/packages/simply-gitlab/lib/commands/gitlab/mr/update.js)_
+_See code: [lib/commands/gitlab/mr/update.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.11.0/packages/simply-gitlab/lib/commands/gitlab/mr/update.js)_
 
 ## `simply gitlab mr view`
 
@@ -1268,13 +1321,14 @@ USAGE
     <value>]
 
 FLAGS
-  -p, --project=<value>  (required) [env: GITLAB_PROJECT] Project id, or its full path such as group/subgroup/project.
+  -p, --project=<value>  (required) [env: SIMPLY_GITLAB_PROJECT] Project id, or its full path such as
+                         group/subgroup/project.
       --mr=<value>       (required) Merge request iid.
 
 CONNECTION FLAGS
   -e, --env-file=<value>      Path to a .env file holding connection settings.
-      --gitlab-token=<value>  [env: GITLAB_TOKEN] Personal, project, or group access token.
-      --gitlab-url=<value>    [env: GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
+      --gitlab-token=<value>  [env: SIMPLY_GITLAB_TOKEN] Personal, project, or group access token.
+      --gitlab-url=<value>    [env: SIMPLY_GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -1294,10 +1348,12 @@ FLAG DESCRIPTIONS
   -e, --env-file=<value>  Path to a .env file holding connection settings.
 
     Loaded before anything else. Variables already present in the environment win, so the file never overrides an
-    explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
+    explicit export, and only GitLab connection variables (SIMPLY_GITLAB_URL, SIMPLY_GITLAB_TOKEN,
+    SIMPLY_GITLAB_SSL_VERIFY, SIMPLY_GITLAB_READ_ONLY, and their deprecated unprefixed names) are read from it. A path
+    that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/mr/view.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.10.0/packages/simply-gitlab/lib/commands/gitlab/mr/view.js)_
+_See code: [lib/commands/gitlab/mr/view.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.11.0/packages/simply-gitlab/lib/commands/gitlab/mr/view.js)_
 
 ## `simply gitlab project create`
 
@@ -1334,8 +1390,8 @@ FLAGS
 
 CONNECTION FLAGS
   -e, --env-file=<value>      Path to a .env file holding connection settings.
-      --gitlab-token=<value>  [env: GITLAB_TOKEN] Personal, project, or group access token.
-      --gitlab-url=<value>    [env: GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
+      --gitlab-token=<value>  [env: SIMPLY_GITLAB_TOKEN] Personal, project, or group access token.
+      --gitlab-url=<value>    [env: SIMPLY_GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -1372,14 +1428,16 @@ FLAG DESCRIPTIONS
   -e, --env-file=<value>  Path to a .env file holding connection settings.
 
     Loaded before anything else. Variables already present in the environment win, so the file never overrides an
-    explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
+    explicit export, and only GitLab connection variables (SIMPLY_GITLAB_URL, SIMPLY_GITLAB_TOKEN,
+    SIMPLY_GITLAB_SSL_VERIFY, SIMPLY_GITLAB_READ_ONLY, and their deprecated unprefixed names) are read from it. A path
+    that cannot be read is an error.
 
   --namespace=<value>  Group or user namespace to create the project in, by id or full path.
 
     Defaults to the namespace of the token owner.
 ```
 
-_See code: [lib/commands/gitlab/project/create.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.10.0/packages/simply-gitlab/lib/commands/gitlab/project/create.js)_
+_See code: [lib/commands/gitlab/project/create.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.11.0/packages/simply-gitlab/lib/commands/gitlab/project/create.js)_
 
 ## `simply gitlab project list`
 
@@ -1399,8 +1457,8 @@ FLAGS
 
 CONNECTION FLAGS
   -e, --env-file=<value>      Path to a .env file holding connection settings.
-      --gitlab-token=<value>  [env: GITLAB_TOKEN] Personal, project, or group access token.
-      --gitlab-url=<value>    [env: GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
+      --gitlab-token=<value>  [env: SIMPLY_GITLAB_TOKEN] Personal, project, or group access token.
+      --gitlab-url=<value>    [env: SIMPLY_GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -1423,10 +1481,12 @@ FLAG DESCRIPTIONS
   -e, --env-file=<value>  Path to a .env file holding connection settings.
 
     Loaded before anything else. Variables already present in the environment win, so the file never overrides an
-    explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
+    explicit export, and only GitLab connection variables (SIMPLY_GITLAB_URL, SIMPLY_GITLAB_TOKEN,
+    SIMPLY_GITLAB_SSL_VERIFY, SIMPLY_GITLAB_READ_ONLY, and their deprecated unprefixed names) are read from it. A path
+    that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/project/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.10.0/packages/simply-gitlab/lib/commands/gitlab/project/list.js)_
+_See code: [lib/commands/gitlab/project/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.11.0/packages/simply-gitlab/lib/commands/gitlab/project/list.js)_
 
 ## `simply gitlab project view`
 
@@ -1437,12 +1497,13 @@ USAGE
   $ simply gitlab project view -p <value> [--json] [-e <value>] [--gitlab-url <value>] [--gitlab-token <value>]
 
 FLAGS
-  -p, --project=<value>  (required) [env: GITLAB_PROJECT] Project id, or its full path such as group/subgroup/project.
+  -p, --project=<value>  (required) [env: SIMPLY_GITLAB_PROJECT] Project id, or its full path such as
+                         group/subgroup/project.
 
 CONNECTION FLAGS
   -e, --env-file=<value>      Path to a .env file holding connection settings.
-      --gitlab-token=<value>  [env: GITLAB_TOKEN] Personal, project, or group access token.
-      --gitlab-url=<value>    [env: GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
+      --gitlab-token=<value>  [env: SIMPLY_GITLAB_TOKEN] Personal, project, or group access token.
+      --gitlab-url=<value>    [env: SIMPLY_GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -1462,10 +1523,12 @@ FLAG DESCRIPTIONS
   -e, --env-file=<value>  Path to a .env file holding connection settings.
 
     Loaded before anything else. Variables already present in the environment win, so the file never overrides an
-    explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
+    explicit export, and only GitLab connection variables (SIMPLY_GITLAB_URL, SIMPLY_GITLAB_TOKEN,
+    SIMPLY_GITLAB_SSL_VERIFY, SIMPLY_GITLAB_READ_ONLY, and their deprecated unprefixed names) are read from it. A path
+    that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/project/view.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.10.0/packages/simply-gitlab/lib/commands/gitlab/project/view.js)_
+_See code: [lib/commands/gitlab/project/view.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.11.0/packages/simply-gitlab/lib/commands/gitlab/project/view.js)_
 
 ## `simply gitlab release list`
 
@@ -1477,13 +1540,14 @@ USAGE
     <value>]
 
 FLAGS
-  -p, --project=<value>  (required) [env: GITLAB_PROJECT] Project id, or its full path such as group/subgroup/project.
+  -p, --project=<value>  (required) [env: SIMPLY_GITLAB_PROJECT] Project id, or its full path such as
+                         group/subgroup/project.
       --limit=<value>    [default: 20] Maximum number of releases to return across all pages.
 
 CONNECTION FLAGS
   -e, --env-file=<value>      Path to a .env file holding connection settings.
-      --gitlab-token=<value>  [env: GITLAB_TOKEN] Personal, project, or group access token.
-      --gitlab-url=<value>    [env: GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
+      --gitlab-token=<value>  [env: SIMPLY_GITLAB_TOKEN] Personal, project, or group access token.
+      --gitlab-url=<value>    [env: SIMPLY_GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -1503,10 +1567,12 @@ FLAG DESCRIPTIONS
   -e, --env-file=<value>  Path to a .env file holding connection settings.
 
     Loaded before anything else. Variables already present in the environment win, so the file never overrides an
-    explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
+    explicit export, and only GitLab connection variables (SIMPLY_GITLAB_URL, SIMPLY_GITLAB_TOKEN,
+    SIMPLY_GITLAB_SSL_VERIFY, SIMPLY_GITLAB_READ_ONLY, and their deprecated unprefixed names) are read from it. A path
+    that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/release/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.10.0/packages/simply-gitlab/lib/commands/gitlab/release/list.js)_
+_See code: [lib/commands/gitlab/release/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.11.0/packages/simply-gitlab/lib/commands/gitlab/release/list.js)_
 
 ## `simply gitlab search`
 
@@ -1530,8 +1596,8 @@ FLAGS
 
 CONNECTION FLAGS
   -e, --env-file=<value>      Path to a .env file holding connection settings.
-      --gitlab-token=<value>  [env: GITLAB_TOKEN] Personal, project, or group access token.
-      --gitlab-url=<value>    [env: GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
+      --gitlab-token=<value>  [env: SIMPLY_GITLAB_TOKEN] Personal, project, or group access token.
+      --gitlab-url=<value>    [env: SIMPLY_GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -1558,10 +1624,12 @@ FLAG DESCRIPTIONS
   -e, --env-file=<value>  Path to a .env file holding connection settings.
 
     Loaded before anything else. Variables already present in the environment win, so the file never overrides an
-    explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
+    explicit export, and only GitLab connection variables (SIMPLY_GITLAB_URL, SIMPLY_GITLAB_TOKEN,
+    SIMPLY_GITLAB_SSL_VERIFY, SIMPLY_GITLAB_READ_ONLY, and their deprecated unprefixed names) are read from it. A path
+    that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/search.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.10.0/packages/simply-gitlab/lib/commands/gitlab/search.js)_
+_See code: [lib/commands/gitlab/search.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.11.0/packages/simply-gitlab/lib/commands/gitlab/search.js)_
 
 ## `simply gitlab tag list`
 
@@ -1573,7 +1641,8 @@ USAGE
     <value>] [--search <value>] [--order-by name|updated|version] [--sort asc|desc]
 
 FLAGS
-  -p, --project=<value>    (required) [env: GITLAB_PROJECT] Project id, or its full path such as group/subgroup/project.
+  -p, --project=<value>    (required) [env: SIMPLY_GITLAB_PROJECT] Project id, or its full path such as
+                           group/subgroup/project.
       --limit=<value>      [default: 20] Maximum number of tags to return across all pages.
       --order-by=<option>  Field to sort by.
                            <options: name|updated|version>
@@ -1583,8 +1652,8 @@ FLAGS
 
 CONNECTION FLAGS
   -e, --env-file=<value>      Path to a .env file holding connection settings.
-      --gitlab-token=<value>  [env: GITLAB_TOKEN] Personal, project, or group access token.
-      --gitlab-url=<value>    [env: GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
+      --gitlab-token=<value>  [env: SIMPLY_GITLAB_TOKEN] Personal, project, or group access token.
+      --gitlab-url=<value>    [env: SIMPLY_GITLAB_URL] Base URL of the GitLab instance. Defaults to https://gitlab.com.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -1605,10 +1674,12 @@ FLAG DESCRIPTIONS
   -e, --env-file=<value>  Path to a .env file holding connection settings.
 
     Loaded before anything else. Variables already present in the environment win, so the file never overrides an
-    explicit export, and only GitLab connection variables are read from it. A path that cannot be read is an error.
+    explicit export, and only GitLab connection variables (SIMPLY_GITLAB_URL, SIMPLY_GITLAB_TOKEN,
+    SIMPLY_GITLAB_SSL_VERIFY, SIMPLY_GITLAB_READ_ONLY, and their deprecated unprefixed names) are read from it. A path
+    that cannot be read is an error.
 ```
 
-_See code: [lib/commands/gitlab/tag/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.10.0/packages/simply-gitlab/lib/commands/gitlab/tag/list.js)_
+_See code: [lib/commands/gitlab/tag/list.js](https://github.com/SimplySF/simply-gitlab/blob/@simplysf/simply-gitlab@0.11.0/packages/simply-gitlab/lib/commands/gitlab/tag/list.js)_
 <!-- commandsstop -->
 
 ## License

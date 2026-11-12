@@ -18,8 +18,12 @@ import process from 'node:process';
 import type { EnvLike } from './config.js';
 import { stripControl } from './text.js';
 
-/** The environment variables that carry credentials, and so must never reach any output. */
-export const SECRET_ENV = ['GITLAB_TOKEN'] as const;
+/**
+ * The environment variables that carry credentials, and so must never reach any output. The
+ * deprecated unprefixed name is listed too: redaction is about what is in the environment, not
+ * which name won, so a shadowed legacy token is still scrubbed.
+ */
+export const SECRET_ENV = ['SIMPLY_GITLAB_TOKEN', 'GITLAB_TOKEN'] as const;
 
 /** Shorter values would mangle unrelated text; real tokens are far longer than this. */
 const MIN_SECRET_LENGTH = 8;

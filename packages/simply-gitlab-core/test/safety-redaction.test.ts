@@ -26,7 +26,7 @@ describe('redaction', () => {
   });
 
   it('reads the token out of an environment', () => {
-    expect(secretValues({ GITLAB_TOKEN: TOKEN })).toStrictEqual(new Set([TOKEN]));
+    expect(secretValues({ SIMPLY_GITLAB_TOKEN: TOKEN })).toStrictEqual(new Set([TOKEN]));
   });
 
   it('blanks a credential wherever it appears in a message', () => {

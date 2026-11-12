@@ -37,6 +37,9 @@ Use the smallest relevant topic document rather than loading the whole directory
 - [Merging a merge request](docs/design/0011-merge-request-merge.md): `gitlab mr merge`,
   `--auto-merge` onto a merge train, the experimental `--skip-merge-train`, why `--confirm` returns,
   and how a bare 405 is explained.
+- [Environment variable names](docs/design/0012-simply-env-prefix.md): the `SIMPLY_` prefix, the
+  deprecated unprefixed names, how the two resolve and warn, the `--project` rebinding, and loading
+  from `--env-file`. Mirrors simply-atlassian's 0023: change both together.
 
 The package [README](packages/simply-gitlab/README.md) is the generated user-facing command
 reference. Update command metadata first, then regenerate it as described in `CONTRIBUTING.md`.

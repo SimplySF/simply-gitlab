@@ -16,6 +16,8 @@
 
 import process from 'node:process';
 import {
+  CONNECTION_ENV,
+  deprecatedEnvWarning,
   type EnvLike,
   GitLabClient,
   type GitLabConfig,
@@ -27,7 +29,7 @@ export interface ServerOptions {
   /**
    * Register the tools that change data. Off by default, so a server launched without thinking
    * about it can only read. Even when on, a write is still refused when the environment carries
-   * `GITLAB_READ_ONLY`, exactly as the CLI refuses it.
+   * `SIMPLY_GITLAB_READ_ONLY`, exactly as the CLI refuses it.
    */
   readonly allowWrites?: boolean;
   /**
@@ -56,6 +58,12 @@ export interface ToolContext {
 export function createContext(options: ServerOptions = {}): ToolContext {
   const env = options.env ?? process.env;
   if (options.envFile !== undefined) loadEnvFile(options.envFile, env);
+  // Once, at startup, and to stderr: stdout is the protocol channel. A host shows it in its log.
+  // Only the connection settings: the server has no --project, so GITLAB_PROJECT is not its concern.
+  const deprecation = deprecatedEnvWarning(env, CONNECTION_ENV);
+  if (deprecation !== undefined)
+    process.stderr.write(`Warning: ${deprecation}
+`);
 
   return {
     env,

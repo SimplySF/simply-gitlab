@@ -34,7 +34,7 @@ afterEach(async () => {
 function context(overrides: Record<string, string> = {}) {
   return createContext({
     allowWrites: true,
-    env: { GITLAB_URL: server.baseUrl, GITLAB_TOKEN: 'glpat-testing', ...overrides },
+    env: { SIMPLY_GITLAB_URL: server.baseUrl, SIMPLY_GITLAB_TOKEN: 'glpat-testing', ...overrides },
   });
 }
 
@@ -82,7 +82,7 @@ describe('invokeTool', () => {
   });
 
   it('applies the read-only guard before the request, exactly as the CLI does', async () => {
-    const result = await invokeTool(spec('gitlab_branch_create'), context({ GITLAB_READ_ONLY: '1' }), {
+    const result = await invokeTool(spec('gitlab_branch_create'), context({ SIMPLY_GITLAB_READ_ONLY: '1' }), {
       project: 'group/project',
       branch: 'x',
       ref: 'main',
@@ -191,7 +191,7 @@ describe('invokeTool', () => {
 });
 
 describe('mapError', () => {
-  const env = { GITLAB_TOKEN: 'glpat-0123456789' };
+  const env = { SIMPLY_GITLAB_TOKEN: 'glpat-0123456789' };
 
   it('maps each error class onto a stable code and exit code', () => {
     expect(mapError(new ConfigError('bad'), { env })).toMatchObject({ code: 'config', exitCode: 2 });
